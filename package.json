@@ -1,0 +1,16 @@
+{
+  "name": "planner-api",
+  "version": "0.1.0",
+  "description": "",
+  "main": "main.js",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^5.10.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Lauri Saar",
+  "license": "ISC"
+}
