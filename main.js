@@ -1,8 +1,8 @@
-const io = require('socket.io')()
+const ioSrv = require('socket.io')()
 const Loki = require('lokijs')
 const Adapter = require('./node_modules/lokijs/src/loki-fs-structured-adapter')
 
-io.listen(3000)
+ioSrv.listen(3000)
 
 // take from configuration
 const dbFile = './data/loki_db.json'
@@ -41,14 +41,14 @@ function dbInit() {
   console.log('leaving dbInit callback')
 }
 
-io.on('connection', socket => {
+ioSrv.on('connection', s => {
   console.log('a user connected')
 
-  socket.on('disconnect', function () {
+  s.on('disconnect', function () {
     console.log('a user disconnected')
   })
 
-  socket.on('test', msg => {
-    socket.emit(`reply: ${msg}`)
+  s.on('test', msg => {
+    s.emit(`reply: ${msg}`)
   })
 })
