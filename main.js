@@ -1,8 +1,9 @@
-const ioSrv = require('socket.io')()
+const SocketIO = require('socket.io')
 const Loki = require('lokijs')
 const Adapter = require('./node_modules/lokijs/src/loki-fs-structured-adapter')
 
-ioSrv.listen(3000)
+// take from configurtion
+const ioSrv = new SocketIO(3000)
 
 // take from configuration
 const dbFile = './data/loki_db.json'
