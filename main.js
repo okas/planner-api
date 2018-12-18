@@ -1,6 +1,45 @@
 const io = require('socket.io')()
+const Loki = require('lokijs')
+const Adapter = require('./node_modules/lokijs/src/loki-fs-structured-adapter')
 
 io.listen(3000)
+
+// take from configuration
+const dbFile = './data/loki_db.json'
+const col1Name = 'users'
+const col2Name = 'animals'
+const db = new Loki(dbFile, {
+  verbose: true,
+  autoload: true,
+  autosave: true,
+  env: 'NODEJS',
+  autoloadCallback: dbInit,
+  adapter: new Adapter()
+})
+
+function dbInit() {
+  console.log('inside dbInit callback')
+  var col1 = db.getCollection(col1Name)
+  if (!col1) {
+    console.log(`no collection '${col1Name}' currently, creating`)
+    col1 = db.addCollection(col1Name)
+  } else {
+    console.log(`collection '${col1Name}' exists`)
+  }
+  var col2 = db.getCollection(col2Name)
+  if (!col2) {
+    console.log(`no collection '${col2Name}' currently, creating`)
+    col2 = db.addCollection(col2Name)
+  } else {
+    console.log(`collection '${col2Name}' exists`)
+  }
+  for (let i = 1; i <= 10; i++) {
+    col1.insert({ name: `User${i}` })
+    col2.insert({ name: `Anim${i}` })
+  }
+  db.saveDatabase()
+  console.log('leaving dbInit callback')
+}
 
 io.on('connection', socket => {
   console.log('a user connected')
