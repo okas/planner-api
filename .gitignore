@@ -1,3 +1,7 @@
+# Project exceptions
+dist
+data
+
 # Logs
 logs
 *.log

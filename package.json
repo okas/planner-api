@@ -2,7 +2,7 @@
   "name": "planner-api",
   "version": "0.1.0",
   "description": "",
-  "main": "main.js",
+  "main": "src/main.js",
   "dependencies": {
     "lokijs": "^1.5.5",
     "socket.io": "^2.2.0"
@@ -10,19 +10,30 @@
   "devDependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.2.2",
+    "@babel/runtime": "^7.2.0",
     "@babel/preset-env": "^7.2.3",
+    "@babel/plugin-transform-runtime": "^7.2.0",
     "eslint": "^5.10.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-node": "^8.0.0",
     "eslint-plugin-promise": "^4.0.1",
-    "eslint-plugin-standard": "^4.0.0"
+    "eslint-plugin-standard": "^4.0.0",
+    "eslint-config-prettier": "^3.3.0",
+    "eslint-plugin-prettier": "^3.0.0",
+    "onchange": "^5.2.0",
+    "prettier": "^1.15.3"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "debug": "npm run build && node --inspect-brk=9229 --nolazy src/main.js",
+    "debug:watch": "npm run build:watch && node --inspect-brk=9229 --nolazy src/main.js",
     "build": "babel src --out-dir dist --source-maps",
     "build:watch": "babel src --out-dir dist --source-maps --watch",
-    "debug": "node --nolazy --inspect-brk=9229 main.js"
+    "format": "prettier --write 'src/**/*.js'",
+    "format:watch": "onchange 'src/**/*.js' -- prettier --write {{changed}}",
+    "lint": "eslint src --color",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node dist/main.js"
   },
   "author": "Lauri Saar",
   "license": "ISC"

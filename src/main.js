@@ -1,6 +1,6 @@
-const SocketIO = require('socket.io')
-const Loki = require('lokijs')
-const Adapter = require('./node_modules/lokijs/src/loki-fs-structured-adapter')
+import SocketIO from 'socket.io'
+import Loki from 'lokijs'
+import Adapter from 'lokijs/src/loki-fs-structured-adapter'
 
 // take from configurtion
 const ioSrv = new SocketIO(3000)
@@ -45,7 +45,7 @@ function dbInit() {
 ioSrv.on('connection', s => {
   console.log('a user connected')
 
-  s.on('disconnect', function () {
+  s.on('disconnect', function() {
     console.log('a user disconnected')
   })
 

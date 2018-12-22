@@ -8,10 +8,12 @@
       "type": "node",
       "request": "launch",
       "name": "Launch Planner API",
-      "program": "${workspaceRoot}/main.js",
+      "cwd": "${workspaceRoot}",
+      "program": "${workspaceRoot}/src/main.js",
       "outFiles": ["${workspaceRoot}/dist/**/*.js"],
       "preLaunchTask": "npm: build",
-      "internalConsoleOptions": "openOnSessionStart"
+      "internalConsoleOptions": "openOnSessionStart",
+      "showAsyncStacks": true
     },
     {
       "type": "node",
@@ -20,7 +22,8 @@
       "program": "${file}",
       "outFiles": ["${workspaceRoot}/dist/**/*.js"],
       "preLaunchTask": "npm: build",
-      "internalConsoleOptions": "openOnSessionStart"
+      "internalConsoleOptions": "openOnSessionStart",
+      "showAsyncStacks": true
     }
   ]
 }
