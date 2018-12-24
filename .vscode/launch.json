@@ -10,7 +10,7 @@
       "name": "Launch Planner API",
       "cwd": "${workspaceRoot}",
       "program": "${workspaceRoot}/src/main.js",
-      "outFiles": ["${workspaceRoot}/dist/**/*.js"],
+      "outFiles": ["${workspaceRoot}/lib/**/*.js"],
       "preLaunchTask": "npm: build",
       "internalConsoleOptions": "openOnSessionStart",
       "showAsyncStacks": true
@@ -20,7 +20,7 @@
       "request": "launch",
       "name": "Launch current file",
       "program": "${file}",
-      "outFiles": ["${workspaceRoot}/dist/**/*.js"],
+      "outFiles": ["${workspaceRoot}/lib/**/*.js"],
       "preLaunchTask": "npm: build",
       "internalConsoleOptions": "openOnSessionStart",
       "showAsyncStacks": true

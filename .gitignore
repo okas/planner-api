@@ -1,6 +1,7 @@
 # Project exceptions
 dist
 data
+lib
 
 # Logs
 logs

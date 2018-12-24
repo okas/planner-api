@@ -2,7 +2,7 @@
   "name": "planner-api",
   "version": "0.1.0",
   "description": "",
-  "main": "src/main.js",
+  "main": "lib/main.js",
   "dependencies": {
     "lokijs": "^1.5.5",
     "socket.io": "^2.2.0"
@@ -28,9 +28,9 @@
   "scripts": {
     "debug:watch": "onchange -v -i -k \"src/**/*.js\" -- npm run debug",
     "debug": "run-s build start",
-    "build": "babel src --out-dir dist --source-maps",
-    "build:watch": "babel src --out-dir dist --source-maps --watch",
-    "start": "node dist/main.js",
+    "build": "babel src --out-dir lib --source-maps",
+    "build:watch": "babel src --out-dir lib --source-maps --watch",
+    "start": "node lib/main.js",
     "format": "prettier --write 'src/**/*.js'",
     "format:watch": "onchange \"src/**/*.js\" -- prettier --write {{changed}}",
     "lint": "eslint src --color",
