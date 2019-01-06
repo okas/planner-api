@@ -1,62 +1,44 @@
 import socketIO from 'socket.io'
 import http from 'http'
-import { roomLamps } from './database'
+import setBootstrap from './database'
+import registerLampsEvents from './ioLamps'
 
-// Todo: retreive configurtion here
+/* Setup bootstrap, to cope with LokiJS async database loading. */
+setBootstrap(main)
 
-const port = 3000
-const pingInterval = 3600000 // testing only!
+function main() {
+  /* Init internals and retreive config */
 
-const httpServer = http.createServer()
+  // Todo: retreive configurtion here
+  const port = 3000
+  const pingInterval = 3600000 // testing only!
+  const socketIoConfig = {
+    pingInterval: pingInterval || undefined
+  }
 
-const io = new socketIO(httpServer, {
-  pingInterval: pingInterval || undefined
-})
+  const httpServer = http.createServer()
+  const io = new socketIO(httpServer, socketIoConfig)
 
-io.on('connection', s => {
-  console.log(`|--> [ ${s.id} ] : a user connected`)
+  /* API definition: set up socekt.io sockets */
 
-  s.emit('ok')
+  io.on('connection', socket => {
+    console.log(`|-> [ ${socket.id} ] : a user connected`)
 
-  s.on('disconnect', () => {
-    console.log(`>--| [ ${s.id} ] : a user disconnected`)
-  })
+    socket.emit('ok')
 
-  s.on('lamps-get_all', fn => {
-    console.log(`sending lamps array with ${roomLamps.count()} items.`)
-    function generateStates(lamps) {
-      function getRandomIntInclusive(min, max) {
-        min = Math.ceil(min)
-        max = Math.floor(max)
-        return Math.floor(Math.random() * (max - min + 1)) + min // The maximum is inclusive and the minimum is inclusive
-      }
-      let randomIds = []
-      while (randomIds.length < lamps.length * 0.33) {
-        randomIds.push(getRandomIntInclusive(1, lamps.length))
-      }
-      return lamps.map((l, i) => {
-        return {
-          ...l,
-          state: Number(!!randomIds.includes(++i))
-        }
-      })
-    }
-    fn(generateStates(roomLamps.data))
-  })
-
-  s.on('lamps-add', (lamp, room, fn) => {
-    let lampObj = roomLamps.insertOne({
-      name: `${lamp || '-lamp'} ${roomLamps.count() + 1}`,
-      room: `${room || '-tuba'}`
+    socket.on('disconnect', () => {
+      console.log(`>-| [ ${socket.id} ] : a user disconnected`)
     })
-    console.log(`created: ${JSON.stringify(lampObj)}`)
-    fn(lampObj)
+
+    registerLampsEvents(socket)
   })
-})
 
-httpServer.listen(port, err => {
-  if (err) throw err
-  console.log(`==> listening on port *:${port}`)
-})
+  /* Run API server */
 
-console.log('planner-api init done')
+  httpServer.listen(port, err => {
+    if (err) throw err
+    console.info(`==> api is listening on [ *:${port} ]`)
+  })
+
+  console.info('||| planner-api init done')
+}

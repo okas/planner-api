@@ -1,25 +1,36 @@
 import Loki from 'lokijs'
-import Adapter from 'lokijs/src/loki-fs-structured-adapter'
+import LokiFsStructuredAdapter from 'lokijs/src/loki-fs-structured-adapter'
+
+let fnProgramLogic
+let collections
 
 // take from configuration or export constructor from this module
 const dbFile = './data/loki_db.json'
-var roomLamps
 
-const lokiConf = {
+const configuration = {
   verbose: true,
   autoload: true,
   autosave: true,
   env: 'NODEJS',
-  adapter: new Adapter(),
+  adapter: new LokiFsStructuredAdapter(),
   autoloadCallback: initializeDatabase
 }
 
-const db = new Loki(dbFile, lokiConf)
+const db = new Loki(dbFile, configuration)
 
 function initializeDatabase() {
-  roomLamps =
-    db.getCollection('room_lamps') ||
-    db.addCollection('room_lamps', { autoupdate: true })
+  collections = {
+    roomLamps:
+      db.getCollection('room_lamps') ||
+      db.addCollection('room_lamps', { autoupdate: true })
+  }
+  fnProgramLogic()
 }
 
-export { db as default, roomLamps }
+// ToDo: analyze, if reasonable use Object.freeze(obj)
+
+export default function(bootstrapFn) {
+  fnProgramLogic = bootstrapFn
+}
+
+export { collections }
