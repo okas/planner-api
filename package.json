@@ -2,7 +2,7 @@
   "name": "planner-api",
   "version": "0.1.0",
   "description": "",
-  "main": "lib/main.js",
+  "main": "src/main.mjs",
   "dependencies": {
     "lokijs": "^1.5.6",
     "socket.io": "^2.2.0"
@@ -26,13 +26,14 @@
     "prettier": "^1.15.3"
   },
   "scripts": {
-    "debug:watch": "onchange -v -i -k \"src/**/*.js\" -- npm run debug",
+    "debug:watch": "onchange -v -i -k \"src/**/*.(mjs|js)\" -- npm run debug",
     "debug": "run-s build start",
     "build": "babel src --out-dir lib --source-maps",
     "build:watch": "babel src --out-dir lib --source-maps --watch",
     "start": "node lib/main.js",
-    "format": "prettier --write 'src/**/*.js'",
-    "format:watch": "onchange \"src/**/*.js\" -- prettier --write {{changed}}",
+    "start:es6": "node src/main.mjs",
+    "format": "prettier --write 'src/**/*.(mjs|js)'",
+    "format:watch": "onchange \"src/**/*.(mjs|js)\" -- prettier --write {{changed}}",
     "lint": "eslint src --color",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
