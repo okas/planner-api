@@ -12,6 +12,7 @@ function main() {
   // Todo: retreive configurtion here
   const port = 3000
   const socketIoConfig = {
+    path: '/api',
     pingInterval: 3600000 || undefined // testing only!
   }
 
