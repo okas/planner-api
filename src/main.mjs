@@ -1,4 +1,4 @@
-import socketIO from 'socket.io'
+import SocketIOClient from 'socket.io'
 import http from 'http'
 import setBootstrap from './database'
 import registerLampsEvents from './ioLamps'
@@ -11,25 +11,20 @@ function main() {
 
   // Todo: retreive configurtion here
   const port = 3000
-  const pingInterval = 3600000 // testing only!
   const socketIoConfig = {
-    pingInterval: pingInterval || undefined
+    pingInterval: 3600000 || undefined // testing only!
   }
 
   const httpServer = http.createServer()
-  const io = new socketIO(httpServer, socketIoConfig)
+  const io = new SocketIOClient(httpServer, socketIoConfig)
 
   /* API definition: set up socekt.io sockets */
 
-  io.on('connection', socket => {
+  io.on('connect', socket => {
     console.log(`|-> [ ${socket.id} ] : a user connected`)
-
-    socket.emit('ok')
-
     socket.on('disconnect', () => {
       console.log(`>-| [ ${socket.id} ] : a user disconnected`)
     })
-
     registerLampsEvents(socket)
   })
 
