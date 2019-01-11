@@ -22,7 +22,10 @@ function initializeDatabase() {
   collections = {
     roomLamps:
       db.getCollection('room_lamps') ||
-      db.addCollection('room_lamps', { autoupdate: true })
+      db.addCollection('room_lamps', { autoupdate: true }),
+    roomBlinds:
+      db.getCollection('room_blinds') ||
+      db.addCollection('room_blinds', { autoupdate: true })
   }
   fnProgramLogic()
 }

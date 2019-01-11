@@ -2,6 +2,7 @@ import SocketIOClient from 'socket.io'
 import http from 'http'
 import setBootstrap from './database'
 import registerLampsEvents from './ioLamps'
+import registerWindowsBlindEvents from './ioBlinds'
 
 /* Setup bootstrap, to cope with LokiJS async database loading. */
 setBootstrap(main)
@@ -27,6 +28,7 @@ function main() {
       console.log(`>-| [ ${socket.id} ] : a user disconnected`)
     })
     registerLampsEvents(socket)
+    registerWindowsBlindEvents(socket)
   })
 
   /* Run API server */
