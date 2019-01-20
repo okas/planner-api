@@ -28,8 +28,8 @@
   "scripts": {
     "debug:watch": "onchange -v -i -k \"src/**/*.(mjs|js)\" -- npm run debug",
     "debug": "run-s build start",
-    "build": "babel src --out-dir dist --source-maps",
-    "build:watch": "babel src --out-dir dist --source-maps --watch",
+    "build": "babel --delete-dir-on-start src --out-dir dist --source-maps",
+    "build:watch": "babel --delete-dir-on-start src --out-dir dist --source-maps --watch",
     "start": "node dist/main.js",
     "start:es6": "node src/main.mjs",
     "format": "prettier --write 'src/**/*.(mjs|js)'",
