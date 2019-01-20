@@ -1,9 +1,12 @@
+import { transformItems } from './transforms'
 import { roomBlinds } from '../persistence'
 import { getRandomIntInclusive } from '../utilities'
 
 export function transformToRoomGroupedObj() {
   return roomBlinds.chain().mapReduce(
-    ({ meta, $loki: id, ...item }) => ({ id, ...item, state: getState(id) }),
+    transformItems(id => ({
+      state: getState(id)
+    })),
     mapped => {
       return mapped.reduce((groupS, { room: id, ...item }) => {
         const group = groupS.find(g => g.id === id)
