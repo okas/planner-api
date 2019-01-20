@@ -1,4 +1,4 @@
-import { transformToRoomGroupedObj, blindsAdd } from './persistence'
+import { transformToRoomGroupedObj, blindsAdd } from '../models/blindsModel'
 
 export default function registerWindowsBlindEvents(socket) {
   socket.on('get-all-room_blinds', fn => {

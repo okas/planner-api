@@ -1,4 +1,4 @@
-import { transformToRoomGroupedObj, lampAdd } from './persistence'
+import { transformToRoomGroupedObj, lampAdd } from '../models/lampsModel'
 
 export default function registerLampsEvents(socket) {
   socket.on('get-all-room_lamps', fn => {
