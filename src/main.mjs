@@ -1,8 +1,8 @@
 import SocketIOClient from 'socket.io'
 import http from 'http'
 import setBootstrap from './database'
-import registerLampsEvents from './ioLamps'
-import registerWindowsBlindEvents from './ioBlinds'
+import registerLampsEvents from './lamps'
+import registerWindowsBlindEvents from './blinds'
 
 /* Setup bootstrap, to cope with LokiJS async database loading. */
 setBootstrap(main)

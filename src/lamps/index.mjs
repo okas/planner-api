@@ -1,10 +1,10 @@
-import { collections } from './database'
-import { getRandomIntInclusive } from './utilities'
+import { collections } from '../database'
+import { getRandomIntInclusive } from '../utilities'
 
 /* Internal functions */
 
-function transformToRoomGroupedObj(lampsColl) {
-  return lampsColl.chain().mapReduce(
+function transformToRoomGroupedObj() {
+  return collections.roomLamps.chain().mapReduce(
     lamp => {
       const { meta, $loki: id, ...obj } = lamp
       return { id, ...obj, state: getState(id) }
@@ -32,7 +32,7 @@ function getState(lampId) {
 
 export default function registerLampsEvents(socket) {
   socket.on('get-all-room_lamps', fn => {
-    fn(transformToRoomGroupedObj(collections.roomLamps))
+    fn(transformToRoomGroupedObj())
     console.log(
       `sending lamps array with ${collections.roomLamps.count()} items.`
     )
