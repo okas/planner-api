@@ -3,11 +3,9 @@ import { roomLamps } from '../persistence'
 import { getRandomIntInclusive } from '../utilities'
 
 export function transformToRoomGroupedObj() {
-  return roomLamps.chain().mapReduce(
-    transformItems(id => ({
-      state: getState(id)
-    })),
-    mapped => {
+  return roomLamps
+    .chain()
+    .mapReduce(transformItems(id => getState(id)), mapped => {
       return mapped.reduce((groupS, { room: id, ...item }) => {
         const group = groupS.find(g => g.id === id)
         if (group) {
@@ -17,8 +15,7 @@ export function transformToRoomGroupedObj() {
         }
         return groupS
       }, [])
-    }
-  )
+    })
 }
 
 // Mockup function. This funtion will retreive physical state in future.
