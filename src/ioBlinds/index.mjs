@@ -3,8 +3,6 @@ import { getRandomIntInclusive } from './utilities'
 
 /* Internal functions */
 
-function transformToRoomGroupedObj(blindsColl) {
-  return blindsColl.chain().mapReduce(
     blind => {
       const { meta, $loki: id, ...obj } = blind
       return { id, ...obj, state: getState(id) }
@@ -36,7 +34,6 @@ function getState(blindId) {
 
 export default function registerWindowsBlindEvents(socket) {
   socket.on('get-all-room_blinds', fn => {
-    fn(transformToRoomGroupedObj(collections.roomBlinds))
     console.log(
       `sending blinds array with ${collections.roomBlinds.count()} items.`
     )
