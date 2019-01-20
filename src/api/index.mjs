@@ -25,3 +25,9 @@ export default function initApi(httpServer) {
     registerWindowsBlindEvents(socket)
   })
 }
+
+// Todo: retreive configurtion here
+const socketIoConfig = {
+  path: '/api',
+  pingInterval: 3600000 || undefined // testing only!
+}
