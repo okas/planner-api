@@ -8,13 +8,15 @@ export function transformToRoomGroupedObj() {
       return { id, ...obj, state: getState(id) }
     },
     mapped => {
-      return mapped.reduce((grouped, blind) => {
-        if (!grouped[blind.room]) {
-          grouped[blind.room] = []
+      return mapped.reduce((groupS, { room: id, ...blind }) => {
+        const group = groupS.find(g => g.id === id)
+        if (group) {
+          group.items.push(blind)
+        } else {
+          groupS.push({ id, items: [blind] })
         }
-        grouped[blind.room].push(blind)
-        return grouped
-      }, {})
+        return groupS
+      }, [])
     }
   )
 }
