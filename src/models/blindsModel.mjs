@@ -1,4 +1,4 @@
-import { roomBlinds } from '../database'
+import { roomBlinds } from '../persistence'
 import { getRandomIntInclusive } from '../utilities'
 
 export function transformToRoomGroupedObj() {

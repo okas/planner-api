@@ -1,6 +1,6 @@
 import http from 'http'
 import initApi from './api'
-import setBootstrap from './database'
+import setBootstrap from './persistence'
 
 // Todo: retreive configurtion here
 const port = 3000
