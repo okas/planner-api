@@ -3,17 +3,14 @@ import { getRandomIntInclusive } from '../utilities'
 
 export function transformToRoomGroupedObj() {
   return roomBlinds.chain().mapReduce(
-    blind => {
-      const { meta, $loki: id, ...obj } = blind
-      return { id, ...obj, state: getState(id) }
-    },
+    ({ meta, $loki: id, ...item }) => ({ id, ...item, state: getState(id) }),
     mapped => {
-      return mapped.reduce((groupS, { room: id, ...blind }) => {
+      return mapped.reduce((groupS, { room: id, ...item }) => {
         const group = groupS.find(g => g.id === id)
         if (group) {
-          group.items.push(blind)
+          group.items.push(item)
         } else {
-          groupS.push({ id, items: [blind] })
+          groupS.push({ id, items: [item] })
         }
         return groupS
       }, [])
