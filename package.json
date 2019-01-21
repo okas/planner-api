@@ -31,7 +31,7 @@
     "build": "babel --delete-dir-on-start src --out-dir dist --source-maps",
     "build:watch": "babel --delete-dir-on-start src --out-dir dist --source-maps --watch",
     "start": "node dist/main.js",
-    "start:es6": "node src/main.mjs",
+    "start:es6": "node src/main.js",
     "format": "prettier --write 'src/**/*.(mjs|js)'",
     "format:watch": "onchange \"src/**/*.(mjs|js)\" -- prettier --write {{changed}}",
     "lint": "eslint src --color",

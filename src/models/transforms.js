@@ -12,3 +12,15 @@ export function transformItems(fnGetStateVal) {
     ...(fnGetStateVal && { state: fnGetStateVal(id) })
   })
 }
+
+export function groupByRooms(mapped) {
+  return mapped.reduce((groupS, { room: id, ...item }) => {
+    const group = groupS.find(g => g.id === id)
+    if (group) {
+      group.items.push(item)
+    } else {
+      groupS.push({ id, items: [item] })
+    }
+    return groupS
+  }, [])
+}

@@ -2,12 +2,6 @@ import SocketIOClient from 'socket.io'
 import registerLampsEvents from './lamps'
 import registerWindowsBlindEvents from './blinds'
 
-// Todo: retreive configurtion here
-const socketIoConfig = {
-  path: '/api',
-  pingInterval: 3600000 || undefined // testing only!
-}
-
 export let io
 
 export default function initApi(httpServer) {

@@ -1,8 +1,8 @@
-import { transformToRoomGroupedObj, blindsAdd } from '../models/blindsModel'
+import { getGroupedBlinds, blindsAdd } from '../models/blindsModel'
 
 export default function registerWindowsBlindEvents(socket) {
   socket.on('get-all-room_blinds', fn => {
-    fn(transformToRoomGroupedObj())
+    fn(getGroupedBlinds())
     console.log('sending blinds grouped by rooms.')
   })
 

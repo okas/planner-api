@@ -1,8 +1,8 @@
-import { transformToRoomGroupedObj, lampAdd } from '../models/lampsModel'
+import { getGroupedLamps, lampAdd } from '../models/lampsModel'
 
 export default function registerLampsEvents(socket) {
   socket.on('get-all-room_lamps', fn => {
-    fn(transformToRoomGroupedObj())
+    fn(getGroupedLamps())
     console.log('sending lamps grouped by rooms.')
   })
 
