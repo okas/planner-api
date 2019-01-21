@@ -13,8 +13,8 @@
     "@babel/plugin-transform-runtime": "^7.2.0",
     "@babel/preset-env": "^7.2.3",
     "@babel/runtime": "^7.2.0",
-    "eslint": "^5.12.0",
-    "eslint-config-prettier": "^3.3.0",
+    "eslint": "^5.12.1",
+    "eslint-config-prettier": "^3.6.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-node": "^8.0.1",
@@ -23,7 +23,7 @@
     "eslint-plugin-standard": "^4.0.0",
     "npm-run-all": "^4.1.5",
     "onchange": "^5.2.0",
-    "prettier": "^1.15.3"
+    "prettier": "^1.16.0"
   },
   "scripts": {
     "debug:watch": "onchange -v -i -k \"src/**/*.(mjs|js)\" -- npm run debug",
