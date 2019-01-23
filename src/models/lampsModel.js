@@ -1,5 +1,4 @@
 import { transformItems, groupByRooms } from './transforms'
-
 import { roomLamps } from '../persistence'
 import { getRandomIntInclusive } from '../utilities'
 
