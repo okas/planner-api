@@ -1,6 +1,7 @@
 import SocketIOClient from 'socket.io'
 import registerLampsEvents from './lamps'
 import registerWindowsBlindEvents from './blinds'
+import registerPresetsEvents from './presets'
 
 export let io
 
@@ -17,6 +18,7 @@ export default function initApi(httpServer) {
     })
     registerLampsEvents(socket)
     registerWindowsBlindEvents(socket)
+    registerPresetsEvents(socket)
   })
 }
 
