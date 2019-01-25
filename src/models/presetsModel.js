@@ -1,14 +1,28 @@
 import { roomLamps, roomBlinds } from '../persistence'
 import { transformItems, groupByRooms } from './transforms'
 
-export function getDevices() {
+const translations = {
+  en: {
+    lampGroupId: 'Lamps',
+    blindsGroupId: 'Blinds'
+  },
+  ee: {
+    lampGroupId: 'Lambid',
+    blindsGroupId: 'Rulood'
+  }
+}
+
+export function getDevices(lang) {
+  const i18n = translations[lang] || translations['en']
   return [
     {
-      type: 'lamps',
+      type: 'room_lamps',
+      id: i18n.lampGroupId,
       items: roomLamps.chain().mapReduce(transformItems(), groupByRooms)
     },
     {
-      type: 'blinds',
+      type: 'room_blinds',
+      id: i18n.blindsGroupId,
       items: roomBlinds.chain().mapReduce(transformItems(), groupByRooms)
     }
   ]
