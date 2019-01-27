@@ -17,12 +17,12 @@ export function getDevices(lang) {
   return [
     {
       type: 'room_lamps',
-      id: i18n.lampGroupId,
+      name: i18n.lampGroupId,
       items: roomLamps.chain().mapReduce(transformItems(), groupByRooms)
     },
     {
       type: 'room_blinds',
-      id: i18n.blindsGroupId,
+      name: i18n.blindsGroupId,
       items: roomBlinds.chain().mapReduce(transformItems(), groupByRooms)
     }
   ]
