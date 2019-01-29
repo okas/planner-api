@@ -1,15 +1,18 @@
-import { roomLamps, roomBlinds } from '../persistence'
+import { presets, roomLamps, roomBlinds } from '../persistence'
 import { transformItems, groupByRooms } from './transforms'
 
-const translations = {
-  en: {
-    lampGroupId: 'Lamps',
-    blindsGroupId: 'Blinds'
-  },
-  ee: {
-    lampGroupId: 'Lambid',
-    blindsGroupId: 'Rulood'
+/**
+ * Takes new object, saves to database, or returns `{error}`,
+ * if `{id}` exists, is numeric and `> 0`.
+ * @param preset preset to insert to database.
+ * @returns new preset's `{id}` or `{error}`.
+ */
+export function addPreset(preset) {
+  if (preset.id && Number.parseInt(preset.id) < 0) {
+    return { error: `attempted object has {id} other than 0` }
   }
+  // ToDo error check
+  return { id: presets.insertOne(preset).$loki }
 }
 
 export function getDevices(lang) {
@@ -26,4 +29,15 @@ export function getDevices(lang) {
       items: roomBlinds.chain().mapReduce(transformItems(), groupByRooms)
     }
   ]
+}
+
+const translations = {
+  en: {
+    lampGroupId: 'Lamps',
+    blindsGroupId: 'Blinds'
+  },
+  ee: {
+    lampGroupId: 'Lambid',
+    blindsGroupId: 'Rulood'
+  }
 }
