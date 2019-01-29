@@ -1,4 +1,4 @@
-import { addPreset, getAll, getDevices } from '../models/presetsModel'
+import { addPreset, update, getAll, getDevices } from '../models/presetsModel'
 
 export default function registerPresetsEvents(socket) {
   socket.on('presets-add', (preset, fn) => {
@@ -8,6 +8,16 @@ export default function registerPresetsEvents(socket) {
       !result.error
         ? `Sent added preset's id.`
         : `Sent error on adding new preset: [ ${JSON.stringify(result)} ]`
+    )
+  })
+
+  socket.on('preset-update', (preset, fn) => {
+    const result = update(preset)
+    fn(result)
+    console.log(
+      !result.error
+        ? `Sent updated presets's id`
+        : `Sent error on updating new preset: [ ${JSON.stringify(result)} ]`
     )
   })
 

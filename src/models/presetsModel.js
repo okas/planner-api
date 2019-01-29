@@ -16,6 +16,13 @@ export function addPreset(preset) {
   return { id: presets.insertOne(preset).$loki }
 }
 
+export function update(preset) {
+  preset.$loki = preset.id
+  delete preset.id
+  presets.update(preset)
+  return { status: 'ok' }
+}
+
 export function getAll() {
   return presets.data.map(transformItems())
 }
