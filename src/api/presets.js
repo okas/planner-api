@@ -1,15 +1,6 @@
 import { addPreset, getAll, getDevices } from '../models/presetsModel'
 
 export default function registerPresetsEvents(socket) {
-  socket.on('get-devices-selection', (lang, fn) => {
-    if (typeof fn === 'function') {
-      fn(getDevices(lang))
-    } else {
-      lang(getDevices())
-    }
-    console.log('Sent devices selection grouped by type and room.')
-  })
-
   socket.on('presets-add', (preset, fn) => {
     const result = addPreset(preset)
     fn(result)
@@ -23,5 +14,15 @@ export default function registerPresetsEvents(socket) {
   socket.on('presets-get-all', fn => {
     fn(getAll())
     console.log('Sent all presets.')
+  })
+
+  // Verify is it necessary expect that fn is moved- argument order if data is not given?
+  socket.on('get-devices-selection', (lang, fn) => {
+    if (typeof fn === 'function') {
+      fn(getDevices(lang))
+    } else {
+      lang(getDevices())
+    }
+    console.log('Sent devices selection grouped by type and room.')
   })
 }

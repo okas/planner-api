@@ -26,12 +26,12 @@ export function getDevices(lang) {
     {
       type: 'room_lamps',
       name: i18n.lampGroupId,
-      items: roomLamps.chain().mapReduce(transformItems(), groupByRooms)
+      items: roomLamps.mapReduce(transformItems(), groupByRooms)
     },
     {
       type: 'room_blinds',
       name: i18n.blindsGroupId,
-      items: roomBlinds.chain().mapReduce(transformItems(), groupByRooms)
+      items: roomBlinds.mapReduce(transformItems(), groupByRooms)
     }
   ]
 }
