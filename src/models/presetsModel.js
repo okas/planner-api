@@ -16,6 +16,10 @@ export function addPreset(preset) {
   return { id: presets.insertOne(preset).$loki }
 }
 
+export function getAll() {
+  return presets.data.map(transformItems())
+}
+
 export function getDevices(lang) {
   const i18n = translations[lang] || translations['en']
   return [
