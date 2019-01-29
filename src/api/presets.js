@@ -16,7 +16,7 @@ export default function registerPresetsEvents(socket) {
     fn(result)
     console.log(
       !result.error
-        ? `Sent updated presets's id`
+        ? `Sent updated presets's status, was no errors.`
         : `Sent error on updating new preset: [ ${JSON.stringify(result)} ]`
     )
   })
