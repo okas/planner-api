@@ -7,11 +7,10 @@ import { transformItems, groupByRooms } from './transforms'
  * @param preset preset to insert to database.
  * @returns new preset's `{id}` or `{error}`.
  */
-export function addPreset(preset) {
-  if (preset.id && Number.parseInt(preset.id) < 0) {
+export function addPreset({ id, preset }) {
+  if (id && Number.parseInt(id) < 0) {
     return { error: `attempted object has {id} other than 0` }
   }
-  delete preset.id
   // ToDo error check
   return { id: presets.insertOne(preset).$loki }
 }
