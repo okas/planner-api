@@ -3,6 +3,7 @@ import LokiFsStructuredAdapter from 'lokijs/src/loki-fs-structured-adapter'
 
 export let roomLamps
 export let roomBlinds
+export let presets
 
 export default function(bootstrapFn) {
   fnProgramLogic = bootstrapFn
@@ -24,13 +25,15 @@ const configuration = {
 const db = new Loki(dbFile, configuration)
 
 function initializeDatabase() {
-  roomLamps =
-    db.getCollection('room_lamps') ||
-    db.addCollection('room_lamps', { autoupdate: true })
-
-  roomBlinds =
-    db.getCollection('room_blinds') ||
-    db.addCollection('room_blinds', { autoupdate: true })
-
+  roomLamps = getOrAddCollection('room_lamps')
+  roomBlinds = getOrAddCollection('room_blinds')
+  presets = getOrAddCollection('presets')
   fnProgramLogic()
+}
+
+function getOrAddCollection(collectionName) {
+  return (
+    db.getCollection(collectionName) ||
+    db.addCollection(collectionName, { autoupdate: true })
+  )
 }
