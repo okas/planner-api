@@ -7,7 +7,7 @@ export default function registerPresetsEvents(socket) {
     } else {
       lang(getDevices())
     }
-    console.log('sending devices grouped by type, then rooms.')
+    console.log('Sent devices selection grouped by type and room.')
   })
 
   socket.on('presets-add', (preset, fn) => {
