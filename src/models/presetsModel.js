@@ -16,10 +16,9 @@ export function addPreset(preset) {
   return { id: presets.insertOne(preset).$loki }
 }
 
-export function update(preset) {
-  preset.$loki = preset.id
-  delete preset.id
-  presets.update(preset)
+export function update({ id, preset }) {
+  // ToDo add error handling (Loki, sync vs async update!)
+  Object.assign(presets.get(id), preset)
   return { status: 'ok' }
 }
 
