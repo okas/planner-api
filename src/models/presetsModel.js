@@ -11,6 +11,7 @@ export function addPreset(preset) {
   if (preset.id && Number.parseInt(preset.id) < 0) {
     return { error: `attempted object has {id} other than 0` }
   }
+  delete preset.id
   // ToDo error check
   return { id: presets.insertOne(preset).$loki }
 }
