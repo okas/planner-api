@@ -32,8 +32,5 @@ function initializeDatabase() {
 }
 
 function getOrAddCollection(collectionName) {
-  return (
-    db.getCollection(collectionName) ||
-    db.addCollection(collectionName, { autoupdate: true })
-  )
+  return db.getCollection(collectionName) || db.addCollection(collectionName)
 }
