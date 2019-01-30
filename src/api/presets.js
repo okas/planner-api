@@ -43,7 +43,7 @@ export default function registerPresetsEvents(socket) {
   })
 
   // Verify is it necessary expect that fn is moved- argument order if data is not given?
-  socket.on('get-devices-selection', (lang, fn) => {
+  socket.on('presets-get-devices-selection', (lang, fn) => {
     if (typeof fn === 'function') {
       fn(getDevices(lang))
     } else {
