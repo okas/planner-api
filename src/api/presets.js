@@ -1,4 +1,10 @@
-import { addPreset, update, getAll, getDevices } from '../models/presetsModel'
+import {
+  addPreset,
+  update,
+  remove,
+  getAll,
+  getDevices
+} from '../models/presetsModel'
 
 export default function registerPresetsEvents(socket) {
   socket.on('presets-add', (preset, fn) => {
@@ -17,6 +23,16 @@ export default function registerPresetsEvents(socket) {
     console.log(
       !result.error
         ? `Sent updated presets's status, was no errors.`
+        : `Sent error on updating new preset: [ ${JSON.stringify(result)} ]`
+    )
+  })
+
+  socket.on('preset-remove', (preset, fn) => {
+    const result = remove(preset)
+    fn(result)
+    console.log(
+      !result.error
+        ? `Sent removed presets's status, was no errors.`
         : `Sent error on updating new preset: [ ${JSON.stringify(result)} ]`
     )
   })

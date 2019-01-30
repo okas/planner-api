@@ -21,6 +21,17 @@ export function update({ id, ...preset }) {
   return { status: 'ok' }
 }
 
+export function remove(id) {
+  // ToDo error check
+  let doc = presets.get(id)
+  if (doc) {
+    presets.remove(doc)
+    return { status: 'ok' }
+  } else {
+    return { status: 'no-exist' }
+  }
+}
+
 export function getAll() {
   return presets.data.map(transformItems())
 }
