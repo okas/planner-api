@@ -7,7 +7,7 @@ import { transformItems, groupByRooms } from './transforms'
  * @param preset preset to insert to database.
  * @returns new preset's `{id}` or `{error}`.
  */
-export function addPreset({ id, ...preset }) {
+export function add({ id, ...preset }) {
   if (id && Number.parseInt(id) < 0) {
     return { error: `attempted object has {id} other than 0` }
   }
@@ -36,7 +36,7 @@ export function getAll() {
   return presets.data.map(transformItems())
 }
 
-export function getDevices(lang) {
+export function getDevicesSelection(lang) {
   const i18n = translations[lang] || translations['en']
   return [
     {

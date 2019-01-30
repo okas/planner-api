@@ -1,14 +1,14 @@
 import {
-  addPreset,
+  add,
   update,
   remove,
   getAll,
-  getDevices
+  getDevicesSelection
 } from '../models/presetsModel'
 
 export default function registerPresetsEvents(socket) {
   socket.on('presets-add', (preset, fn) => {
-    const result = addPreset(preset)
+    const result = add(preset)
     fn(result)
     console.log(
       !result.error
@@ -45,9 +45,9 @@ export default function registerPresetsEvents(socket) {
   // Verify is it necessary expect that fn is moved- argument order if data is not given?
   socket.on('presets-get-devices-selection', (lang, fn) => {
     if (typeof fn === 'function') {
-      fn(getDevices(lang))
+      fn(getDevicesSelection(lang))
     } else {
-      lang(getDevices())
+      lang(getDevicesSelection())
     }
     console.log('Sent devices selection grouped by type and room.')
   })
