@@ -49,6 +49,6 @@ export default function registerPresetsEvents(socket) {
     } else {
       lang(getDevicesSelection())
     }
-    console.log('Sent devices selection grouped by type and room.')
+    console.log('Sent devices selection grouped by type.')
   })
 }
