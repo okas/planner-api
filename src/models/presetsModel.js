@@ -1,5 +1,5 @@
 import { presets, roomLamps, roomBlinds } from '../persistence'
-import { transformItems, groupByRooms } from './transforms'
+import { transformItems } from './transforms'
 
 /**
  * Takes new object, saves to database, or returns `{error}`,
