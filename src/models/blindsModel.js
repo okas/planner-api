@@ -19,9 +19,10 @@ function getState(blindId) {
   return match === 1 ? getRandomIntInclusive(0, 100) / 100 : 0
 }
 
-export function blindAdd(blind, room) {
+export function blindAdd(blind, room, valuestep = 1) {
   return roomBlinds.insertOne({
     name: `${blind || '-blind'} ${roomBlinds.count() + 1}`, // ToDo: remove test code (number suffix)
-    room: room || '?'
+    room: room || '?',
+    valuestep
   })
 }

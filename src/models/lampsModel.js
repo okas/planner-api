@@ -15,9 +15,10 @@ function getState(lampId) {
   return +(getRandomIntInclusive(lampId, lampId + 2) % (lampId + 2) === 0)
 }
 
-export function lampAdd(lamp, room) {
+export function lampAdd(lamp, room, valuestep = 1) {
   return roomLamps.insertOne({
     name: `${lamp || '-lamp'} ${roomLamps.count() + 1}`, // ToDo: remove test code (number suffix)
-    room: room || '?'
+    room: room || '?',
+    valuestep
   })
 }
