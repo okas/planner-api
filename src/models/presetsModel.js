@@ -42,12 +42,12 @@ export function getDevicesSelection(lang) {
     {
       type: 'room_lamps',
       name: i18n.lampGroupId,
-      items: roomLamps.mapReduce(transformItems(), groupByRooms)
+      items: roomLamps.data.map(transformItems())
     },
     {
       type: 'room_blinds',
       name: i18n.blindsGroupId,
-      items: roomBlinds.mapReduce(transformItems(), groupByRooms)
+      items: roomBlinds.data.map(transformItems())
     }
   ]
 }
