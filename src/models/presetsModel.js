@@ -3,22 +3,34 @@ import { transformItems } from './transforms'
 
 /**
  * Takes new object, saves to database, or returns `{error}`,
- * if `{id}` exists, is numeric and `> 0`.
+ * if `{id}` exists, is numeric and `!== 0`.
  * @param preset preset to insert to database.
  * @returns new preset's `{id}` or `{error}`.
  */
 export function add({ id, ...preset }) {
-  if (id && Number.parseInt(id) < 0) {
+  if (id && Number.parseInt(id) !== 0) {
     return { error: `attempted object has {id} other than 0` }
   }
+  const doc = sanitize(preset)
   // ToDo error check
-  return { id: presets.insertOne(preset).$loki }
+  return { id: presets.insertOne(doc).$loki }
 }
 
 export function update({ id, ...preset }) {
+  const doc = sanitize(preset)
   // ToDo add error handling (Loki, sync vs async update!)
-  presets.update(Object.assign(presets.get(id), preset))
+  presets.update(Object.assign(presets.get(id), doc))
   return { status: 'ok' }
+}
+
+function sanitize({ name, schedule, active, setorder, devices: rawDevices }) {
+  return {
+    name,
+    schedule,
+    active,
+    setorder,
+    devices: rawDevices.map(({ id, type, value }) => ({ id, type, value }))
+  }
 }
 
 export function remove(id) {
