@@ -1,15 +1,8 @@
-import {
-  add,
-  update,
-  remove,
-  setActive,
-  getAll,
-  getDevicesSelection
-} from '../models/presetsModel'
+import * as model from '../models/presetsModel'
 
 export default function registerPresetsEvents(socket) {
   socket.on('presets-add', (preset, fn) => {
-    const result = add(preset)
+    const result = model.add(preset)
     fn(result)
     console.log(
       !result.error
@@ -19,7 +12,7 @@ export default function registerPresetsEvents(socket) {
   })
 
   socket.on('preset-update', (preset, fn) => {
-    const result = update(preset)
+    const result = model.update(preset)
     fn(result)
     console.log(
       !result.error
@@ -29,7 +22,7 @@ export default function registerPresetsEvents(socket) {
   })
 
   socket.on('preset-remove', (preset, fn) => {
-    const result = remove(preset)
+    const result = model.remove(preset)
     fn(result)
     console.log(
       !result.error
@@ -39,7 +32,7 @@ export default function registerPresetsEvents(socket) {
   })
 
   socket.on('presets-set-active', ({ id, active }, fn) => {
-    const result = setActive(id, active)
+    const result = model.setActive(id, active)
     fn(result)
     console.log(
       !result.error
@@ -51,16 +44,16 @@ export default function registerPresetsEvents(socket) {
   })
 
   socket.on('presets-get-all', fn => {
-    fn(getAll())
+    fn(model.getAll())
     console.log('Sent all presets.')
   })
 
   // Verify is it necessary expect that fn is moved- argument order if data is not given?
   socket.on('presets-get-devices-selection', (lang, fn) => {
     if (typeof fn === 'function') {
-      fn(getDevicesSelection(lang))
+      fn(model.getDevicesSelection(lang))
     } else {
-      lang(getDevicesSelection())
+      lang(model.getDevicesSelection())
     }
     console.log('Sent devices selection grouped by type.')
   })
