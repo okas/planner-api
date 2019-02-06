@@ -32,6 +32,17 @@ export function remove(id) {
   }
 }
 
+export function setActive(id, newState) {
+  let doc = presets.get(id)
+  if (doc) {
+    doc.active = newState
+    presets.update(doc)
+    return { status: 'ok' }
+  } else {
+    return { status: 'no-exist' }
+  }
+}
+
 export function getAll() {
   return presets.data.map(transformItems())
 }

@@ -2,6 +2,7 @@ import {
   add,
   update,
   remove,
+  setActive,
   getAll,
   getDevicesSelection
 } from '../models/presetsModel'
@@ -34,6 +35,18 @@ export default function registerPresetsEvents(socket) {
       !result.error
         ? `Sent removed presets's status, was no errors.`
         : `Sent error on updating new preset: [ ${JSON.stringify(result)} ]`
+    )
+  })
+
+  socket.on('presets-set-active', ({ id, active }, fn) => {
+    const result = setActive(id, active)
+    fn(result)
+    console.log(
+      !result.error
+        ? `Sent state for set active change of preset, was no errors.`
+        : `Sent error on setting new active state: [ ${JSON.stringify(
+            result
+          )} ]`
     )
   })
 
