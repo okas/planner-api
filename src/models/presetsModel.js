@@ -23,12 +23,18 @@ export function update({ id, ...preset }) {
   return { status: 'ok' }
 }
 
-function sanitize({ name, schedule, active, setorder, devices: rawDevices }) {
+function sanitize({
+  name,
+  schedule,
+  active,
+  // setorder,
+  devices: rawDevices
+}) {
   return {
     name,
     schedule,
     active,
-    setorder,
+    // setorder,
     devices: rawDevices.map(({ id, type, value }) => ({ id, type, value }))
   }
 }
