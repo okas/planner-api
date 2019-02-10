@@ -86,7 +86,7 @@ const translations = {
     lampGroupId: 'Lamps',
     blindsGroupId: 'Blinds'
   },
-  ee: {
+  et: {
     lampGroupId: 'Lambid',
     blindsGroupId: 'Rulood'
   }
