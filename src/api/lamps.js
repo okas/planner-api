@@ -6,9 +6,13 @@ export default function registerLampsEvents(socket) {
     console.log('sending lamps grouped by rooms.')
   })
 
-  socket.on('lamps-add', (lamp, room, fn) => {
-    let lampObj = model.lampAdd(lamp, room)
-    console.log(`created: ${JSON.stringify(lampObj)}`)
-    fn(lampObj)
+  socket.on('lamp-add', (lamp, fn) => {
+    let result = model.lampAdd(lamp)
+    fn(result)
+    console.log(
+      result.errors
+        ? `Sent error on adding new lamp: [ ${JSON.stringify(result)} ]`
+        : `Sent added lamps's id.`
+    )
   })
 }
