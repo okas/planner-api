@@ -7,12 +7,22 @@ export default function registerLampsEvents(socket) {
   })
 
   socket.on('lamp-add', (lamp, fn) => {
-    let result = model.lampAdd(lamp)
+    let result = model.add(lamp)
     fn(result)
     console.log(
       result.errors
-        ? `Sent error on adding new lamp: [ ${JSON.stringify(result)} ]`
+        ? `Sent errors on adding new lamp: [ ${JSON.stringify(result)} ]`
         : `Sent added lamps's id.`
+    )
+  })
+
+  socket.on('lamp-update', (lamp, fn) => {
+    const result = model.update(lamp)
+    fn(result)
+    console.log(
+      !result.errors
+        ? `Sent updated lamp's status, was no errors.`
+        : `Sent errors on updating new lamp: [ ${JSON.stringify(result)} ]`
     )
   })
 }

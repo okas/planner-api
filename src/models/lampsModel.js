@@ -21,15 +21,33 @@ function getState(lampId) {
  * @param lamp preset to insert to database, provided `{id}` prop will be ignored.
  * @returns new preset's `{id}` or `{errors:[]}`.
  */
-export function lampAdd(lamp) {
-  // We will ignor sent id, because db will assign id for a document and returns it to the conumer
-  delete lamp.id
-  const erros = validate(lamp)
+export function add(lamp) {
+  const doc = sanitize(lamp)
+  const erros = validate(doc)
   if (erros) {
     return erros
   }
   // ToDo handle db level errors and return them
-  return { id: roomLamps.insertOne(lamp).$loki }
+  return { id: roomLamps.insertOne(doc).$loki }
+}
+
+export function update({ id, ...lamp }) {
+  const doc = sanitize(lamp)
+  const erros = validate(doc)
+  if (erros) {
+    return erros
+  }
+  // ToDo add error handling (Loki, sync vs async update!)
+  roomLamps.update(Object.assign(roomLamps.get(id), doc))
+  return { status: 'ok' }
+}
+
+/**
+ * Takes object from API request and sanitizes according to model.
+ * @returns new object that only has properties defined by model.
+ */
+function sanitize({ name, room, valuestep }) {
+  return { name, room, valuestep }
 }
 
 function validate({ name, room, valuestep }) {
