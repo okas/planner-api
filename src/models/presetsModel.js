@@ -23,6 +23,10 @@ export function update({ id, ...preset }) {
   return { status: 'ok' }
 }
 
+/**
+ * Takes object from API request and sanitizes according to model.
+ * @returns new object that only has properties defined by model.
+ */
 function sanitize({
   name,
   schedule,
