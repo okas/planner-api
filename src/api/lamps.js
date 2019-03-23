@@ -25,4 +25,14 @@ export default function registerLampsEvents(socket) {
         : `Sent errors on updating new lamp: [ ${JSON.stringify(result)} ]`
     )
   })
+
+  socket.on('lamp-remove', (lampId, fn) => {
+    const result = model.remove(lampId)
+    fn(result)
+    console.log(
+      !result.error
+        ? `Sent removed lamp's status, was no errors.`
+        : `Sent error on removing lamp: [ ${JSON.stringify(result)} ]`
+    )
+  })
 }

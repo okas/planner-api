@@ -65,3 +65,14 @@ function validate({ name, room, valuestep }) {
   }
   return errors.length ? { errors } : null
 }
+
+export function remove(id) {
+  // ToDo error check
+  let doc = roomLamps.get(id)
+  if (doc) {
+    roomLamps.remove(doc)
+    return { status: 'ok' }
+  } else {
+    return { status: 'no-exist' }
+  }
+}
