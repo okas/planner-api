@@ -21,13 +21,13 @@ export default function registerPresetsEvents(socket) {
     )
   })
 
-  socket.on('preset-remove', (preset, fn) => {
-    const result = model.remove(preset)
+  socket.on('preset-remove', (presetId, fn) => {
+    const result = model.remove(presetId)
     fn(result)
     console.log(
       !result.error
         ? `Sent removed presets's status, was no errors.`
-        : `Sent error on updating new preset: [ ${JSON.stringify(result)} ]`
+        : `Sent error on removing preset: [ ${JSON.stringify(result)} ]`
     )
   })
 
