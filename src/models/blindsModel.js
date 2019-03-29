@@ -19,10 +19,64 @@ function getState(blindId) {
   return match === 1 ? getRandomIntInclusive(0, 100) / 100 : 0
 }
 
-export function blindAdd(blind, room, valuestep = 1) {
-  return roomBlinds.insertOne({
-    name: `${blind || '-blind'} ${roomBlinds.count() + 1}`, // ToDo: remove test code (number suffix)
-    room: room || '?',
-    valuestep
-  })
+/**
+ * Takes new object, saves to database, or returns `{errors}`,
+ * if validation fails.
+ * @param blind preset to insert to database, provided `{id}` prop will be ignored.
+ * @returns new preset's `{id}` or `{errors:[]}`.
+ */
+export function add(blind) {
+  const doc = sanitize(blind)
+  const erros = validate(doc)
+  if (erros) {
+    return erros
+  }
+  // ToDo handle db level errors and return them
+  return { id: roomBlinds.insertOne(doc).$loki }
+}
+
+export function update({ id, ...blind }) {
+  const doc = sanitize(blind)
+  const erros = validate(doc)
+  if (erros) {
+    return erros
+  }
+  // ToDo add error handling (Loki, sync vs async update!)
+  roomBlinds.update(Object.assign(roomBlinds.get(id), doc))
+  return { status: 'ok' }
+}
+
+/**
+ * Takes object from API request and sanitizes according to model.
+ * @returns new object that only has properties defined by model.
+ */
+function sanitize({ name, room, valuestep }) {
+  return { name, room, valuestep }
+}
+
+function validate({ name, room, valuestep }) {
+  let errors = []
+  if (!name) {
+    errors.push(`attempted object didn't have valid {name} value: [${name}]`)
+  }
+  if (!room) {
+    errors.push(`attempted object didn't have valid {room} value: [${room}]`)
+  }
+  if (!(valuestep === 1 || (valuestep > 0 && valuestep <= 0.5))) {
+    errors.push(
+      `attempted object didn't have valid {valuestep} value; must be 1 or > 0 and <= 0.5: [${valuestep}]`
+    )
+  }
+  return errors.length ? { errors } : null
+}
+
+export function remove(id) {
+  // ToDo error check
+  let doc = roomBlinds.get(id)
+  if (doc) {
+    roomBlinds.remove(doc)
+    return { status: 'ok' }
+  } else {
+    return { status: 'no-exist' }
+  }
 }
