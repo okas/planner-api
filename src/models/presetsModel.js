@@ -1,4 +1,8 @@
-import { presets, roomLamps, roomBlinds } from '../persistence'
+import {
+  presetsCollection,
+  roomLampsCollection,
+  roomBlindsCollection
+} from '../persistence'
 import { transformItems } from './transforms'
 
 /**
@@ -13,13 +17,13 @@ export function add({ id, ...preset }) {
   }
   const doc = sanitize(preset)
   // ToDo error check
-  return { id: presets.insertOne(doc).$loki }
+  return { id: presetsCollection.insertOne(doc).$loki }
 }
 
 export function update({ id, ...preset }) {
   const doc = sanitize(preset)
   // ToDo add error handling (Loki, sync vs async update!)
-  presets.update(Object.assign(presets.get(id), doc))
+  presetsCollection.update(Object.assign(presetsCollection.get(id), doc))
   return { status: 'ok' }
 }
 
@@ -45,9 +49,9 @@ function sanitize({
 
 export function remove(id) {
   // ToDo error check
-  let doc = presets.get(id)
+  let doc = presetsCollection.get(id)
   if (doc) {
-    presets.remove(doc)
+    presetsCollection.remove(doc)
     return { status: 'ok' }
   } else {
     return { status: 'no-exist' }
@@ -55,10 +59,10 @@ export function remove(id) {
 }
 
 export function setActive(id, newState) {
-  let doc = presets.get(id)
+  let doc = presetsCollection.get(id)
   if (doc) {
     doc.active = newState
-    presets.update(doc)
+    presetsCollection.update(doc)
     return { status: 'ok' }
   } else {
     return { status: 'no-exist' }
@@ -66,7 +70,7 @@ export function setActive(id, newState) {
 }
 
 export function getAll() {
-  return presets.data.map(transformItems())
+  return presetsCollection.data.map(transformItems())
 }
 
 export function getDevicesSelection(lang) {
@@ -75,12 +79,12 @@ export function getDevicesSelection(lang) {
     {
       type: 'room_lamps',
       name: i18n.lampGroupId,
-      items: roomLamps.data.map(transformItems())
+      items: roomLampsCollection.data.map(transformItems())
     },
     {
       type: 'room_blinds',
       name: i18n.blindsGroupId,
-      items: roomBlinds.data.map(transformItems())
+      items: roomBlindsCollection.data.map(transformItems())
     }
   ]
 }

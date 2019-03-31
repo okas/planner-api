@@ -1,13 +1,11 @@
 import Loki from 'lokijs'
 import LokiFsStructuredAdapter from 'lokijs/src/loki-fs-structured-adapter'
 
-export let roomLamps
-export let roomBlinds
-export let presets
-
 export default function(bootstrapFn) {
   fnProgramLogic = bootstrapFn
 }
+
+export let roomLampsCollection, roomBlindsCollection, presetsCollection
 
 let fnProgramLogic
 // take from configuration or export constructor from this module
@@ -25,12 +23,16 @@ const configuration = {
 const db = new Loki(dbFile, configuration)
 
 function initializeDatabase() {
-  roomLamps = getOrAddCollection('room_lamps')
-  roomBlinds = getOrAddCollection('room_blinds')
-  presets = getOrAddCollection('presets')
+  initCollections()
   fnProgramLogic()
 }
 
-function getOrAddCollection(collectionName) {
-  return db.getCollection(collectionName) || db.addCollection(collectionName)
+function initCollections() {
+  roomLampsCollection = getOrAddCollection('room_lamps')
+  roomBlindsCollection = getOrAddCollection('room_blinds')
+  presetsCollection = getOrAddCollection('presets')
+}
+
+function getOrAddCollection(name, config = null) {
+  return db.getCollection(name) || db.addCollection(name, config)
 }

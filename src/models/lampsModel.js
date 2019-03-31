@@ -1,9 +1,9 @@
 import { transformItems, groupByRooms } from './transforms'
-import { roomLamps } from '../persistence'
+import { roomLampsCollection } from '../persistence'
 import { getRandomIntInclusive } from '../utilities'
 
 export function getGroupedLamps() {
-  return roomLamps
+  return roomLampsCollection
     .chain()
     .mapReduce(transformItems(id => getState(id)), groupByRooms)
 }
@@ -28,7 +28,7 @@ export function add(lamp) {
     return erros
   }
   // ToDo handle db level errors and return them
-  return { id: roomLamps.insertOne(doc).$loki }
+  return { id: roomLampsCollection.insertOne(doc).$loki }
 }
 
 export function update({ id, ...lamp }) {
@@ -38,7 +38,8 @@ export function update({ id, ...lamp }) {
     return erros
   }
   // ToDo add error handling (Loki, sync vs async update!)
-  roomLamps.update(Object.assign(roomLamps.get(id), doc))
+  roomLampsCollection.update(Object.assign(roomLampsCollection.get(id), doc))
+
   return { status: 'ok' }
 }
 
@@ -68,9 +69,9 @@ function validate({ name, room, valuestep }) {
 
 export function remove(id) {
   // ToDo error check
-  let doc = roomLamps.get(id)
+  let doc = roomLampsCollection.get(id)
   if (doc) {
-    roomLamps.remove(doc)
+    roomLampsCollection.remove(doc)
     return { status: 'ok' }
   } else {
     return { status: 'no-exist' }

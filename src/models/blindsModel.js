@@ -1,9 +1,9 @@
 import { transformItems, groupByRooms } from './transforms'
-import { roomBlinds } from '../persistence'
+import { roomBlindsCollection } from '../persistence'
 import { getRandomIntInclusive } from '../utilities'
 
 export function getGroupedBlinds() {
-  return roomBlinds
+  return roomBlindsCollection
     .chain()
     .mapReduce(transformItems(id => getState(id)), groupByRooms)
 }
@@ -32,7 +32,7 @@ export function add(blind) {
     return erros
   }
   // ToDo handle db level errors and return them
-  return { id: roomBlinds.insertOne(doc).$loki }
+  return { id: roomBlindsCollection.insertOne(doc).$loki }
 }
 
 export function update({ id, ...blind }) {
@@ -42,7 +42,7 @@ export function update({ id, ...blind }) {
     return erros
   }
   // ToDo add error handling (Loki, sync vs async update!)
-  roomBlinds.update(Object.assign(roomBlinds.get(id), doc))
+  roomBlindsCollection.update(Object.assign(roomBlindsCollection.get(id), doc))
   return { status: 'ok' }
 }
 
@@ -72,9 +72,9 @@ function validate({ name, room, valuestep }) {
 
 export function remove(id) {
   // ToDo error check
-  let doc = roomBlinds.get(id)
+  let doc = roomBlindsCollection.get(id)
   if (doc) {
-    roomBlinds.remove(doc)
+    roomBlindsCollection.remove(doc)
     return { status: 'ok' }
   } else {
     return { status: 'no-exist' }
