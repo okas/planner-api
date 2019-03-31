@@ -1,10 +1,13 @@
 import Loki from 'lokijs'
 import LokiFsStructuredAdapter from 'lokijs/src/loki-fs-structured-adapter'
+import { EventEmitter } from 'events'
 
 export default function(bootstrapFn) {
   fnProgramLogic = bootstrapFn
 }
 
+export let meEmitter = new EventEmitter()
+export const readyEventName = 'persistence:ready'
 export let roomLampsCollection, roomBlindsCollection, presetsCollection
 
 let fnProgramLogic
@@ -24,6 +27,7 @@ const db = new Loki(dbFile, configuration)
 
 function initializeDatabase() {
   initCollections()
+  meEmitter.emit(readyEventName)
   fnProgramLogic()
 }
 
