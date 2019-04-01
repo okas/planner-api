@@ -1,16 +1,7 @@
 import Loki from 'lokijs'
 import LokiFsStructuredAdapter from 'lokijs/src/loki-fs-structured-adapter'
-import { EventEmitter } from 'events'
+import messageBus from '../messageBus'
 
-export default function(bootstrapFn) {
-  fnProgramLogic = bootstrapFn
-}
-
-export let meEmitter = new EventEmitter()
-export const readyEventName = 'persistence:ready'
-export let roomLampsCollection, roomBlindsCollection, presetsCollection
-
-let fnProgramLogic
 // take from configuration or export constructor from this module
 const dbFile = './data/loki_db.json'
 
@@ -23,12 +14,9 @@ const configuration = {
   autoloadCallback: initializeDatabase
 }
 
-const db = new Loki(dbFile, configuration)
-
 function initializeDatabase() {
   initCollections()
-  meEmitter.emit(readyEventName)
-  fnProgramLogic()
+  messageBus.emit(readyEvent)
 }
 
 function initCollections() {
@@ -40,3 +28,8 @@ function initCollections() {
 function getOrAddCollection(name, config = null) {
   return db.getCollection(name) || db.addCollection(name, config)
 }
+
+const db = new Loki(dbFile, configuration)
+
+export const readyEvent = 'persistence:ready'
+export let roomLampsCollection, roomBlindsCollection, presetsCollection

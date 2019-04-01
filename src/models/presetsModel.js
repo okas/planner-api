@@ -1,7 +1,9 @@
+import messageBus from '../messageBus'
 import {
   presetsCollection,
   roomLampsCollection,
-  roomBlindsCollection
+  roomBlindsCollection,
+  readyEvent
 } from '../persistence'
 import { transformItems } from './transforms'
 
@@ -98,4 +100,15 @@ const translations = {
     lampGroupId: 'Lambid',
     blindsGroupId: 'Rulood'
   }
+}
+
+messageBus.on(readyEvent, () => {
+  roomLampsCollection.addListener('delete', removeDeviceFomAllPresets)
+  roomBlindsCollection.addListener('delete', removeDeviceFomAllPresets)
+})
+
+function removeDeviceFomAllPresets({ $loki }) {
+  presetsCollection.findAndUpdate({ 'devices.id': $loki }, p => {
+    p.devices.splice(p.devices.findIndex(d => d.id === $loki), 1)
+  })
 }

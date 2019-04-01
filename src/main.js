@@ -1,12 +1,12 @@
 import http from 'http'
 import initApi from './api'
-import setBootstrap from './persistence'
+import messageBus from './messageBus'
+import { readyEventName } from './persistence'
 
 // Todo: retreive configurtion here
 const port = 3000
 
-/* Setup bootstrap, to cope with LokiJS async database loading. */
-setBootstrap(main)
+messageBus.on(readyEventName, main)
 
 function main() {
   /* Init internals  */
