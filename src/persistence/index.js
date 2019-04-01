@@ -16,7 +16,7 @@ const configuration = {
 
 function initializeDatabase() {
   initCollections()
-  messageBus.emit(readyEvent)
+  messageBus.emit('persistence:ready')
 }
 
 function initCollections() {
@@ -31,5 +31,4 @@ function getOrAddCollection(name, config = null) {
 
 const db = new Loki(dbFile, configuration)
 
-export const readyEvent = 'persistence:ready'
 export let roomLampsCollection, roomBlindsCollection, presetsCollection

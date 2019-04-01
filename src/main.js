@@ -1,12 +1,12 @@
 import http from 'http'
 import initApi from './api'
 import messageBus from './messageBus'
-import { readyEventName } from './persistence'
+import './persistence'
 
 // Todo: retreive configurtion here
 const port = 3000
 
-messageBus.on(readyEventName, main)
+messageBus.on('persistence:ready', main)
 
 function main() {
   /* Init internals  */

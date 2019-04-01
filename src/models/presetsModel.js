@@ -2,8 +2,7 @@ import messageBus from '../messageBus'
 import {
   presetsCollection,
   roomLampsCollection,
-  roomBlindsCollection,
-  readyEvent
+  roomBlindsCollection
 } from '../persistence'
 import { transformItems } from './transforms'
 
@@ -102,7 +101,7 @@ const translations = {
   }
 }
 
-messageBus.on(readyEvent, () => {
+messageBus.on('persistence:ready', () => {
   roomLampsCollection.addListener('delete', removeDeviceFomAllPresets)
   roomBlindsCollection.addListener('delete', removeDeviceFomAllPresets)
 })
