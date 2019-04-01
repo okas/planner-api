@@ -22,7 +22,7 @@ export default function registerLampsEvents(socket) {
     console.log(
       !result.errors
         ? `Sent updated lamp's status, was no errors.`
-        : `Sent errors on updating new lamp: [ ${JSON.stringify(result)} ]`
+        : `Sent errors on updating lamp: [ ${JSON.stringify(result)} ]`
     )
   })
 
@@ -30,9 +30,9 @@ export default function registerLampsEvents(socket) {
     const result = model.remove(lampId)
     fn(result)
     console.log(
-      !result.error
+      !result.errors
         ? `Sent removed lamp's status, was no errors.`
-        : `Sent error on removing lamp: [ ${JSON.stringify(result)} ]`
+        : `Sent errors on removing lamp: [ ${JSON.stringify(result)} ]`
     )
   })
 }

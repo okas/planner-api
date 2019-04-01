@@ -5,9 +5,9 @@ export default function registerPresetsEvents(socket) {
     const result = model.add(preset)
     fn(result)
     console.log(
-      !result.error
+      !result.errors
         ? `Sent added preset's id.`
-        : `Sent error on adding new preset: [ ${JSON.stringify(result)} ]`
+        : `Sent errors on adding new preset: [ ${JSON.stringify(result)} ]`
     )
   })
 
@@ -15,9 +15,9 @@ export default function registerPresetsEvents(socket) {
     const result = model.update(preset)
     fn(result)
     console.log(
-      !result.error
+      !result.errors
         ? `Sent updated presets's status, was no errors.`
-        : `Sent error on updating new preset: [ ${JSON.stringify(result)} ]`
+        : `Sent errors on updating preset: [ ${JSON.stringify(result)} ]`
     )
   })
 
@@ -25,9 +25,9 @@ export default function registerPresetsEvents(socket) {
     const result = model.remove(presetId)
     fn(result)
     console.log(
-      !result.error
+      !result.errors
         ? `Sent removed presets's status, was no errors.`
-        : `Sent error on removing preset: [ ${JSON.stringify(result)} ]`
+        : `Sent errors on removing preset: [ ${JSON.stringify(result)} ]`
     )
   })
 
@@ -35,9 +35,9 @@ export default function registerPresetsEvents(socket) {
     const result = model.setActive(id, active)
     fn(result)
     console.log(
-      !result.error
+      !result.errors
         ? `Sent state for set active change of preset, was no errors.`
-        : `Sent error on setting new active state: [ ${JSON.stringify(
+        : `Sent errors on setting new active state: [ ${JSON.stringify(
             result
           )} ]`
     )

@@ -22,7 +22,7 @@ export default function registerWindowsBlindEvents(socket) {
     console.log(
       !result.errors
         ? `Sent updated blind's status, was no errors.`
-        : `Sent errors on updating new blind: [ ${JSON.stringify(result)} ]`
+        : `Sent errors on updating blind: [ ${JSON.stringify(result)} ]`
     )
   })
 
@@ -30,9 +30,9 @@ export default function registerWindowsBlindEvents(socket) {
     const result = model.remove(blindId)
     fn(result)
     console.log(
-      !result.error
+      !result.errors
         ? `Sent removed blind's status, was no errors.`
-        : `Sent error on removing blind: [ ${JSON.stringify(result)} ]`
+        : `Sent errors on removing blind: [ ${JSON.stringify(result)} ]`
     )
   })
 }
