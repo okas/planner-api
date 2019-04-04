@@ -1,7 +1,7 @@
 import SocketIOClient from 'socket.io'
-import registerLampsEvents from './lamps'
-import registerWindowsBlindEvents from './blinds'
-import registerPresetsEvents from './presets'
+import registerLampsEvents from './lampsEvents'
+import registerWindowsBlindEvents from './blindsEvents'
+import registerPresetsEvents from './presetsevents'
 
 export let io
 
