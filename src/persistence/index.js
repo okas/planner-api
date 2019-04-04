@@ -1,18 +1,21 @@
 import Loki from 'lokijs'
 import LokiFsStructuredAdapter from 'lokijs/src/loki-fs-structured-adapter'
 import messageBus from '../messageBus'
+import setupLampsCollection from './lampsCollection'
+import setupBlindsCollection from './blindsCollection'
+import setupPresetCollection from './presetsCollection'
 
 // take from configuration or export constructor from this module
 const dbFile = './data/loki_db.json'
 
-const configuration = {
+const database = new Loki(dbFile, {
   verbose: true,
   autoload: true,
   autosave: true,
   env: 'NODEJS',
   adapter: new LokiFsStructuredAdapter(),
   autoloadCallback: initializeDatabase
-}
+})
 
 function initializeDatabase() {
   initCollections()
@@ -20,15 +23,14 @@ function initializeDatabase() {
 }
 
 function initCollections() {
-  roomLampsCollection = getOrAddCollection('room_lamps')
-  roomBlindsCollection = getOrAddCollection('room_blinds')
-  presetsCollection = getOrAddCollection('presets')
+  roomLampsCollection = setupLampsCollection(database)
+  roomBlindsCollection = setupBlindsCollection(database)
+  presetsCollection = setupPresetCollection(database)
 }
 
-function getOrAddCollection(name, config = null) {
-  return db.getCollection(name) || db.addCollection(name, config)
-}
-
-const db = new Loki(dbFile, configuration)
-
-export let roomLampsCollection, roomBlindsCollection, presetsCollection
+/** @type {Collection} */
+export let roomLampsCollection
+/** @type {Collection} */
+export let roomBlindsCollection
+/** @type {Collection} */
+export let presetsCollection
