@@ -35,7 +35,7 @@ export function update(preset) {
   if (!dbDoc) {
     return {
       errors: [
-        `didn't found a document from database with {id}: "${preset.id}"`
+        `didn't found a Preset document from database with {id}: "${preset.id}"`
       ]
     }
   }

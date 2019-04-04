@@ -35,14 +35,22 @@ export function add(blind) {
   return { id: roomBlindsCollection.insertOne(doc).$loki }
 }
 
-export function update({ id, ...blind }) {
+export function update(blind) {
   const doc = sanitize(blind)
-  const erros = validate(doc)
-  if (erros) {
-    return erros
+  const errors = validate(doc)
+  if (errors) {
+    return errors
   }
   // ToDo add error handling (Loki, sync vs async update!)
-  roomBlindsCollection.update(Object.assign(roomBlindsCollection.get(id), doc))
+  const dbDoc = roomBlindsCollection.get(blind.id)
+  if (!dbDoc) {
+    return {
+      errors: [
+        `didn't found a Blind document from database with {id}: "${blind.id}"`
+      ]
+    }
+  }
+  roomBlindsCollection.update(Object.assign(dbDoc, doc))
   return { status: 'ok' }
 }
 

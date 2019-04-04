@@ -39,15 +39,23 @@ export function add(lamp) {
   return { id: roomLampsCollection.insertOne(doc).$loki }
 }
 
-export function update({ id, ...lamp }) {
+export function update(lamp) {
+  // ToDo drop the destruction
   const doc = sanitize(lamp)
-  const erros = validate(doc)
-  if (erros) {
-    return erros
+  const errors = validate(doc)
+  if (errors) {
+    return errors
   }
   // ToDo add error handling (Loki, sync vs async update!)
-  roomLampsCollection.update(Object.assign(roomLampsCollection.get(id), doc))
-
+  const dbDoc = roomLampsCollection.get(lamp.id)
+  if (!dbDoc) {
+    return {
+      errors: [
+        `didn't found a Lamp document from database with {id}: "${lamp.id}"`
+      ]
+    }
+  }
+  roomLampsCollection.update(Object.assign(dbDoc, doc))
   return { status: 'ok' }
 }
 
