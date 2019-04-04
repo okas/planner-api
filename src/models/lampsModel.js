@@ -1,6 +1,14 @@
 import { transformItems, groupByRooms } from './transforms'
-import { roomLampsCollection } from '../persistence'
+import { roomLampsCollection, presetsCollection } from '../persistence'
 import { getRandomIntInclusive } from '../utilities'
+
+export function getLampDependendts(id) {
+  return presetsCollection
+    .chain('findPresetsByDevice', { id, type: 'room_lamps' })
+    .map(({ $loki, name }) => ({ id: $loki, name }))
+    .simplesort('name')
+    .data({ removeMeta: true })
+}
 
 export function getGroupedLamps() {
   return roomLampsCollection

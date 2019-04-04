@@ -35,4 +35,9 @@ export default function registerLampsEvents(socket) {
         : `Sent errors on removing lamp: [ ${JSON.stringify(result)} ]`
     )
   })
+
+  socket.on('lamp-dependents', (lampId, fn) => {
+    const result = model.getLampDependendts(lampId)
+    fn(result)
+  })
 }

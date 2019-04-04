@@ -180,12 +180,24 @@ const translations = {
 }
 
 messageBus.on('persistence:ready', () => {
-  roomLampsCollection.addListener('delete', removeDeviceFomAllPresets)
-  roomBlindsCollection.addListener('delete', removeDeviceFomAllPresets)
+  roomLampsCollection.addListener('delete', e =>
+    removeDeviceFomAllPresets(e, 'room_lamps')
+  )
+  roomBlindsCollection.addListener('delete', e =>
+    removeDeviceFomAllPresets(e, 'room_blinds')
+  )
 })
 
-function removeDeviceFomAllPresets({ $loki }) {
-  presetsCollection.findAndUpdate({ 'devices.id': $loki }, p => {
-    p.devices.splice(p.devices.findIndex(d => d.id === $loki), 1)
-  })
+/**
+ * @param {string} type of device.
+ */
+function removeDeviceFomAllPresets({ $loki }, type) {
+  presetsCollection
+    .chain('findPresetsByDevice', { id: $loki, type })
+    .update(p => {
+      p.devices.splice(p.devices.findIndex(d => d.id === $loki), 1)
+      if (p.devices.length === 0) {
+        p.active = false
+      }
+    })
 }
