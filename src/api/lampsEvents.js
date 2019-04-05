@@ -37,7 +37,8 @@ export default function registerLampsEvents(socket) {
   })
 
   socket.on('lamp-dependents', (lampId, fn) => {
-    const result = model.getLampDependendts(lampId)
+    const result = model.getDependendts(lampId)
     fn(result)
+    console.log("sending lamp's dependents")
   })
 }

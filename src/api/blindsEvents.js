@@ -35,4 +35,10 @@ export default function registerWindowsBlindEvents(socket) {
         : `Sent errors on removing blind: [ ${JSON.stringify(result)} ]`
     )
   })
+
+  socket.on('blind-dependents', (blindId, fn) => {
+    const result = model.getDependendts(blindId)
+    fn(result)
+    console.log("sending blind's dependents")
+  })
 }

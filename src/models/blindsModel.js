@@ -1,6 +1,14 @@
 import { transformItems, groupByRooms } from './transforms'
-import { roomBlindsCollection } from '../persistence'
+import { roomBlindsCollection, presetsCollection } from '../persistence'
 import { getRandomIntInclusive } from '../utilities'
+
+export function getDependendts(id) {
+  return presetsCollection
+    .chain('findPresetsByDevice', { id, type: 'room_blinds' })
+    .map(({ $loki, name }) => ({ id: $loki, name }))
+    .simplesort('name')
+    .data({ removeMeta: true })
+}
 
 export function getGroupedBlinds() {
   return roomBlindsCollection

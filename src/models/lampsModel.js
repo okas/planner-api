@@ -2,7 +2,7 @@ import { transformItems, groupByRooms } from './transforms'
 import { roomLampsCollection, presetsCollection } from '../persistence'
 import { getRandomIntInclusive } from '../utilities'
 
-export function getLampDependendts(id) {
+export function getDependendts(id) {
   return presetsCollection
     .chain('findPresetsByDevice', { id, type: 'room_lamps' })
     .map(({ $loki, name }) => ({ id: $loki, name }))
