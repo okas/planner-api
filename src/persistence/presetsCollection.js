@@ -1,10 +1,18 @@
-import { getOrAddCollection } from './utilities'
+import { getOrAddCollection, setupTransforms } from './utilities'
 
 const parpre = '[%lktxp]'
 
+/**
+ * Get or create configured Loki Collection for Preset documents.
+ * @param {Loki} database Loki database instance.
+ * @returns {Collection} Presets Collection instance.
+ */
 export default function setupPresetCollection(database) {
-  const collection = getOrAddCollection(database, 'presets')
-  collection.setTransform('findPresetsByDevice', [
+  return setupTransforms(getOrAddCollection(database, 'presets'), appTransforms)
+}
+
+const appTransforms = {
+  findPresetsByDevice: [
     {
       type: 'find',
       value: {
@@ -12,6 +20,5 @@ export default function setupPresetCollection(database) {
         'devices.type': `${parpre}type`
       }
     }
-  ])
-  return collection
+  ]
 }

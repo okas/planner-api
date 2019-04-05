@@ -19,6 +19,8 @@ const database = new Loki(dbFile, {
 
 function initializeDatabase() {
   initCollections()
+  // Save configurations to db
+  database.saveDatabase()
   messageBus.emit('persistence:ready')
 }
 
