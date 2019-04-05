@@ -1,14 +1,12 @@
 import http from 'http'
+import './persistence'
 import initApi from './api'
 import messageBus from './messageBus'
-import './persistence'
 
 // Todo: retreive configurtion here
 const port = 3000
 
-messageBus.on('persistence:ready', main)
-
-function main() {
+messageBus.on('persistence:ready', () => {
   /* Init internals  */
 
   const httpServer = http.createServer()
@@ -22,4 +20,4 @@ function main() {
   })
 
   console.info('||| planner-api init done')
-}
+})
