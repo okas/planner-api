@@ -36,7 +36,7 @@ export default function registerPresetsEvents(socket) {
     fn(result)
     console.log(
       !result.errors
-        ? `Sent state for set active change of preset, was no errors.`
+        ? `Sent state for preset active property's change, was no errors.`
         : `Sent errors on setting new active state: [ ${JSON.stringify(
             result
           )} ]`

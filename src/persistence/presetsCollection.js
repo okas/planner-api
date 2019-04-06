@@ -8,10 +8,13 @@ const parpre = '[%lktxp]'
  * @returns {Collection} Presets Collection instance.
  */
 export default function setupPresetCollection(database) {
-  return setupTransforms(getOrAddCollection(database, 'presets'), appTransforms)
+  return setupTransforms(
+    getOrAddCollection(database, 'presets'),
+    requiredTransforms
+  )
 }
 
-const appTransforms = {
+const requiredTransforms = {
   findPresetsByDevice: [
     {
       type: 'find',
