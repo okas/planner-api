@@ -1,6 +1,6 @@
 import Loki from 'lokijs'
 import LokiFsStructuredAdapter from 'lokijs/src/loki-fs-structured-adapter'
-import messageBus from '../messageBus'
+import messageBus, { PERSISTENCE_READY } from '../messageBus'
 import setupLampsCollection from './lampsCollection'
 import setupBlindsCollection from './blindsCollection'
 import setupPresetCollection from './presetsCollection'
@@ -21,7 +21,7 @@ function initializeDatabase() {
   initCollections()
   // Save configurations to db
   database.saveDatabase()
-  messageBus.emit('persistence:ready')
+  messageBus.emit(PERSISTENCE_READY)
 }
 
 function initCollections() {

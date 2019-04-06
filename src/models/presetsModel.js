@@ -1,4 +1,4 @@
-import messageBus from '../messageBus'
+import messageBus, { PERSISTENCE_READY } from '../messageBus'
 import {
   presetsCollection,
   roomLampsCollection,
@@ -179,7 +179,7 @@ const translations = {
   }
 }
 
-messageBus.on('persistence:ready', () => {
+messageBus.on(PERSISTENCE_READY, () => {
   roomLampsCollection.addListener('delete', e =>
     removeDeviceFomAllPresets(e, 'room_lamps')
   )

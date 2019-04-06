@@ -1,12 +1,13 @@
 import http from 'http'
+import messageBus, { PERSISTENCE_READY } from './messageBus'
 import './persistence'
 import initApi from './api'
-import messageBus from './messageBus'
+import initScheduler from './scheduler'
 
 // Todo: retreive configurtion here
 const port = 3000
 
-messageBus.on('persistence:ready', () => {
+messageBus.on(PERSISTENCE_READY, () => {
   /* Init internals  */
 
   const httpServer = http.createServer()
