@@ -189,7 +189,10 @@ messageBus.on(PERSISTENCE_READY, () => {
 })
 
 /**
- * @param {string} type of device.
+ * @typedef ChangedDevice
+ * @property {String} $loki of chnaged device.
+ * @param {ChangedDevice} device changed device.
+ * @param {String} type of changed device.
  */
 function removeDeviceFomAllPresets({ $loki }, type) {
   presetsCollection
