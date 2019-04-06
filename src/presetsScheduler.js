@@ -15,6 +15,7 @@ function collDeletedHandler({ $loki }) {
   const job = nodeShedule.scheduledJobs[$loki]
   if (job) {
     job.cancel()
+    logJobCount()
   }
 }
 
@@ -37,11 +38,19 @@ function initiateJob(docPreset) {
       presetTask(docPreset, fireDate)
     }
   )
+  logJobCount()
 }
 
 function presetTask({ devices }, fireDate = new Date()) {
   // ToDo some async way?
   devices.forEach(d =>
     console.log(`at "${fireDate}"`, 'run preset device [hardware] of:', d)
+  )
+}
+
+function logJobCount() {
+  console.log(
+    'presetsScheduler: active Job count is',
+    Object.keys(nodeShedule.scheduledJobs).length
   )
 }
