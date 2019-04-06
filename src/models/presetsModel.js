@@ -1,4 +1,4 @@
-import messageBus, { PERSISTENCE_READY } from '../messageBus'
+import messageBus, { PERSISTENCE_COLLECTIONS_READY } from '../messageBus'
 import {
   presetsCollection,
   roomLampsCollection,
@@ -179,12 +179,12 @@ const translations = {
   }
 }
 
-messageBus.on(PERSISTENCE_READY, () => {
-  roomLampsCollection.addListener('delete', e =>
-    removeDeviceFomAllPresets(e, 'room_lamps')
+messageBus.on(PERSISTENCE_COLLECTIONS_READY, () => {
+  roomLampsCollection.addListener('delete', doc =>
+    removeDeviceFomAllPresets(doc, 'room_lamps')
   )
-  roomBlindsCollection.addListener('delete', e =>
-    removeDeviceFomAllPresets(e, 'room_blinds')
+  roomBlindsCollection.addListener('delete', doc =>
+    removeDeviceFomAllPresets(doc, 'room_blinds')
   )
 })
 
