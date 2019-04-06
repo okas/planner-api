@@ -1,7 +1,7 @@
 import SocketIO from 'socket.io'
 import registerLampsEvents from './lampsEvents'
 import registerWindowsBlindEvents from './blindsEvents'
-import registerPresetsEvents from './presetsevents'
+import registerPresetsEvents from './presetsEvents'
 
 export default function initApi(httpServer) {
   // Force single initialization
