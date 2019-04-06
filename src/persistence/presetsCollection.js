@@ -20,5 +20,14 @@ const appTransforms = {
         'devices.type': `${parpre}type`
       }
     }
+  ],
+  findRunnablePresets: [
+    {
+      type: 'find',
+      value: {
+        active: true,
+        devices: { $size: { $gt: 0 } }
+      }
+    }
   ]
 }

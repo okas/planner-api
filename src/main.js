@@ -2,7 +2,7 @@ import http from 'http'
 import messageBus, { PERSISTENCE_READY } from './messageBus'
 import './persistence'
 import initApi from './api'
-import initScheduler from './scheduler'
+import initScheduler from './presetsScheduler'
 
 // Todo: retreive configurtion here
 const port = 3000
@@ -12,6 +12,10 @@ messageBus.on(PERSISTENCE_READY, () => {
 
   const httpServer = http.createServer()
   initApi(httpServer)
+
+  /* Run Scheduler */
+
+  initScheduler()
 
   /* Run API server */
 
