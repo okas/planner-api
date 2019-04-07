@@ -7,7 +7,7 @@ export function getDependendtPresets(id) {
     .chain('findPresetsByDevice', { id, type: 'lamp' })
     .map(({ $loki, name }) => ({ id: $loki, name }))
     .simplesort('name')
-    .data({ removeMeta: true })
+    .data()
 }
 
 export function getGroupedLamps() {
