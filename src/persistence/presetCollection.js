@@ -9,7 +9,7 @@ const parpre = '[%lktxp]'
  */
 export default function setupPresetCollection(database) {
   return setupTransforms(
-    getOrAddCollection(database, 'presets'),
+    getOrAddCollection(database, 'preset'),
     requiredTransforms
   )
 }

@@ -156,12 +156,12 @@ export function getDevicesSelection(lang) {
   const i18n = translations[lang] || translations['en']
   return [
     {
-      type: 'room_lamps',
+      type: 'lamp',
       name: i18n.lampGroupId,
       items: roomLampCollection.data.map(transformItems())
     },
     {
-      type: 'room_blinds',
+      type: 'blind',
       name: i18n.blindsGroupId,
       items: roomBlindCollection.data.map(transformItems())
     }
@@ -181,10 +181,10 @@ const translations = {
 
 messageBus.on(PERSISTENCE__COLLECTIONS_READY, () => {
   roomLampCollection.addListener('delete', doc =>
-    removeDeviceFomAllPresets(doc, 'room_lamps')
+    removeDeviceFomAllPresets(doc, 'lamp')
   )
   roomBlindCollection.addListener('delete', doc =>
-    removeDeviceFomAllPresets(doc, 'room_blinds')
+    removeDeviceFomAllPresets(doc, 'blind')
   )
 })
 

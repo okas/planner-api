@@ -4,7 +4,7 @@ import { getRandomIntInclusive } from '../utilities'
 
 export function getDependendtPresets(id) {
   return presetCollection
-    .chain('findPresetsByDevice', { id, type: 'room_lamps' })
+    .chain('findPresetsByDevice', { id, type: 'lamp' })
     .map(({ $loki, name }) => ({ id: $loki, name }))
     .simplesort('name')
     .data({ removeMeta: true })
