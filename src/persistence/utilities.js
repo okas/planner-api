@@ -3,7 +3,7 @@
  * @param {Loki} database
  * @param {string} name
  * @param {Object} config Loki Colleciton configuration
- * @returns {Collection} Loki Collection instance
+ * @returns {Collection<any>} Loki Collection instance
  */
 export function getOrAddCollection(database, name, config = null) {
   return database.getCollection(name) || database.addCollection(name, config)
