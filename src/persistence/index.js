@@ -1,12 +1,12 @@
 import Loki from 'lokijs'
 import LokiFsStructuredAdapter from 'lokijs/src/loki-fs-structured-adapter'
 import messageBus, {
-  PERSISTENCE_READY,
-  PERSISTENCE_COLLECTIONS_READY
+  PERSISTENCE__READY,
+  PERSISTENCE__COLLECTIONS_READY
 } from '../messageBus'
-import setupLampsCollection from './lampsCollection'
-import setupBlindsCollection from './blindsCollection'
-import setupPresetCollection from './presetsCollection'
+import setupLampCollection from './lampCollection'
+import setupBlindCollection from './blindCollection'
+import setupPresetCollection from './presetCollection'
 
 // take from configuration or export constructor from this module
 const dbFile = './data/loki_db.json'
@@ -27,21 +27,21 @@ function initializeDatabase() {
     if (err) {
       console.error('error : ' + err)
     } else {
-      messageBus.emit(PERSISTENCE_READY)
+      messageBus.emit(PERSISTENCE__READY)
     }
   })
-  messageBus.emit(PERSISTENCE_COLLECTIONS_READY)
+  messageBus.emit(PERSISTENCE__COLLECTIONS_READY)
 }
 
 function initCollections() {
-  roomLampsCollection = setupLampsCollection(database)
-  roomBlindsCollection = setupBlindsCollection(database)
-  presetsCollection = setupPresetCollection(database)
+  roomLampCollection = setupLampCollection(database)
+  roomBlindCollection = setupBlindCollection(database)
+  presetCollection = setupPresetCollection(database)
 }
 
 /** @type {Collection} */
-export let roomLampsCollection
+export let roomLampCollection
 /** @type {Collection} */
-export let roomBlindsCollection
+export let roomBlindCollection
 /** @type {Collection} */
-export let presetsCollection
+export let presetCollection

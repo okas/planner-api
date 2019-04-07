@@ -1,7 +1,7 @@
-import * as model from '../models/presetsModel'
+import * as model from '../models/presetModel'
 
 export default function registerPresetsEvents(socket) {
-  socket.on('presets-add', (preset, fn) => {
+  socket.on('preset__add', (preset, fn) => {
     const result = model.add(preset)
     fn(result)
     console.log(
@@ -11,7 +11,7 @@ export default function registerPresetsEvents(socket) {
     )
   })
 
-  socket.on('preset-update', (preset, fn) => {
+  socket.on('preset__update', (preset, fn) => {
     const result = model.update(preset)
     fn(result)
     console.log(
@@ -21,7 +21,7 @@ export default function registerPresetsEvents(socket) {
     )
   })
 
-  socket.on('preset-remove', (presetId, fn) => {
+  socket.on('preset__remove', (presetId, fn) => {
     const result = model.remove(presetId)
     fn(result)
     console.log(
@@ -31,7 +31,7 @@ export default function registerPresetsEvents(socket) {
     )
   })
 
-  socket.on('presets-set-active', ({ id, active }, fn) => {
+  socket.on('presets__set_active', ({ id, active }, fn) => {
     const result = model.setActive(id, active)
     fn(result)
     console.log(
@@ -43,13 +43,13 @@ export default function registerPresetsEvents(socket) {
     )
   })
 
-  socket.on('presets-get-all', fn => {
+  socket.on('preset__get_all', fn => {
     fn(model.getAll())
     console.log('Sent all presets.')
   })
 
   // Verify is it necessary expect that fn is moved- argument order if data is not given?
-  socket.on('presets-get-devices-selection', (lang, fn) => {
+  socket.on('preset__get_devices_all', (lang, fn) => {
     if (typeof fn === 'function') {
       fn(model.getDevicesSelection(lang))
     } else {

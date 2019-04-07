@@ -1,9 +1,9 @@
 import { transformItems, groupByRooms } from './transforms'
-import { roomLampsCollection, presetsCollection } from '../persistence'
+import { roomLampCollection, presetCollection } from '../persistence'
 import { getRandomIntInclusive } from '../utilities'
 
-export function getDependendts(id) {
-  return presetsCollection
+export function getDependendtPresets(id) {
+  return presetCollection
     .chain('findPresetsByDevice', { id, type: 'room_lamps' })
     .map(({ $loki, name }) => ({ id: $loki, name }))
     .simplesort('name')
@@ -11,7 +11,7 @@ export function getDependendts(id) {
 }
 
 export function getGroupedLamps() {
-  return roomLampsCollection
+  return roomLampCollection
     .chain()
     .mapReduce(transformItems(id => getState(id)), groupByRooms)
 }
@@ -36,7 +36,7 @@ export function add(lamp) {
     return erros
   }
   // ToDo handle db level errors and return them
-  return { id: roomLampsCollection.insertOne(doc).$loki }
+  return { id: roomLampCollection.insertOne(doc).$loki }
 }
 
 export function update(lamp) {
@@ -47,7 +47,7 @@ export function update(lamp) {
     return errors
   }
   // ToDo add error handling (Loki, sync vs async update!)
-  const dbDoc = roomLampsCollection.get(lamp.id)
+  const dbDoc = roomLampCollection.get(lamp.id)
   if (!dbDoc) {
     return {
       errors: [
@@ -55,7 +55,7 @@ export function update(lamp) {
       ]
     }
   }
-  roomLampsCollection.update(Object.assign(dbDoc, doc))
+  roomLampCollection.update(Object.assign(dbDoc, doc))
   return { status: 'ok' }
 }
 
@@ -85,9 +85,9 @@ function validate({ name, room, valuestep }) {
 
 export function remove(id) {
   // ToDo error check
-  let doc = roomLampsCollection.get(id)
+  let doc = roomLampCollection.get(id)
   if (doc) {
-    roomLampsCollection.remove(doc)
+    roomLampCollection.remove(doc)
     return { status: 'ok' }
   } else {
     return { status: 'no-exist' }

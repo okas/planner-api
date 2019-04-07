@@ -1,8 +1,8 @@
-import messageBus, { PERSISTENCE_COLLECTIONS_READY } from '../messageBus'
+import messageBus, { PERSISTENCE__COLLECTIONS_READY } from '../messageBus'
 import {
-  presetsCollection,
-  roomLampsCollection,
-  roomBlindsCollection
+  presetCollection,
+  roomLampCollection,
+  roomBlindCollection
 } from '../persistence'
 import { transformItems } from './transforms'
 import cronParser from 'cron-parser'
@@ -20,7 +20,7 @@ export function add(preset) {
     return errors
   }
   // ToDo error check
-  return { id: presetsCollection.insertOne(doc).$loki }
+  return { id: presetCollection.insertOne(doc).$loki }
 }
 
 export function update(preset) {
@@ -31,7 +31,7 @@ export function update(preset) {
     return errors
   }
   // ToDo add error handling (Loki, sync vs async update!)
-  const dbDoc = presetsCollection.get(preset.id)
+  const dbDoc = presetCollection.get(preset.id)
   if (!dbDoc) {
     return {
       errors: [
@@ -39,7 +39,7 @@ export function update(preset) {
       ]
     }
   }
-  presetsCollection.update(Object.assign(dbDoc, doc))
+  presetCollection.update(Object.assign(dbDoc, doc))
   return { status: 'ok' }
 }
 
@@ -128,9 +128,9 @@ function validateDevices(devices, errors) {
 
 export function remove(id) {
   // ToDo error check
-  let doc = presetsCollection.get(id)
+  let doc = presetCollection.get(id)
   if (doc) {
-    presetsCollection.remove(doc)
+    presetCollection.remove(doc)
     return { status: 'ok' }
   } else {
     return { status: 'no-exist' }
@@ -138,10 +138,10 @@ export function remove(id) {
 }
 
 export function setActive(id, newState) {
-  let doc = presetsCollection.get(id)
+  let doc = presetCollection.get(id)
   if (doc) {
     doc.active = newState
-    presetsCollection.update(doc)
+    presetCollection.update(doc)
     return { status: 'ok' }
   } else {
     return { status: 'no-exist' }
@@ -149,7 +149,7 @@ export function setActive(id, newState) {
 }
 
 export function getAll() {
-  return presetsCollection.data.map(transformItems())
+  return presetCollection.data.map(transformItems())
 }
 
 export function getDevicesSelection(lang) {
@@ -158,12 +158,12 @@ export function getDevicesSelection(lang) {
     {
       type: 'room_lamps',
       name: i18n.lampGroupId,
-      items: roomLampsCollection.data.map(transformItems())
+      items: roomLampCollection.data.map(transformItems())
     },
     {
       type: 'room_blinds',
       name: i18n.blindsGroupId,
-      items: roomBlindsCollection.data.map(transformItems())
+      items: roomBlindCollection.data.map(transformItems())
     }
   ]
 }
@@ -179,11 +179,11 @@ const translations = {
   }
 }
 
-messageBus.on(PERSISTENCE_COLLECTIONS_READY, () => {
-  roomLampsCollection.addListener('delete', doc =>
+messageBus.on(PERSISTENCE__COLLECTIONS_READY, () => {
+  roomLampCollection.addListener('delete', doc =>
     removeDeviceFomAllPresets(doc, 'room_lamps')
   )
-  roomBlindsCollection.addListener('delete', doc =>
+  roomBlindCollection.addListener('delete', doc =>
     removeDeviceFomAllPresets(doc, 'room_blinds')
   )
 })
@@ -195,7 +195,7 @@ messageBus.on(PERSISTENCE_COLLECTIONS_READY, () => {
  * @param {String} type of changed device.
  */
 function removeDeviceFomAllPresets({ $loki }, type) {
-  presetsCollection
+  presetCollection
     .chain('findPresetsByDevice', { id: $loki, type })
     .update(p => {
       p.devices.splice(p.devices.findIndex(d => d.id === $loki), 1)

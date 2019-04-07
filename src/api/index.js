@@ -1,7 +1,7 @@
 import SocketIO from 'socket.io'
-import registerLampsEvents from './lampsEvents'
-import registerWindowsBlindEvents from './blindsEvents'
-import registerPresetsEvents from './presetsEvents'
+import registerLampEvents from './lampEvents'
+import registerWindowsBlindEvents from './blindEvents'
+import registerPresetEvents from './presetEvents'
 
 export default function initApi(httpServer) {
   // Force single initialization
@@ -14,9 +14,9 @@ export default function initApi(httpServer) {
     socket.on('disconnect', () => {
       console.log(`>-| [ ${socket.id} ] : a user disconnected`)
     })
-    registerLampsEvents(socket)
+    registerLampEvents(socket)
     registerWindowsBlindEvents(socket)
-    registerPresetsEvents(socket)
+    registerPresetEvents(socket)
   })
 }
 

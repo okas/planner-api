@@ -2,5 +2,7 @@ import { EventEmitter } from 'events'
 
 export default new EventEmitter()
 
-export const PERSISTENCE_COLLECTIONS_READY = 'persistence:collectionsReady'
-export const PERSISTENCE_READY = 'persistence:ready'
+export const PERSISTENCE__COLLECTIONS_READY = Symbol(
+  'persistence:collectionsReady'
+)
+export const PERSISTENCE__READY = Symbol('persistence:ready')

@@ -1,12 +1,12 @@
-import * as model from '../models/lampsModel'
+import * as model from '../models/lampModel'
 
 export default function registerLampsEvents(socket) {
-  socket.on('get-all-room_lamps', fn => {
+  socket.on('lamp__get-all', fn => {
     fn(model.getGroupedLamps())
     console.log('sending lamps grouped by rooms.')
   })
 
-  socket.on('lamp-add', (lamp, fn) => {
+  socket.on('lamp__add', (lamp, fn) => {
     let result = model.add(lamp)
     fn(result)
     console.log(
@@ -16,7 +16,7 @@ export default function registerLampsEvents(socket) {
     )
   })
 
-  socket.on('lamp-update', (lamp, fn) => {
+  socket.on('lamp__update', (lamp, fn) => {
     const result = model.update(lamp)
     fn(result)
     console.log(
@@ -26,7 +26,7 @@ export default function registerLampsEvents(socket) {
     )
   })
 
-  socket.on('lamp-remove', (lampId, fn) => {
+  socket.on('lamp__remove', (lampId, fn) => {
     const result = model.remove(lampId)
     fn(result)
     console.log(
@@ -36,9 +36,9 @@ export default function registerLampsEvents(socket) {
     )
   })
 
-  socket.on('lamp-dependents', (lampId, fn) => {
-    const result = model.getDependendts(lampId)
+  socket.on('lamp__get-dependent-presets', (lampId, fn) => {
+    const result = model.getDependendtPresets(lampId)
     fn(result)
-    console.log("sending lamp's dependents")
+    console.log("sending lamp's dependent presets")
   })
 }

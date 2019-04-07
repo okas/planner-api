@@ -1,12 +1,12 @@
-import * as model from '../models/blindsModel'
+import * as model from '../models/blindModel'
 
 export default function registerWindowsBlindEvents(socket) {
-  socket.on('get-all-room_blinds', fn => {
+  socket.on('blind__get_all', fn => {
     fn(model.getGroupedBlinds())
     console.log('sending blinds grouped by rooms.')
   })
 
-  socket.on('blind-add', (blind, fn) => {
+  socket.on('blind__add', (blind, fn) => {
     let result = model.add(blind)
     fn(result)
     console.log(
@@ -16,7 +16,7 @@ export default function registerWindowsBlindEvents(socket) {
     )
   })
 
-  socket.on('blind-update', (blind, fn) => {
+  socket.on('blind__update', (blind, fn) => {
     const result = model.update(blind)
     fn(result)
     console.log(
@@ -26,7 +26,7 @@ export default function registerWindowsBlindEvents(socket) {
     )
   })
 
-  socket.on('blind-remove', (blindId, fn) => {
+  socket.on('blind__remove', (blindId, fn) => {
     const result = model.remove(blindId)
     fn(result)
     console.log(
@@ -36,9 +36,9 @@ export default function registerWindowsBlindEvents(socket) {
     )
   })
 
-  socket.on('blind-dependents', (blindId, fn) => {
-    const result = model.getDependendts(blindId)
+  socket.on('lamp__get-dependent-presets', (blindId, fn) => {
+    const result = model.getDependendtPresets(blindId)
     fn(result)
-    console.log("sending blind's dependents")
+    console.log("sending blind's dependent presets.")
   })
 }

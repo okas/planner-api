@@ -1,14 +1,14 @@
 import nodeShedule from 'node-schedule'
-import { presetsCollection } from './persistence'
+import { presetCollection } from './persistence'
 
 export default function initScheduler() {
-  presetsCollection
+  presetCollection
     .chain('findRunnablePresets')
     .data()
     .forEach(initiateJob)
-  presetsCollection.addListener('delete', collDeletedHandler)
-  presetsCollection.addListener('insert', collInsertHandler)
-  presetsCollection.addListener('update', collUpdateHandler)
+  presetCollection.addListener('delete', collDeletedHandler)
+  presetCollection.addListener('insert', collInsertHandler)
+  presetCollection.addListener('update', collUpdateHandler)
 }
 
 function collDeletedHandler({ $loki }) {

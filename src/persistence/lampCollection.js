@@ -1,5 +1,5 @@
 import { getOrAddCollection } from './utilities'
 
-export default function setupLampsCollection(database) {
+export default function setupLampCollection(database) {
   return getOrAddCollection(database, 'room_lamps')
 }
