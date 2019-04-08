@@ -4,6 +4,7 @@ import './persistence'
 import initApi from './api'
 import initScheduler from './presetScheduler'
 
+console.info('>>> planner-api init start')
 // Todo: retreive configurtion here
 const port = 3000
 
