@@ -1,4 +1,3 @@
-import { transformItems, groupByRooms } from './transforms'
 import { roomLampCollection, presetCollection } from '../persistence'
 import { getRandomIntInclusive } from '../utilities'
 
@@ -10,10 +9,11 @@ export function getDependendtPresets(id) {
     .data()
 }
 
-export function getGroupedLamps() {
-  return roomLampCollection
-    .chain()
-    .mapReduce(transformItems(id => getState(id)), groupByRooms)
+export function getAll() {
+  return roomLampCollection.data.map(lamp => ({
+    ...lamp,
+    state: getState(lamp.id)
+  }))
 }
 
 // Mockup function. This funtion will retreive physical state in future.

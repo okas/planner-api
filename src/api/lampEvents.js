@@ -2,8 +2,8 @@ import * as model from '../models/lampModel'
 
 export default function registerLampsEvents(socket) {
   socket.on('lamp__get-all', fn => {
-    fn(model.getGroupedLamps())
-    console.log('sending lamps grouped by rooms.')
+    fn(model.getAll())
+    console.log('sending lamps rooms')
   })
 
   socket.on('lamp__add', (lamp, fn) => {
