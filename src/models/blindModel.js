@@ -1,4 +1,3 @@
-import { transformItems, groupByRooms } from './transforms'
 import { roomBlindCollection, presetCollection } from '../persistence'
 import { getRandomIntInclusive } from '../utilities'
 
@@ -10,10 +9,12 @@ export function getDependendtPresets(id) {
     .map(({ $loki, name }) => ({ id: $loki, name }))
 }
 
-export function getGroupedBlinds() {
-  return roomBlindCollection
-    .chain()
-    .mapReduce(transformItems(id => getState(id)), groupByRooms)
+export function getAll() {
+  return roomBlindCollection.data.map(({ $loki, ...rest }) => ({
+    id: $loki,
+    ...rest,
+    state: getState($loki)
+  }))
 }
 
 // Mockup function. This funtion will retreive physical state in future.
