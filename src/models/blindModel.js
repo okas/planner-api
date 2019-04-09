@@ -5,9 +5,9 @@ import { getRandomIntInclusive } from '../utilities'
 export function getDependendtPresets(id) {
   return presetCollection
     .chain('findPresetsByDevice', { id, type: 'blind' })
-    .map(({ $loki, name }) => ({ id: $loki, name }))
     .simplesort('name')
-    .data({ removeMeta: true })
+    .data()
+    .map(({ $loki, name }) => ({ id: $loki, name }))
 }
 
 export function getGroupedBlinds() {
