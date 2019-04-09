@@ -10,9 +10,10 @@ export function getDependendtPresets(id) {
 }
 
 export function getAll() {
-  return roomLampCollection.data.map(lamp => ({
-    ...lamp,
-    state: getState(lamp.id)
+  return roomLampCollection.data.map(({ $loki, ...rest }) => ({
+    id: $loki,
+    ...rest,
+    state: getState($loki)
   }))
 }
 
