@@ -35,9 +35,9 @@ function getState(blindId) {
  */
 export function add(blind) {
   const doc = sanitize(blind)
-  const erros = validate(doc)
-  if (erros) {
-    return erros
+  const errors = validate(doc)
+  if (errors) {
+    return errors
   }
   // ToDo handle db level errors and return them
   return { id: roomBlindCollection.insertOne(doc).$loki }

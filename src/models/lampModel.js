@@ -32,16 +32,15 @@ function getState(lampId) {
  */
 export function add(lamp) {
   const doc = sanitize(lamp)
-  const erros = validate(doc)
-  if (erros) {
-    return erros
+  const errors = validate(doc)
+  if (errors) {
+    return errors
   }
   // ToDo handle db level errors and return them
   return { id: roomLampCollection.insertOne(doc).$loki }
 }
 
 export function update(lamp) {
-  // ToDo drop the destruction
   const doc = sanitize(lamp)
   const errors = validate(doc)
   if (errors) {
