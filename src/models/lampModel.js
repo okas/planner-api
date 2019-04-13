@@ -27,8 +27,8 @@ function getState(lampId) {
 /**
  * Takes new object, saves to database, or returns `{errors}`,
  * if validation fails.
- * @param lamp preset to insert to database, provided `{id}` prop will be ignored.
- * @returns new preset's `{id}` or `{errors:[]}`.
+ * @param lamp entity data to insert to database, provided `{id}` prop will be ignored.
+ * @returns new lamp document or `{errors:[]}`.
  */
 export function add(lamp) {
   const doc = sanitize(lamp)

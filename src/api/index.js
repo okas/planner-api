@@ -9,7 +9,10 @@ export default function initApi(httpServer) {
 
   io = new SocketIO(httpServer, socketIoConfig)
 
-  io.on('connect', socket => {
+  io.on(
+    'connect',
+    /** @param {SocketIO.Socket} socket current connections socket  */
+    socket => {
     console.log(`|-> [ ${socket.id} ] : a user connected`)
     socket.on('disconnect', () => {
       console.log(`>-| [ ${socket.id} ] : a user disconnected`)
@@ -17,7 +20,8 @@ export default function initApi(httpServer) {
     registerLampEvents(socket)
     registerWindowsBlindEvents(socket)
     registerPresetEvents(socket)
-  })
+    }
+  )
 }
 
 // Todo: retreive configurtion here

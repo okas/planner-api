@@ -1,5 +1,8 @@
 import * as model from '../models/lampModel'
 
+/**
+ * @param {SocketIO.Socket} socket
+ */
 export default function registerLampsEvents(socket) {
   socket.on('lamp__get_all', fn => {
     fn(model.getAll())
