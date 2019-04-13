@@ -4,22 +4,19 @@ import registerWindowsBlindEvents from './blindEvents'
 import registerPresetEvents from './presetEvents'
 
 export default function initApi(httpServer) {
-  // Force single initialization
-  if (io) return
-
   io = new SocketIO(httpServer, socketIoConfig)
 
   io.on(
     'connect',
     /** @param {SocketIO.Socket} socket current connections socket  */
     socket => {
-    console.log(`|-> [ ${socket.id} ] : a user connected`)
-    socket.on('disconnect', () => {
-      console.log(`>-| [ ${socket.id} ] : a user disconnected`)
-    })
-    registerLampEvents(socket)
-    registerWindowsBlindEvents(socket)
-    registerPresetEvents(socket)
+      console.log(`|-> [ ${socket.id} ] : a user connected`)
+      socket.on('disconnect', () => {
+        console.log(`>-| [ ${socket.id} ] : a user disconnected`)
+      })
+      registerLampEvents(socket)
+      registerWindowsBlindEvents(socket)
+      registerPresetEvents(socket)
     }
   )
 }
