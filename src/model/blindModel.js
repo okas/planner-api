@@ -31,8 +31,8 @@ function getState(blindId) {
 /**
  * Takes new object, saves to database, or returns `{errors}`,
  * if validation fails.
- * @param blind preset to insert to database, provided `{id}` prop will be ignored.
- * @returns new preset's `{id}` or `{errors:[]}`.
+ * @param blind entity data to insert to database, provided `{id}` prop will be ignored.
+ * @returns new blind document or `{errors:[]}`.
  */
 export function add(blind) {
   const doc = sanitize(blind)
@@ -40,8 +40,9 @@ export function add(blind) {
   if (errors) {
     return errors
   }
+  const { $loki: id, ...docRest } = roomBlindCollection.insertOne(doc)
   // ToDo handle db level errors and return them
-  return { id: roomBlindCollection.insertOne(doc).$loki }
+  return { id, ...docRest }
 }
 
 export function update(blind) {
@@ -59,8 +60,9 @@ export function update(blind) {
       ]
     }
   }
-  roomBlindCollection.update(Object.assign(dbDoc, doc))
-  return { status: 'ok' }
+  Object.assign(dbDoc, doc)
+  const { $loki: id, ...docRest } = roomBlindCollection.update(dbDoc)
+  return { id, ...docRest }
 }
 
 /**
@@ -92,8 +94,8 @@ export function remove(id) {
   let doc = roomBlindCollection.get(id)
   if (doc) {
     roomBlindCollection.remove(doc)
-    return { status: 'ok' }
+    return { id }
   } else {
-    return { status: 'no-exist' }
+    return { errors: [{ no_exist: id }] }
   }
 }
