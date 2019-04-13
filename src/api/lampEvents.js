@@ -6,7 +6,7 @@ import * as model from '../model/lampModel'
 export default function registerLampsEvents(socket) {
   socket.on('lamp__get_all', fn => {
     fn(model.getAll())
-    console.log(`[ ${socket.id} ] :  sending lamps rooms`)
+    console.log(`[ ${socket.id} ] :  sending Lamps`)
   })
 
   socket.on('lamp__add', (lamp, fn) => {
@@ -20,8 +20,8 @@ export default function registerLampsEvents(socket) {
     console.log(
       `[ ${socket.id} ] : ${
         result.errors
-          ? `Sent errors on adding new lamp: [ ${JSON.stringify(result)} ]`
-          : `Sent added lamps's id and broadcasted new document.`
+          ? `Sent errors on adding new Lamp: [ ${JSON.stringify(result)} ]`
+          : `Sent added Lamp's id and broadcasted new document.`
       }`
     )
   })
@@ -37,8 +37,8 @@ export default function registerLampsEvents(socket) {
     console.log(
       `[ ${socket.id} ] : ${
         result.errors
-          ? `Sent errors on updating lamp: [ ${JSON.stringify(result)} ]`
-          : `Sent updated lamp's status, no errors.`
+          ? `Sent errors on updating Lamp: [ ${JSON.stringify(result)} ]`
+          : `Sent updated Lamp's status and broadcasted document changes.`
       }`
     )
   })
@@ -54,8 +54,8 @@ export default function registerLampsEvents(socket) {
     console.log(
       `[ ${socket.id} ] : ${
         result.errors
-          ? `Sent errors on removing lamp: [ ${JSON.stringify(result)} ]`
-          : `Sent removed lamp's status, no errors.`
+          ? `Sent errors on removing Lamp: [ ${JSON.stringify(result)} ]`
+          : `Sent removed Lamp's status, no errors.`
       }`
     )
   })
