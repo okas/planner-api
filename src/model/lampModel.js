@@ -25,7 +25,7 @@ function getState(lampId) {
 }
 
 /**
- * Takes new object, saves to database, or returns `{errors}`,
+ * Takes new object, saves to database, or returns `{errors:[]}`,
  * if validation fails.
  * @param lamp entity data to insert to database, provided `{id}` prop will be ignored.
  * @returns new lamp document or `{errors:[]}`.

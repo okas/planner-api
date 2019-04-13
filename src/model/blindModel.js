@@ -29,7 +29,7 @@ function getState(blindId) {
 }
 
 /**
- * Takes new object, saves to database, or returns `{errors}`,
+ * Takes new object, saves to database, or returns `{errors:[]}`,
  * if validation fails.
  * @param blind entity data to insert to database, provided `{id}` prop will be ignored.
  * @returns new blind document or `{errors:[]}`.
