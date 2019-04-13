@@ -55,16 +55,21 @@ export default function registerPresetsEvents(socket) {
     )
   })
 
-  socket.on('preset__set_active', ({ id, active }, fn) => {
-    const result = model.setActive(id, active)
-    fn(result)
+  socket.on('preset__set_active', (patchObj, fn) => {
+    const result = model.setActive(patchObj)
+    if (result.errors) {
+      fn(result)
+    } else {
+      fn({ status: 'ok' })
+      socket.broadcast.emit('preset__api_set_active', patchObj)
+    }
     console.log(
       `[ ${socket.id} ] : ${
         result.errors
           ? `Sent errors on setting new active state: [ ${JSON.stringify(
               result
             )} ]`
-          : `Sent state for preset active property's change, no errors.`
+          : `Sent and broadcasted state for Preset active property's change, no errors.`
       }`
     )
   })
@@ -82,9 +87,7 @@ export default function registerPresetsEvents(socket) {
       lang(model.getDevicesSelection())
     }
     console.log(
-      `[ ${
-        socket.id
-      } ] : Sent all presets.Sent devices selection grouped by type.`
+      `[ ${socket.id} ] : Sent devices data for Presets, grouped by type.`
     )
   })
 }

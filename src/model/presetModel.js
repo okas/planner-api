@@ -135,14 +135,16 @@ export function remove(id) {
   }
 }
 
-export function setActive(id, newState) {
+export function setActive({ id, active }) {
   let doc = presetCollection.get(id)
   if (doc) {
-    doc.active = newState
+    doc.active = active
     presetCollection.update(doc)
-    return { status: 'ok' }
+    return {}
   } else {
-    return { status: 'no-exist' }
+    return {
+      errors: [`didn't found a Preset document from database with {id:${id}}`]
+    }
   }
 }
 
