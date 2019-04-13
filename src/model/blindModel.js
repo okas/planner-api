@@ -90,10 +90,7 @@ function validate({ name, room, valuestep }) {
 }
 
 export function remove(id) {
-  // ToDo error check
-  let doc = roomBlindCollection.get(id)
-  if (doc) {
-    roomBlindCollection.remove(doc)
+  if (roomBlindCollection.remove(id)) {
     return { id }
   } else {
     return { errors: [{ no_exist: id }] }
