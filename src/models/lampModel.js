@@ -36,8 +36,9 @@ export function add(lamp) {
   if (errors) {
     return errors
   }
+  const { $loki: id, ...docRest } = roomLampCollection.insert(doc)
   // ToDo handle db level errors and return them
-  return { id: roomLampCollection.insertOne(doc).$loki }
+  return { id, ...docRest }
 }
 
 export function update(lamp) {
@@ -55,8 +56,9 @@ export function update(lamp) {
       ]
     }
   }
-  roomLampCollection.update(Object.assign(dbDoc, doc))
-  return { status: 'ok' }
+  Object.assign(dbDoc, doc)
+  const { $loki: id, ...docRest } = roomLampCollection.update(dbDoc)
+  return { id, ...docRest }
 }
 
 /**
@@ -88,8 +90,8 @@ export function remove(id) {
   let doc = roomLampCollection.get(id)
   if (doc) {
     roomLampCollection.remove(doc)
-    return { status: 'ok' }
+    return { id }
   } else {
-    return { status: 'no-exist' }
+    return { errors: [{ no_exist: id }] }
   }
 }
