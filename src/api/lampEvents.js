@@ -1,4 +1,4 @@
-import * as model from '../models/lampModel'
+import * as model from '../model/lampModel'
 
 /**
  * @param {SocketIO.Socket} socket

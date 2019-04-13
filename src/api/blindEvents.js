@@ -1,4 +1,4 @@
-import * as model from '../models/blindModel'
+import * as model from '../model/blindModel'
 
 export default function registerWindowsBlindEvents(socket) {
   socket.on('blind__get_all', fn => {

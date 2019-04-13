@@ -1,4 +1,4 @@
-import * as model from '../models/presetModel'
+import * as model from '../model/presetModel'
 
 export default function registerPresetsEvents(socket) {
   socket.on('preset__add', (preset, fn) => {
