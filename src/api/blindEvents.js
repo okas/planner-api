@@ -36,7 +36,7 @@ export default function registerWindowsBlindEvents(socket) {
     )
   })
 
-  socket.on('lamp__get-dependent-presets', (blindId, fn) => {
+  socket.on('blind__get_dependent_presets', (blindId, fn) => {
     const result = model.getDependendtPresets(blindId)
     fn(result)
     console.log("sending blind's dependent presets.")

@@ -1,7 +1,7 @@
 import * as model from '../models/lampModel'
 
 export default function registerLampsEvents(socket) {
-  socket.on('lamp__get-all', fn => {
+  socket.on('lamp__get_all', fn => {
     fn(model.getAll())
     console.log('sending lamps rooms')
   })
@@ -36,7 +36,7 @@ export default function registerLampsEvents(socket) {
     )
   })
 
-  socket.on('lamp__get-dependent-presets', (lampId, fn) => {
+  socket.on('lamp__get_dependent_presets', (lampId, fn) => {
     const result = model.getDependendtPresets(lampId)
     fn(result)
     console.log("sending lamp's dependent presets")
