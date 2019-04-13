@@ -8,10 +8,10 @@ import { transformItems } from './transforms'
 import cronParser from 'cron-parser'
 
 /**
- * Takes new object, saves to database, or returns `{error}`,
+ * Takes new object, saves to database; or returns `{errors:[]}`,
  * if `{id}` exists, is numeric and `!== 0`.
- * @param preset preset to insert to database.
- * @returns new preset's `{id}` or `{error}`.
+ * @param preset entity to insert to database, provided `{id}` prop will be ignored.
+ * @returns new Preset document or `{errors:[]}`.
  */
 export function add(preset) {
   const doc = sanitize(preset)
@@ -19,12 +19,12 @@ export function add(preset) {
   if (errors) {
     return errors
   }
+  const { $loki: id, ...docRest } = presetCollection.insertOne(doc)
   // ToDo error check
-  return { id: presetCollection.insertOne(doc).$loki }
+  return { id, ...docRest }
 }
 
 export function update(preset) {
-  // ToDo implement validation
   const doc = sanitize(preset)
   const errors = validate(doc)
   if (errors) {
@@ -39,8 +39,9 @@ export function update(preset) {
       ]
     }
   }
-  presetCollection.update(Object.assign(dbDoc, doc))
-  return { status: 'ok' }
+  Object.assign(dbDoc, doc)
+  const { $loki: id, ...docRest } = presetCollection.update(dbDoc)
+  return { id, ...docRest }
 }
 
 /**
@@ -127,13 +128,10 @@ function validateDevices(devices, errors) {
 }
 
 export function remove(id) {
-  // ToDo error check
-  let doc = presetCollection.get(id)
-  if (doc) {
-    presetCollection.remove(doc)
-    return { status: 'ok' }
+  if (presetCollection.remove(id)) {
+    return { id }
   } else {
-    return { status: 'no-exist' }
+    return { errors: [{ no_exist: id }] }
   }
 }
 
