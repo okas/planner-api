@@ -55,7 +55,7 @@ export default function registerPresetsEvents(socket) {
     )
   })
 
-  socket.on('presets__set_active', ({ id, active }, fn) => {
+  socket.on('preset__set_active', ({ id, active }, fn) => {
     const result = model.setActive(id, active)
     fn(result)
     console.log(
