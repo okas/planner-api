@@ -1,19 +1,25 @@
 import * as model from '../model/presetModel'
 
+const room = 'preset'
+
 /**
  * @param {SocketIO.Socket} socket
  */
 export default function registerPresetsEvents(socket) {
+  function getLogPrefix() {
+    return `[ ${socket.id} ], room "${room}" : `
+  }
+
   socket.on('preset__add', (preset, fn) => {
     const result = model.add(preset)
     if (result.errors) {
       fn(result)
     } else {
       fn({ id: result.id })
-      socket.broadcast.emit('preset__api_add', result)
+      socket.to(room).emit('preset__api_add', result)
     }
     console.log(
-      `[ ${socket.id} ] : ${
+      `${getLogPrefix()}${
         result.errors
           ? `Sent errors on adding new preset: [ ${JSON.stringify(result)} ]`
           : `Sent added preset's id.`
@@ -27,10 +33,10 @@ export default function registerPresetsEvents(socket) {
       fn(result)
     } else {
       fn({ status: 'ok' })
-      socket.broadcast.emit('preset__api_update', result)
+      socket.to(room).emit('preset__api_update', result)
     }
     console.log(
-      `[ ${socket.id} ] : ${
+      `${getLogPrefix()}${
         result.errors
           ? `Sent errors on updating preset: [ ${JSON.stringify(result)} ]`
           : `Sent updated presets's status, no errors.`
@@ -44,10 +50,10 @@ export default function registerPresetsEvents(socket) {
       fn(result)
     } else {
       fn({ status: 'ok' })
-      socket.broadcast.emit('preset__api_remove', result)
+      socket.to(room).emit('preset__api_remove', result)
     }
     console.log(
-      `[ ${socket.id} ] : ${
+      `${getLogPrefix()}${
         result.errors
           ? `Sent errors on removing preset: [ ${JSON.stringify(result)} ]`
           : `Sent removed presets's status, no errors.`
@@ -61,10 +67,10 @@ export default function registerPresetsEvents(socket) {
       fn(result)
     } else {
       fn({ status: 'ok' })
-      socket.broadcast.emit('preset__api_set_active', patchObj)
+      socket.to(room).emit('preset__api_set_active', patchObj)
     }
     console.log(
-      `[ ${socket.id} ] : ${
+      `${getLogPrefix()}${
         result.errors
           ? `Sent errors on setting new active state: [ ${JSON.stringify(
               result
@@ -76,7 +82,7 @@ export default function registerPresetsEvents(socket) {
 
   socket.on('preset__get_all', fn => {
     fn(model.getAll())
-    console.log(`[ ${socket.id} ] : Sent all presets.`)
+    console.log(`${getLogPrefix()}Sent all presets.`)
   })
 
   // Verify is it necessary expect that fn is moved- argument order if data is not given?
@@ -87,7 +93,7 @@ export default function registerPresetsEvents(socket) {
       lang(model.getDevicesSelection())
     }
     console.log(
-      `[ ${socket.id} ] : Sent devices data for Presets, grouped by type.`
+      `${getLogPrefix()}Sent devices data for Presets, grouped by type.`
     )
   })
 }

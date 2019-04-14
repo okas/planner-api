@@ -1,4 +1,4 @@
-import SocketIO from 'socket.io'
+import registerCommonEvents from './commonEvents'
 import registerLampEvents from './lampEvents'
 import registerWindowsBlindEvents from './blindEvents'
 import registerPresetEvents from './presetEvents'
@@ -10,10 +10,7 @@ export default function initApi(httpServer) {
     'connect',
     /** @param {SocketIO.Socket} socket current connections socket  */
     socket => {
-      console.log(`|-> [ ${socket.id} ] : a user connected`)
-      socket.on('disconnect', () => {
-        console.log(`>-| [ ${socket.id} ] : a user disconnected`)
-      })
+      registerCommonEvents(socket)
       registerLampEvents(socket)
       registerWindowsBlindEvents(socket)
       registerPresetEvents(socket)
