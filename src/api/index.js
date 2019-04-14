@@ -1,13 +1,15 @@
+import Server from 'socket.io'
 import registerCommonEvents from './commonEvents'
 import registerLampEvents from './lampEvents'
 import registerWindowsBlindEvents from './blindEvents'
 import registerPresetEvents from './presetEvents'
 
 export default function initApi(httpServer) {
-  io = new SocketIO(httpServer, socketIoConfig)
+  // @ts-ignore
+  io = new Server(httpServer, socketIoConfig)
 
   io.on(
-    'connect',
+    'connection',
     /** @param {SocketIO.Socket} socket current connections socket  */
     socket => {
       registerCommonEvents(socket)
@@ -24,4 +26,5 @@ const socketIoConfig = {
   pingInterval: 3600000 || undefined // testing only!
 }
 
+/** @type {SocketIO.Server} */
 export let io
