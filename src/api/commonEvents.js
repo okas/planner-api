@@ -5,28 +5,28 @@ export default function registerCommonEvents(socket) {
     console.log(`>-| [ ${socket.id} ] : a user disconnected`)
   })
 
-  socket.on('api__join_room', (room, fn) => {
-    socket.join(room, err => {
+  socket.on('api__join_rooms', (rooms, fn) => {
+    socket.join(rooms, err => {
       if (fn) {
         fn(createResponse(err))
       }
       console.log(
         err
-          ? `>-- [ ${socket.id} ] : failed to joined to room "${room}"`
-          : `>-> [ ${socket.id} ] : joined to room "${room}"`
+          ? `>-- [ ${socket.id} ] : failed to joined to rooms "${rooms}"`
+          : `>-> [ ${socket.id} ] : joined to rooms "${rooms}"`
       )
     })
   })
 
-  socket.on('api__leave_room', (room, fn) => {
-    socket.leave(room, err => {
+  socket.on('api__leave_rooms', (rooms, fn) => {
+    socket.leave(rooms, err => {
       if (fn) {
         fn(createResponse(err))
       }
       console.log(
         err
-          ? `--< [ ${socket.id} ] : failed to leave from room "${room}"`
-          : `<-< [ ${socket.id} ] : leaved from room "${room}"`
+          ? `--< [ ${socket.id} ] : failed to leave from rooms "${rooms}"`
+          : `<-< [ ${socket.id} ] : leaved from rooms "${rooms}"`
       )
     })
   })
