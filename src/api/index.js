@@ -1,4 +1,4 @@
-import Server from 'socket.io'
+import IOServer from 'socket.io'
 import registerCommonEvents from './commonEvents'
 import registerLampEvents from './lampEvents'
 import registerWindowsBlindEvents from './blindEvents'
@@ -6,8 +6,20 @@ import registerPresetEvents from './presetEvents'
 
 export default function initApi(httpServer) {
   // @ts-ignore
-  io = new Server(httpServer, socketIoConfig)
+  io = new IOServer(httpServer, socketIoConfig)
+  register(io)
+}
 
+// Todo: retreive configurtion here
+const socketIoConfig = {
+  path: '/api',
+  pingInterval: 3600000 || undefined // testing only!
+}
+
+/**
+ * @param {SocketIO.Server} io
+ */
+function register(io) {
   io.on(
     'connection',
     /** @param {SocketIO.Socket} socket current connections socket  */
@@ -18,12 +30,6 @@ export default function initApi(httpServer) {
       registerPresetEvents(socket)
     }
   )
-}
-
-// Todo: retreive configurtion here
-const socketIoConfig = {
-  path: '/api',
-  pingInterval: 3600000 || undefined // testing only!
 }
 
 /** @type {SocketIO.Server} */
