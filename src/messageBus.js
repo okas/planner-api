@@ -10,6 +10,13 @@ export const PERSISTENCE__COLLECTIONS_READY = Symbol(
   'persistence:collectionsReady'
 )
 /**
- * for Persistence consumers: Persistence layer is fully initialized.
+ * For Persistence consumers: Persistence layer is fully initialized.
  */
 export const PERSISTENCE__READY = Symbol('persistence:ready')
+
+/**
+ * For notifying Preset room's sockets that Preset has changed.
+ */
+export const PRESET__UPDATED_DEVICE_DELETED = Symbol(
+  'presetModel:updatedDevicesDeleted'
+)

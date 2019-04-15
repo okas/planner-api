@@ -1,4 +1,7 @@
-import messageBus, { PERSISTENCE__COLLECTIONS_READY } from '../messageBus'
+import messageBus, {
+  PERSISTENCE__COLLECTIONS_READY,
+  PRESET__UPDATED_DEVICE_DELETED
+} from '../messageBus'
 import {
   presetCollection,
   lampCollection,
@@ -180,18 +183,23 @@ const translations = {
 }
 
 messageBus.on(PERSISTENCE__COLLECTIONS_READY, () => {
-  lampCollection.on('delete', doc => removeDeviceFomAllPresets(doc, 'lamp'))
-  blindCollection.on('delete', doc => removeDeviceFomAllPresets(doc, 'blind'))
+  lampCollection.on('delete', doc =>
+    notifyChangedPresets(removeDeviceFomAllPresets(doc, 'lamp'))
+  )
+  blindCollection.on('delete', doc =>
+    notifyChangedPresets(removeDeviceFomAllPresets(doc, 'blind'))
+  )
 })
 
 /**
  * @typedef ChangedDevice
- * @property {String} $loki of chnaged device.
+ * @property {String} $loki of changed device.
  * @param {ChangedDevice} device changed device.
  * @param {String} type of changed device.
+ * @returns {Array} changed Presets.
  */
 function removeDeviceFomAllPresets({ $loki }, type) {
-  presetCollection
+  return presetCollection
     .chain('findPresetsByDevice', { id: $loki, type })
     .update(p => {
       p.devices.splice(p.devices.findIndex(d => d.id === $loki), 1)
@@ -199,4 +207,16 @@ function removeDeviceFomAllPresets({ $loki }, type) {
         p.active = false
       }
     })
+    .data()
+}
+
+/**
+ * @param {Array} changedPresets updated Presets, after device deletion.
+ */
+function notifyChangedPresets(changedPresets) {
+  setImmediate(() => {
+    changedPresets.forEach(({ $loki: id, ...docRest }) => {
+      messageBus.emit(PRESET__UPDATED_DEVICE_DELETED, { id, ...docRest })
+    })
+  })
 }

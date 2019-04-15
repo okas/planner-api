@@ -3,6 +3,7 @@ import registerCommonEvents from './commonEvents'
 import registerLampEvents from './lampEvents'
 import registerWindowsBlindEvents from './blindEvents'
 import registerPresetEvents from './presetEvents'
+import registerPresetEmits from './presetEmits'
 
 export default function initApi(httpServer) {
   // @ts-ignore
@@ -20,6 +21,7 @@ const socketIoConfig = {
  * @param {SocketIO.Server} io
  */
 function register(io) {
+  registerPresetEmits(io)
   io.on(
     'connection',
     /** @param {SocketIO.Socket} socket current connections socket  */
