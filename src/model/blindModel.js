@@ -1,4 +1,4 @@
-import { roomBlindCollection, presetCollection } from '../persistence'
+import { blindCollection, presetCollection } from '../persistence'
 import { getRandomIntInclusive } from '../utilities'
 
 export function getDependendtPresets(id) {
@@ -10,7 +10,7 @@ export function getDependendtPresets(id) {
 }
 
 export function getAll() {
-  return roomBlindCollection.data.map(({ $loki, ...rest }) => ({
+  return blindCollection.data.map(({ $loki, ...rest }) => ({
     id: $loki,
     ...rest,
     state: getState($loki)
@@ -40,7 +40,7 @@ export function add(blind) {
   if (errors) {
     return errors
   }
-  const { $loki: id, ...docRest } = roomBlindCollection.insertOne(doc)
+  const { $loki: id, ...docRest } = blindCollection.insertOne(doc)
   // ToDo handle db level errors and return them
   return { id, ...docRest }
 }
@@ -52,7 +52,7 @@ export function update(blind) {
     return errors
   }
   // ToDo add error handling (Loki, sync vs async update!)
-  const dbDoc = roomBlindCollection.get(blind.id)
+  const dbDoc = blindCollection.get(blind.id)
   if (!dbDoc) {
     return {
       errors: [
@@ -61,7 +61,7 @@ export function update(blind) {
     }
   }
   Object.assign(dbDoc, doc)
-  const { $loki: id, ...docRest } = roomBlindCollection.update(dbDoc)
+  const { $loki: id, ...docRest } = blindCollection.update(dbDoc)
   return { id, ...docRest }
 }
 
@@ -90,7 +90,7 @@ function validate({ name, room, valuestep }) {
 }
 
 export function remove(id) {
-  if (roomBlindCollection.remove(id)) {
+  if (blindCollection.remove(id)) {
     return { id }
   } else {
     return { errors: [{ no_exist: id }] }

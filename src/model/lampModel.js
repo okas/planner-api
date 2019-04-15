@@ -1,4 +1,4 @@
-import { roomLampCollection, presetCollection } from '../persistence'
+import { lampCollection, presetCollection } from '../persistence'
 import { getRandomIntInclusive } from '../utilities'
 
 export function getDependendtPresets(id) {
@@ -10,7 +10,7 @@ export function getDependendtPresets(id) {
 }
 
 export function getAll() {
-  return roomLampCollection.data.map(({ $loki, ...rest }) => ({
+  return lampCollection.data.map(({ $loki, ...rest }) => ({
     id: $loki,
     ...rest,
     state: getState($loki)
@@ -36,7 +36,7 @@ export function add(lamp) {
   if (errors) {
     return errors
   }
-  const { $loki: id, ...docRest } = roomLampCollection.insert(doc)
+  const { $loki: id, ...docRest } = lampCollection.insert(doc)
   // ToDo handle db level errors and return them
   return { id, ...docRest }
 }
@@ -48,7 +48,7 @@ export function update(lamp) {
     return errors
   }
   // ToDo add error handling (Loki, sync vs async update!)
-  const dbDoc = roomLampCollection.get(lamp.id)
+  const dbDoc = lampCollection.get(lamp.id)
   if (!dbDoc) {
     return {
       errors: [
@@ -57,7 +57,7 @@ export function update(lamp) {
     }
   }
   Object.assign(dbDoc, doc)
-  const { $loki: id, ...docRest } = roomLampCollection.update(dbDoc)
+  const { $loki: id, ...docRest } = lampCollection.update(dbDoc)
   return { id, ...docRest }
 }
 
@@ -86,7 +86,7 @@ function validate({ name, room, valuestep }) {
 }
 
 export function remove(id) {
-  if (roomLampCollection.remove(id)) {
+  if (lampCollection.remove(id)) {
     return { id }
   } else {
     return { errors: [{ no_exist: id }] }

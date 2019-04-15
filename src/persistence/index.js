@@ -34,14 +34,14 @@ function initializeDatabase() {
 }
 
 function initCollections() {
-  roomLampCollection = setupLampCollection(database)
-  roomBlindCollection = setupBlindCollection(database)
+  lampCollection = setupLampCollection(database)
+  blindCollection = setupBlindCollection(database)
   presetCollection = setupPresetCollection(database)
 }
 
 /** @type {Collection} */
-export let roomLampCollection
+export let lampCollection
 /** @type {Collection} */
-export let roomBlindCollection
+export let blindCollection
 /** @type {Collection} */
 export let presetCollection

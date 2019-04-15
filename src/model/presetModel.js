@@ -1,8 +1,8 @@
 import messageBus, { PERSISTENCE__COLLECTIONS_READY } from '../messageBus'
 import {
   presetCollection,
-  roomLampCollection,
-  roomBlindCollection
+  lampCollection,
+  blindCollection
 } from '../persistence'
 import { transformItems } from './transforms'
 import cronParser from 'cron-parser'
@@ -158,12 +158,12 @@ export function getDevicesSelection(lang) {
     {
       type: 'lamp',
       name: i18n.lampGroupId,
-      items: roomLampCollection.data.map(transformItems())
+      items: lampCollection.data.map(transformItems())
     },
     {
       type: 'blind',
       name: i18n.blindsGroupId,
-      items: roomBlindCollection.data.map(transformItems())
+      items: blindCollection.data.map(transformItems())
     }
   ]
 }
@@ -180,12 +180,8 @@ const translations = {
 }
 
 messageBus.on(PERSISTENCE__COLLECTIONS_READY, () => {
-  roomLampCollection.addListener('delete', doc =>
-    removeDeviceFomAllPresets(doc, 'lamp')
-  )
-  roomBlindCollection.addListener('delete', doc =>
-    removeDeviceFomAllPresets(doc, 'blind')
-  )
+  lampCollection.on('delete', doc => removeDeviceFomAllPresets(doc, 'lamp'))
+  blindCollection.on('delete', doc => removeDeviceFomAllPresets(doc, 'blind'))
 })
 
 /**
