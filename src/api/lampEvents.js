@@ -6,8 +6,10 @@ const room = 'lamp'
  * @param {SocketIO.Socket} socket
  */
 export default function registerLampsEvents(socket) {
-  function getLogPrefix() {
-    return `[ ${socket.id} ], room "${room}" : `
+  const ioRoom = socket.to(room)
+
+  function getLogPrefix(roomVal) {
+    return `[ ${socket.id} ]${roomVal ? `, room "${roomVal}"` : ''} : `
   }
 
   socket.on('lamp__get_all', fn => {
@@ -21,10 +23,10 @@ export default function registerLampsEvents(socket) {
       fn(result)
     } else {
       fn({ id: result.id })
-      socket.to(room).emit('lamp__api_add', result)
+      ioRoom.emit('lamp__api_add', result)
     }
     console.log(
-      `${getLogPrefix()}${
+      `${getLogPrefix(room)}${
         result.errors
           ? `Sent errors on adding new Lamp: [ ${JSON.stringify(result)} ]`
           : `Sent added Lamp's id and broadcasted new document.`
@@ -38,10 +40,10 @@ export default function registerLampsEvents(socket) {
       fn(result)
     } else {
       fn({ status: 'ok' })
-      socket.to(room).emit('lamp__api_update', result)
+      ioRoom.emit('lamp__api_update', result)
     }
     console.log(
-      `${getLogPrefix()}${
+      `${getLogPrefix(room)}${
         result.errors
           ? `Sent errors on updating Lamp: [ ${JSON.stringify(result)} ]`
           : `Sent updated Lamp's status and broadcasted document changes.`
@@ -55,10 +57,10 @@ export default function registerLampsEvents(socket) {
       fn(result)
     } else {
       fn({ status: 'ok' })
-      socket.to(room).emit('lamp__api_remove', result)
+      ioRoom.emit('lamp__api_remove', result)
     }
     console.log(
-      `${getLogPrefix()}${
+      `${getLogPrefix(room)}${
         result.errors
           ? `Sent errors on removing Lamp: [ ${JSON.stringify(result)} ]`
           : `Sent removed Lamp's status, no errors.`

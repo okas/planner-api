@@ -6,8 +6,10 @@ const room = 'blind'
  * @param {SocketIO.Socket} socket
  */
 export default function registerWindowsBlindEvents(socket) {
-  function getLogPrefix() {
-    return `[ ${socket.id} ], room "${room}" : `
+  const ioRoom = socket.to(room)
+
+  function getLogPrefix(roomVal) {
+    return `[ ${socket.id} ]${roomVal ? `, room "${roomVal}"` : ''} : `
   }
 
   socket.on('blind__get_all', fn => {
@@ -21,10 +23,10 @@ export default function registerWindowsBlindEvents(socket) {
       fn(result)
     } else {
       fn({ id: result.id })
-      socket.to(room).emit('blind__api_add', result)
+      ioRoom.emit('blind__api_add', result)
     }
     console.log(
-      `${getLogPrefix()}${
+      `${getLogPrefix(room)}${
         result.errors
           ? `Sent errors on adding new Blind: [ ${JSON.stringify(result)} ]`
           : `Sent added Blind's id and broadcasted new document.`
@@ -38,10 +40,10 @@ export default function registerWindowsBlindEvents(socket) {
       fn(result)
     } else {
       fn({ status: 'ok' })
-      socket.to(room).emit('blind__api_update', result)
+      ioRoom.emit('blind__api_update', result)
     }
     console.log(
-      `${getLogPrefix()}${
+      `${getLogPrefix(room)}${
         result.errors
           ? `Sent errors on updating Blind: [ ${JSON.stringify(result)} ]`
           : `Sent updated Blind's status and broadcasted document changes.`
@@ -55,10 +57,10 @@ export default function registerWindowsBlindEvents(socket) {
       fn(result)
     } else {
       fn({ status: 'ok' })
-      socket.to(room).emit('blind__api_remove', result)
+      ioRoom.emit('blind__api_remove', result)
     }
     console.log(
-      `${getLogPrefix()}${
+      `${getLogPrefix(room)}${
         result.errors
           ? `Sent errors on removing Blind: [ ${JSON.stringify(result)} ]`
           : `Sent removed Blind's status, no errors.`

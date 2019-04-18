@@ -6,8 +6,10 @@ const room = 'preset'
  * @param {SocketIO.Socket} socket
  */
 export default function registerPresetsEvents(socket) {
-  function getLogPrefix() {
-    return `[ ${socket.id} ], room "${room}" : `
+  const ioRoom = socket.to(room)
+
+  function getLogPrefix(roomVal) {
+    return `[ ${socket.id} ]${roomVal ? `, room "${roomVal}"` : ''} : `
   }
 
   socket.on('preset__add', (preset, fn) => {
@@ -16,10 +18,10 @@ export default function registerPresetsEvents(socket) {
       fn(result)
     } else {
       fn({ id: result.id })
-      socket.to(room).emit('preset__api_add', result)
+      ioRoom.emit('preset__api_add', result)
     }
     console.log(
-      `${getLogPrefix()}${
+      `${getLogPrefix(room)}${
         result.errors
           ? `Sent errors on adding new preset: [ ${JSON.stringify(result)} ]`
           : `Sent added preset's id.`
@@ -33,10 +35,10 @@ export default function registerPresetsEvents(socket) {
       fn(result)
     } else {
       fn({ status: 'ok' })
-      socket.to(room).emit('preset__api_update', result)
+      ioRoom.emit('preset__api_update', result)
     }
     console.log(
-      `${getLogPrefix()}${
+      `${getLogPrefix(room)}${
         result.errors
           ? `Sent errors on updating preset: [ ${JSON.stringify(result)} ]`
           : `Sent updated presets's status, no errors.`
@@ -50,10 +52,10 @@ export default function registerPresetsEvents(socket) {
       fn(result)
     } else {
       fn({ status: 'ok' })
-      socket.to(room).emit('preset__api_remove', result)
+      ioRoom.emit('preset__api_remove', result)
     }
     console.log(
-      `${getLogPrefix()}${
+      `${getLogPrefix(room)}${
         result.errors
           ? `Sent errors on removing preset: [ ${JSON.stringify(result)} ]`
           : `Sent removed presets's status, no errors.`
@@ -67,10 +69,10 @@ export default function registerPresetsEvents(socket) {
       fn(result)
     } else {
       fn({ status: 'ok' })
-      socket.to(room).emit('preset__api_set_active', patchObj)
+      ioRoom.emit('preset__api_set_active', patchObj)
     }
     console.log(
-      `${getLogPrefix()}${
+      `${getLogPrefix(room)}${
         result.errors
           ? `Sent errors on setting new active state: [ ${JSON.stringify(
               result
