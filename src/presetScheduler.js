@@ -2,13 +2,18 @@ import nodeShedule from 'node-schedule'
 import { presetCollection } from './persistence'
 
 export default function initScheduler() {
+  runPresetJobs()
+  presetCollection.addListener('delete', collDeletedHandler)
+  presetCollection.addListener('insert', collInsertHandler)
+  presetCollection.addListener('update', collUpdateHandler)
+}
+
+function runPresetJobs() {
   presetCollection
     .chain('findRunnablePresets')
     .data()
     .forEach(initiateJob)
-  presetCollection.addListener('delete', collDeletedHandler)
-  presetCollection.addListener('insert', collInsertHandler)
-  presetCollection.addListener('update', collUpdateHandler)
+  logJobCount()
 }
 
 function collDeletedHandler({ $loki }) {
@@ -22,6 +27,7 @@ function collDeletedHandler({ $loki }) {
 function collInsertHandler(docPreset) {
   if (docPreset.active && docPreset.devices.length > 0) {
     initiateJob(docPreset)
+    logJobCount()
   }
 }
 
@@ -38,7 +44,6 @@ function initiateJob(docPreset) {
       presetTask(docPreset, fireDate)
     }
   )
-  logJobCount()
 }
 
 function presetTask({ devices }, fireDate = new Date()) {
