@@ -140,15 +140,31 @@ export function remove(id) {
 
 export function setActive({ id, active }) {
   let doc = presetCollection.get(id)
-  if (doc) {
-    doc.active = active
-    presetCollection.update(doc)
-    return {}
-  } else {
+  const errors = validateActiveStateChange(doc, active)
+  if (errors) {
+    return errors
+  }
+  doc.active = active
+  presetCollection.update(doc)
+  return {}
+}
+
+function validateActiveStateChange(doc, newState) {
+  if (!doc) {
     return {
-      errors: [`didn't found a Preset document from database with {id:${id}}`]
+      errors: [`didn't found a Preset from database with {id:${doc.id}}`]
     }
   }
+  if (!doc.devices || doc.devices.length < 1) {
+    return {
+      errors: [
+        `cannot change {active} state, because Preset with {id:${
+          doc.id
+        }} has no devices`
+      ]
+    }
+  }
+  return null
 }
 
 export function getAll() {
