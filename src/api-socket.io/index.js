@@ -3,7 +3,7 @@ import registerCommonEvents from './commonEvents'
 import registerLampEvents from './lampEvents'
 import registerWindowsBlindEvents from './blindEvents'
 import registerPresetEvents from './presetEvents'
-import registerPresetEmits from './presetEmits'
+import registerPresetEmits from './presetBroadcasts'
 
 export default function initApi(httpServer) {
   // @ts-ignore

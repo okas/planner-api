@@ -1,7 +1,7 @@
 import http from 'http'
 import messageBus, { PERSISTENCE__READY } from './messageBus'
 import './persistence'
-import initApi from './api'
+import initApi from './api-socket.io'
 import initScheduler from './presetScheduler'
 
 console.info('>>> planner-api init start')
@@ -22,7 +22,7 @@ messageBus.on(PERSISTENCE__READY, () => {
 
   httpServer.listen(port, err => {
     if (err) throw err
-    console.info(`==> api is listening on [ *:${port} ]`)
+    console.info(`==> api-socket.io is listening on [ *:${port} ]`)
   })
 
   console.info('||| planner-api init done')
