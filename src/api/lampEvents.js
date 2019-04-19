@@ -6,8 +6,6 @@ const room = 'lamp'
  * @param {SocketIO.Socket} socket
  */
 export default function registerLampsEvents(socket) {
-  const ioRoom = socket.to(room)
-
   function getLogPrefix(roomVal) {
     return `[ ${socket.id} ]${roomVal ? `, room "${roomVal}"` : ''} : `
   }
@@ -23,7 +21,7 @@ export default function registerLampsEvents(socket) {
       fn(result)
     } else {
       fn({ id: result.id })
-      ioRoom.emit('lamp__api_add', result)
+      socket.to(room).emit('lamp__api_add', result)
     }
     console.log(
       `${getLogPrefix(room)}${
@@ -40,7 +38,7 @@ export default function registerLampsEvents(socket) {
       fn(result)
     } else {
       fn({ status: 'ok' })
-      ioRoom.emit('lamp__api_update', result)
+      socket.to(room).emit('lamp__api_update', result)
     }
     console.log(
       `${getLogPrefix(room)}${
@@ -57,7 +55,7 @@ export default function registerLampsEvents(socket) {
       fn(result)
     } else {
       fn({ status: 'ok' })
-      ioRoom.emit('lamp__api_remove', result)
+      socket.to(room).emit('lamp__api_remove', result)
     }
     console.log(
       `${getLogPrefix(room)}${

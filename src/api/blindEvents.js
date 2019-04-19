@@ -6,8 +6,6 @@ const room = 'blind'
  * @param {SocketIO.Socket} socket
  */
 export default function registerWindowsBlindEvents(socket) {
-  const ioRoom = socket.to(room)
-
   function getLogPrefix(roomVal) {
     return `[ ${socket.id} ]${roomVal ? `, room "${roomVal}"` : ''} : `
   }
@@ -23,7 +21,7 @@ export default function registerWindowsBlindEvents(socket) {
       fn(result)
     } else {
       fn({ id: result.id })
-      ioRoom.emit('blind__api_add', result)
+      socket.to(room).emit('blind__api_add', result)
     }
     console.log(
       `${getLogPrefix(room)}${
@@ -40,7 +38,7 @@ export default function registerWindowsBlindEvents(socket) {
       fn(result)
     } else {
       fn({ status: 'ok' })
-      ioRoom.emit('blind__api_update', result)
+      socket.to(room).emit('blind__api_update', result)
     }
     console.log(
       `${getLogPrefix(room)}${
@@ -57,7 +55,7 @@ export default function registerWindowsBlindEvents(socket) {
       fn(result)
     } else {
       fn({ status: 'ok' })
-      ioRoom.emit('blind__api_remove', result)
+      socket.to(room).emit('blind__api_remove', result)
     }
     console.log(
       `${getLogPrefix(room)}${
