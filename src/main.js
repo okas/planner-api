@@ -23,7 +23,9 @@ messageBus.once(PERSISTENCE__READY, () => {
   /* Run API server */
 
   httpServer.listen(port, err => {
-    if (err) throw err
+    if (err) {
+      throw err
+    }
     console.info(`==> api-socket.io is listening on [ *:${port} ]`)
   })
 

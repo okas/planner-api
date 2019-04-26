@@ -1,10 +1,16 @@
 import * as model from '../model/lampModel'
 
+const broadcastRoom = 'lamp'
 
 /**
  * @param {SocketIO.Socket} socket
  */
 export default function registerLampsEvents(socket) {
+  /**
+   * @param {String} [room]
+   */
+  function getLogPrefix(room) {
+    return `[ ${socket.id} ]${room ? `, room "${room}"` : ''} : `
   }
 
   socket.on('lamp__get_all', fn => {
@@ -18,8 +24,10 @@ export default function registerLampsEvents(socket) {
       fn(result)
     } else {
       fn({ id: result.id })
+      socket.to(broadcastRoom).emit('lamp__api_add', result)
     }
     console.log(
+      `${getLogPrefix(broadcastRoom)}${
         result.errors
           ? `Sent errors on adding new Lamp: [ ${JSON.stringify(result)} ]`
           : `Sent added Lamp's id and broadcasted new document.`
@@ -33,8 +41,10 @@ export default function registerLampsEvents(socket) {
       fn(result)
     } else {
       fn({ status: 'ok' })
+      socket.to(broadcastRoom).emit('lamp__api_update', result)
     }
     console.log(
+      `${getLogPrefix(broadcastRoom)}${
         result.errors
           ? `Sent errors on updating Lamp: [ ${JSON.stringify(result)} ]`
           : `Sent updated Lamp's status and broadcasted document changes.`
@@ -48,8 +58,10 @@ export default function registerLampsEvents(socket) {
       fn(result)
     } else {
       fn({ status: 'ok' })
+      socket.to(broadcastRoom).emit('lamp__api_remove', result)
     }
     console.log(
+      `${getLogPrefix(broadcastRoom)}${
         result.errors
           ? `Sent errors on removing Lamp: [ ${JSON.stringify(result)} ]`
           : `Sent removed Lamp's status, no errors.`
