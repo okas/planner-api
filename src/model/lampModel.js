@@ -1,5 +1,4 @@
 import { lampCollection, presetCollection } from '../persistence'
-import { getRandomIntInclusive } from '../utilities'
 
 export function getDependendtPresets(id) {
   return presetCollection
@@ -10,18 +9,7 @@ export function getDependendtPresets(id) {
 }
 
 export function getAll() {
-  return lampCollection.data.map(({ $loki, ...rest }) => ({
-    id: $loki,
-    ...rest,
-    state: getState($loki)
-  }))
-}
-
-// Mockup function. This funtion will retreive physical state in future.
-function getState(lampId) {
-  // About 1/3 of calls will be 1, otherwize 0.
-  // Dimmed lamps might have value 0..1 ? ;-)
-  return +(getRandomIntInclusive(lampId, lampId + 2) % (lampId + 2) === 0)
+  return lampCollection.data.map(({ $loki: id, ...rest }) => ({ id, ...rest }))
 }
 
 /**

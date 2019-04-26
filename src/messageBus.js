@@ -20,3 +20,11 @@ export const PERSISTENCE__READY = Symbol('persistence:ready')
 export const PRESET__UPDATED_DEVICE_DELETED = Symbol(
   'presetModel:updatedDevicesDeleted'
 )
+
+export const MQTT__CLIENT_READY = Symbol('mqtt:ready')
+
+export const MQTT__CLEAR_SENDER_COMMANDS = Symbol('mqtt:clearSenderCommands')
+
+export const MQTT__LAMP_CMND__STATE = Symbol('mqtt:getLampState')
+
+export const MQTT__LAMP_CMND__SET_STATE = Symbol('mqtt:setLampstate')

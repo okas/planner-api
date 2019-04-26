@@ -1,22 +1,24 @@
 import http from 'http'
-import messageBus, { PERSISTENCE__READY } from './messageBus'
+import messageBus, {
+  PERSISTENCE__READY,
+  MQTT__CLIENT_READY
+} from './messageBus'
 import './persistence'
 import initApi from './api-socket.io'
 import initScheduler from './presetScheduler'
+import initMqtt from './mqtt-client'
 
 console.info('>>> planner-api init start')
 // Todo: retreive configurtion here
 const port = 3000
 
-messageBus.on(PERSISTENCE__READY, () => {
+messageBus.once(PERSISTENCE__READY, () => {
   /* Init internals  */
 
   const httpServer = http.createServer()
   initApi(httpServer)
-
-  /* Run Scheduler */
-
-  initScheduler()
+  messageBus.once(MQTT__CLIENT_READY, initScheduler)
+  initMqtt()
 
   /* Run API server */
 

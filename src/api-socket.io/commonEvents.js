@@ -1,6 +1,15 @@
+import messageBus, { MQTT__CLEAR_SENDER_COMMANDS } from '../messageBus'
+
+/**
+ * @param {SocketIO.Socket} socket conection from browser
+ */
 export default function registerCommonEvents(socket) {
   console.log(`|-> [ ${socket.id} ] : a user connected`)
-  socket.on('disconnecting', reason => {})
+
+  socket.on('disconnecting', reason => {
+    messageBus.emit(MQTT__CLEAR_SENDER_COMMANDS, socket.id)
+  })
+
   socket.on('disconnect', () => {
     console.log(`>-| [ ${socket.id} ] : a user disconnected`)
   })
