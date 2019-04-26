@@ -198,7 +198,7 @@ const translations = {
   }
 }
 
-messageBus.on(PERSISTENCE__COLLECTIONS_READY, () => {
+messageBus.once(PERSISTENCE__COLLECTIONS_READY, () => {
   lampCollection.on('delete', doc =>
     notifyChangedPresets(removeDeviceFomAllPresets(doc, 'lamp'))
   )
