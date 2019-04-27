@@ -1,10 +1,10 @@
 import IOServer from 'socket.io'
 import registerCommonEvents from './commonEvents'
 import registerLampEvents from './lampModelEvents'
-import registerWindowsBlindEvents from './blindEvents'
-import registerPresetEvents from './presetEvents'
-import registerPresetEmits from './presetBroadcasts'
 import registerLampMqttEvents from './lampMqttEvents'
+import registerBlindEvents from './blindEvents'
+import registerPresetEvents from './presetEvents'
+import registerPresetBroadcast from './presetBroadcast'
 
 export default function initApi(httpServer) {
   // @ts-ignore
@@ -22,7 +22,7 @@ const socketIoConfig = {
  * @param {SocketIO.Server} io
  */
 function register(io) {
-  registerPresetEmits(io)
+  registerPresetBroadcast(io)
   io.on(
     'connection',
     /** @param {SocketIO.Socket} socket current connections socket  */
@@ -30,7 +30,7 @@ function register(io) {
       registerCommonEvents(socket)
       registerLampEvents(socket)
       registerLampMqttEvents(socket)
-      registerWindowsBlindEvents(socket)
+      registerBlindEvents(socket)
       registerPresetEvents(socket)
     }
   )
