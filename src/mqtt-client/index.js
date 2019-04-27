@@ -28,7 +28,7 @@ function onConnect(client, connAck) {
     setTimeout(() => client.reconnect(), 2000)
     return
   }
-  client.publish('saartk/greeting/api', `hello, at @${Date()}`, console.log)
+  client.publish('saartk/api/present', `hello, at @${Date()}`, console.log)
 
   // Todo analyze right time for ready notify
   messageBus.emit(MQTT__CLIENT_READY, client)

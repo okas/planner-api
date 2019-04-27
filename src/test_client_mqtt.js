@@ -37,7 +37,7 @@ function conneAck(client, clientId, ack) {
     `hello, at @${Date()}`,
     console.log
   )
-  client.subscribe(`saartk/greeting/api`, console.log)
+  client.subscribe(`saartk/api/present`, console.log)
   client.subscribe(`saartk/device/${clientId}/cmnd/+/+`, console.log)
 }
 
