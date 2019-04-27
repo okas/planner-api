@@ -8,8 +8,8 @@ export default function initMqtt() {
     clientId: 'api'
   })
   client.on('message', logMessage)
-  registerBridge(client)
   client.on('connect', connAck => onConnect(client, connAck))
+  registerBridge(client)
 }
 
 function logMessage(topic, payload, packet) {
@@ -29,13 +29,8 @@ function onConnect(client, connAck) {
     return
   }
   client.publish('saartk/greeting/api', `hello, at @${Date()}`, console.log)
-  registerSubscriptions(client)
+  client.subscribe('saartk/greeting/device/+/+', console.log)
 
   // Todo analyze right time for ready notify
   messageBus.emit(MQTT__CLIENT_READY, client)
-}
-
-function registerSubscriptions(client) {
-  client.subscribe('saartk/greeting/device/+/+', console.log)
-  client.subscribe('saartk/device/+/+/+/+/+', console.log)
 }

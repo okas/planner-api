@@ -1,29 +1,50 @@
 import messageBus, { MQTT__CLEAR_SENDER_COMMANDS } from '../messageBus'
-import lampCommands from './lampCommands'
+import { lampCommands, lampSubscriptions } from './lampMqtt'
 
 const sentCommands = new Map()
 
 export default function registerBridge(client) {
-  /* Import and then iterate all command objects here */
-  Object.getOwnPropertySymbols(lampCommands).forEach(sym => {
-    messageBus.on(sym, event => {
-      setImmediate(bridgePublisher, client, sym, event)
-    })
+  /* Add publishers here */
+  bridgePublishes(client, lampCommands)
+  client.on('connect', connAck => {
+    /* Add subscriptions here */
+    bridgeSubscriptions(client, lampSubscriptions)
   })
   client.on('message', messageHandler)
 }
 
-function bridgePublisher(client, sym, eventArgs) {
-  const { topic, payload } = lampCommands[sym](
-    eventArgs.data,
-    sanitizeSender(eventArgs.sender)
+/**
+ * @param {Map<symbol,function>} commandsMap
+ */
+function bridgePublishes(client, commandsMap) {
+  commandsMap.forEach((getArgs, eventSymbol) => {
+    messageBus.on(eventSymbol, eventPayload =>
+      setImmediate(apiEventHandler, client, getArgs, eventPayload)
+    )
+  })
+}
+
+function apiEventHandler(client, getArgs, eventPayload) {
+  const publishArgs = getArgs(
+    eventPayload.data,
+    sanitizeSender(eventPayload.sender)
   )
+  publishCommandFromApi(client, publishArgs, eventPayload)
+}
+
+function publishCommandFromApi(client, { topic, payload }, eventPayload) {
   client.publish(topic, payload, err => {
     if (err) {
       throw err
     } else {
-      sentCommands.set(topic, eventArgs.done)
+      sentCommands.set(topic, eventPayload.done)
     }
+  })
+}
+
+function bridgeSubscriptions(client, subscriptions) {
+  subscriptions.forEach(s => {
+    client.subscribe(s, console.log)
   })
 }
 
