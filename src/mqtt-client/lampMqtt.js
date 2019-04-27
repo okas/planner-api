@@ -1,7 +1,14 @@
 import {
   MQTT__LAMP_CMND__STATE,
-  MQTT__LAMP_CMND__SET_STATE
+  MQTT__LAMP_CMND__SET_STATE,
+  MQTT__LAMP_PRESENT
 } from '../messageBus'
+
+export const type = 'lamp'
+
+const topicPrefix = 'saartk/device/lamp/+/'
+const topicParts = ['present', 'resp/+/+']
+export let lampSubscriptions = topicParts.map(p => topicPrefix + p)
 
 /**
  * @type {Map<symbol,function>}
@@ -25,3 +32,10 @@ function setLampState(data, sender) {
     payload: data.state.toString()
   }
 }
+
+/**
+ * @type {Map<string,symbol>} holds broadcast type to Symbol event
+ * relations for EventEmitter usage.
+ */
+export const lampBroadcasts = new Map()
+lampBroadcasts.set('present', MQTT__LAMP_PRESENT)

@@ -2,6 +2,7 @@ import IOServer from 'socket.io'
 import registerCommonEvents from './commonEvents'
 import registerLampEvents from './lampModelEvents'
 import registerLampMqttEvents from './lampMqttEvents'
+import registerLampMqttBroadcast from './lampMqttBroadcast'
 import registerBlindEvents from './blindEvents'
 import registerPresetEvents from './presetEvents'
 import registerPresetBroadcast from './presetBroadcast'
@@ -22,6 +23,7 @@ const socketIoConfig = {
  * @param {SocketIO.Server} io
  */
 function register(io) {
+  registerLampMqttBroadcast(io)
   registerPresetBroadcast(io)
   io.on(
     'connection',

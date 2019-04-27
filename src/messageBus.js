@@ -28,3 +28,5 @@ export const MQTT__CLEAR_SENDER_COMMANDS = Symbol('mqtt:clearSenderCommands')
 export const MQTT__LAMP_CMND__STATE = Symbol('mqtt:getLampState')
 
 export const MQTT__LAMP_CMND__SET_STATE = Symbol('mqtt:setLampstate')
+
+export const MQTT__LAMP_PRESENT = Symbol('mqtt:lampPresent')

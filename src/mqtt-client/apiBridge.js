@@ -1,9 +1,17 @@
 import messageBus, { MQTT__CLEAR_SENDER_COMMANDS } from '../messageBus'
-import { lampCommands, lampSubscriptions } from './lampMqtt'
+import {
+  lampCommands,
+  lampSubscriptions,
+  type as lampType,
+  lampBroadcasts
+} from './lampMqtt'
 
 const sentCommands = new Map()
+const broadcasts = {}
 
 export default function registerBridge(client) {
+  /* Add broadcasts here */
+  addApiBroadcasts(lampBroadcasts, lampType)
   /* Add publishers here */
   bridgePublishes(client, lampCommands)
   client.on('connect', connAck => {
@@ -11,6 +19,12 @@ export default function registerBridge(client) {
     bridgeSubscriptions(client, lampSubscriptions)
   })
   client.on('message', messageHandler)
+}
+
+function addApiBroadcasts(broadcastMap, name) {
+  broadcastMap.forEach((v, k) => {
+    broadcasts[name] = { [k]: v }
+  })
 }
 
 /**
@@ -58,21 +72,61 @@ function bridgeSubscriptions(client, subscriptions) {
  */
 function messageHandler(topic, payload) {
   // it is called on both times: publish from this client and receive message from broker !?
-  const [, type, subtype, id, msgType, command, senderInApi] = topic.split('/')
-  if (type === 'device' && msgType === 'resp') {
-    const commandTopic = `saartk/${type}/${subtype}/${id}/cmnd/${command}/${sanitizeSender(
-      senderInApi
-    )}`
-    let doneCallBack = sentCommands.get(commandTopic)
-    sentCommands.delete(commandTopic)
-    if (doneCallBack) {
-      doneCallBack(JSON.parse(payload.toString()))
-    } else {
-      console.log(
-        `MQTT: cannot pass command response, did't found sent command: "${commandTopic}"`
-      )
-    }
+  const topicObj = createTopicObject(topic)
+  if (topicObj.type !== 'device') {
+    return
   }
+  switch (topicObj.msgType) {
+    case 'resp':
+      commandResponseHandler(topicObj, payload)
+      break
+    case 'present':
+      devicePresentMessageHandler(topicObj, payload)
+      break
+    default:
+      break
+  }
+}
+
+/**
+ * @param {string} topic of MQTT packet
+ * @returns {object}
+ */
+function createTopicObject(topic) {
+  const [, type, subtype, id, msgType, command, senderInApi] = topic.split('/')
+  return {
+    type,
+    subtype,
+    id,
+    msgType,
+    command,
+    senderInApi
+  }
+}
+
+function commandResponseHandler(topicObj, payload) {
+  const commandTopic = createCommandTopic(topicObj)
+  let doneCallBack = sentCommands.get(commandTopic)
+  sentCommands.delete(commandTopic)
+  if (doneCallBack) {
+    doneCallBack(JSON.parse(payload.toString()))
+  } else {
+    console.log(
+      `MQTT: cannot pass command response, did't found sent command: "${commandTopic}"`
+    )
+  }
+}
+
+function createCommandTopic({ type, subtype, id, command, senderInApi }) {
+  return `saartk/${type}/${subtype}/${id}/cmnd/${command}/${sanitizeSender(
+    senderInApi
+  )}`
+}
+
+function devicePresentMessageHandler({ id, subtype, msgType }, payload) {
+  const broadcastEvent = broadcasts[subtype][msgType]
+  const eventPayload = { id, ...JSON.parse(payload.toString()) }
+  messageBus.emit(broadcastEvent, eventPayload)
 }
 
 messageBus.on(MQTT__CLEAR_SENDER_COMMANDS, sender => {
