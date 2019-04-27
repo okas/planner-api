@@ -29,7 +29,6 @@ function onConnect(client, connAck) {
     return
   }
   client.publish('saartk/greeting/api', `hello, at @${Date()}`, console.log)
-  client.subscribe('saartk/greeting/device/+/+', console.log)
 
   // Todo analyze right time for ready notify
   messageBus.emit(MQTT__CLIENT_READY, client)
