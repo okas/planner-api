@@ -43,8 +43,12 @@ function publishCommandFromApi(client, { topic, payload }, eventPayload) {
 }
 
 function bridgeSubscriptions(client, subscriptions) {
-  subscriptions.forEach(s => {
-    client.subscribe(s, console.log)
+  subscriptions.forEach(subs => {
+    if (typeof subs === 'object') {
+      client.subscribe(subs.topics, subs.options, console.log)
+    } else {
+      client.subscribe(subs, console.log)
+    }
   })
 }
 
