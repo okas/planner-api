@@ -60,7 +60,7 @@ function clearSenderCommands(sender) {
       toDelete.push(k)
     }
   })
-  toDelete.forEach(sentCommands.delete)
+  toDelete.forEach(c => sentCommands.delete(c))
 }
 
 function sanitizeSender(sender) {
