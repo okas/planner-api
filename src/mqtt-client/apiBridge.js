@@ -3,13 +3,14 @@ import lampCommands from './lampCommands'
 
 const sentCommands = new Map()
 
-export function registerBridge(client) {
+export default function registerBridge(client) {
   /* Import and then iterate all command objects here */
   Object.getOwnPropertySymbols(lampCommands).forEach(sym => {
     messageBus.on(sym, event => {
       setImmediate(bridgePublisher, client, sym, event)
     })
   })
+  client.on('message', messageHandler)
 }
 
 function bridgePublisher(client, sym, eventArgs) {
@@ -30,7 +31,7 @@ function bridgePublisher(client, sym, eventArgs) {
  * @param {String} topic
  * @param {Buffer} payload
  */
-export function messageHandler(topic, payload) {
+function messageHandler(topic, payload) {
   // it is called on both times: publish from this client and receive message from broker !?
   const [, type, subtype, id, msgType, command, senderInApi] = topic.split('/')
   if (type === 'device' && msgType === 'resp') {

@@ -1,21 +1,18 @@
 import mqtt from 'mqtt'
 import messageBus, { MQTT__CLIENT_READY } from '../messageBus'
-import { registerBridge, messageHandler } from './apiBridge'
+import registerBridge from './apiBridge'
 
 export default function initMqtt() {
   const client = mqtt.connect('mqtt://broker.hivemq.com:1883', {
     resubscribe: true,
     clientId: 'api'
   })
-  client.on('message', (topic, payload, packet) => {
-    logOnMessage(payload, packet)
-    messageHandler(topic, payload)
-  })
+  client.on('message', logMessage)
   registerBridge(client)
   client.on('connect', connAck => onConnect(client, connAck))
 }
 
-function logOnMessage(payload, packet) {
+function logMessage(topic, payload, packet) {
   console.log('>>>>>')
   console.log(`payload: "${payload}"`)
   console.log(packet)
