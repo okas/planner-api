@@ -4,12 +4,10 @@ import mqtt from 'mqtt'
  * Client registry and initial states.
  */
 const clientStateStore = {
-  'lamp/61': 1,
-  'lamp/62': 0
-  // 'lamp/63': 0,
-  // 'lamp/64': 1,
-  // 'lamp/65': 0,
-  // 'lamp/66': 1
+  'lamp/63': 0,
+  'lamp/64': 1,
+  'lamp/65': 0,
+  'lamp/66': 1
 }
 
 Object.keys(clientStateStore).forEach(clientId => {
@@ -32,9 +30,13 @@ function logOnMessage(clientId, payload, packet) {
 
 function conneAck(client, clientId, ack) {
   console.log(`connect connaACK:`, ack)
+  const payload = {
+    state: clientStateStore[clientId],
+    timestamp: Date.now()
+  }
   client.publish(
-    `saartk/greeting/${clientId}`,
-    `hello, at @${Date()}`,
+    `saartk/device/${clientId}/present`,
+    JSON.stringify(payload),
     console.log
   )
   client.subscribe(`saartk/api/present`, console.log)
