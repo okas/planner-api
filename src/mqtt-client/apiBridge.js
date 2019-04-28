@@ -15,8 +15,10 @@ export default function registerBridge(client) {
   /* Add publishers here */
   bridgePublishes(client, lampCommands)
   client.on('connect', connAck => {
+    if (!connAck.sessionPresent) {
       /* Add subscriptions here */
       bridgeSubscriptions(client, lampSubscriptions)
+    }
   })
   client.on('message', messageHandler)
 }
