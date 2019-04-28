@@ -24,7 +24,7 @@ export default function registerLampMqttEvents(socket) {
       done: payload => {
         fn(payload)
         console.log(
-          `${getLogPrefix()} forwarding Lamp state MQTT=>API=>browser.`
+          `${getLogPrefix()}forwarding Lamp state MQTT=>API=>browser.`
         )
       }
     })
@@ -44,7 +44,7 @@ export default function registerLampMqttEvents(socket) {
         console.log(
           `${getLogPrefix(
             broadcastRoom
-          )} forwarding set state of Lamp, MQTT=>API=>browser.`
+          )}forwarding set state of Lamp, MQTT=>API=>browser.`
         )
       }
     })
