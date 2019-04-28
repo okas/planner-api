@@ -24,7 +24,7 @@ Object.keys(clientStateStore).forEach(clientId => {
     logOnMessage(clientId, payload, packet)
     messageHandler(client, clientId, topic, payload)
   })
-  client.on('connect', ack => conneAck(client, clientId, ack))
+  client.on('connect', ack => onConnect(client, clientId, ack))
 })
 
 function logOnMessage(clientId, payload, packet) {
@@ -34,7 +34,7 @@ function logOnMessage(clientId, payload, packet) {
   console.log('<<<<<')
 }
 
-function conneAck(client, clientId, ack) {
+function onConnect(client, clientId, ack) {
   console.log(`connect connaACK:`, ack)
   const payload = {
     state: clientStateStore[clientId],
