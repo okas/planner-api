@@ -13,8 +13,7 @@ export let lampSubscriptions = topicParts.map(p => topicPrefix + p)
 /**
  * @type {Map<symbol,function>}
  */
-export let lampCommands = new Map()
-export let lampSubscriptions = ['saartk/device/lamp/+/+/+/+']
+export const lampCommands = new Map()
 
 lampCommands.set(MQTT__LAMP_CMND__STATE, getLampState)
 lampCommands.set(MQTT__LAMP_CMND__SET_STATE, setLampState)
