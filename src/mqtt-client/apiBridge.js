@@ -13,60 +13,62 @@ export default function registerBridge(client) {
   /* Add broadcasts here */
   broadcasts.set(lampType, lampBroadcasts)
   /* Add publishers here */
-  bridgePublishes(client, lampCommands)
+  bridgePublishes(lampCommands)
+
   client.on('connect', connAck => {
     if (!connAck.sessionPresent) {
       /* Add subscriptions here */
-      bridgeSubscriptions(client, lampSubscriptions)
+      bridgeSubscriptions(lampSubscriptions)
     }
   })
-  client.on('message', messageHandler)
-}
 
-/**
- * @param {Map<symbol,function>} commandsMap
- */
-function bridgePublishes(client, commandsMap) {
-  commandsMap.forEach((getArgs, eventSymbol) => {
-    messageBus.on(eventSymbol, eventPayload =>
-      setImmediate(apiEventHandler, client, getArgs, eventPayload)
+  client.on('message', onMessage)
+
+  /**
+   * @param {Map<symbol,function>} commandsMap
+   */
+  function bridgePublishes(commandsMap) {
+    commandsMap.forEach((getPublishArgs, eventSymbol) => {
+      messageBus.on(eventSymbol, eventPayload =>
+        setImmediate(apiEventHandler, getPublishArgs, eventPayload)
+      )
+    })
+  }
+
+  function apiEventHandler(getArgs, eventPayload) {
+    const publishArgs = getArgs(
+      eventPayload.data,
+      sanitizeSender(eventPayload.sender)
     )
-  })
-}
+    publishCommandFromApi(publishArgs, eventPayload)
+  }
 
-function apiEventHandler(client, getArgs, eventPayload) {
-  const publishArgs = getArgs(
-    eventPayload.data,
-    sanitizeSender(eventPayload.sender)
-  )
-  publishCommandFromApi(client, publishArgs, eventPayload)
-}
+  function publishCommandFromApi({ topic, payload }, eventPayload) {
+    client.publish(topic, payload, err => {
+      if (err) {
+        throw err
+      } else {
+        sentCommands.set(topic, eventPayload.done)
+      }
+    })
+  }
 
-function publishCommandFromApi(client, { topic, payload }, eventPayload) {
-  client.publish(topic, payload, err => {
-    if (err) {
-      throw err
-    } else {
-      sentCommands.set(topic, eventPayload.done)
-    }
-  })
-}
-
-function bridgeSubscriptions(client, subscriptions) {
-  subscriptions.forEach(subs => {
-    if (typeof subs === 'object') {
-      client.subscribe(subs.topics, subs.options, console.log)
-    } else {
-      client.subscribe(subs, console.log)
-    }
-  })
+  function bridgeSubscriptions(subscriptions) {
+    subscriptions.forEach(subs => {
+      if (typeof subs === 'object') {
+        client.subscribe(subs.topics, subs.options, console.log)
+      } else {
+        client.subscribe(subs, console.log)
+      }
+    })
+  }
 }
 
 /**
  * @param {String} topic
  * @param {Buffer} payload
  */
-function messageHandler(topic, payload) {
+function onMessage(topic, payload) {
   const topicObj = createTopicObject(topic)
   if (topicObj.type !== 'device') {
     return
