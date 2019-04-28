@@ -15,8 +15,8 @@ export default function registerBridge(client) {
   /* Add publishers here */
   bridgePublishes(client, lampCommands)
   client.on('connect', connAck => {
-    /* Add subscriptions here */
-    bridgeSubscriptions(client, lampSubscriptions)
+      /* Add subscriptions here */
+      bridgeSubscriptions(client, lampSubscriptions)
   })
   client.on('message', messageHandler)
 }
@@ -65,7 +65,6 @@ function bridgeSubscriptions(client, subscriptions) {
  * @param {Buffer} payload
  */
 function messageHandler(topic, payload) {
-  // it is called on both times: publish from this client and receive message from broker !?
   const topicObj = createTopicObject(topic)
   if (topicObj.type !== 'device') {
     return
