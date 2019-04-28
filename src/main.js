@@ -4,7 +4,7 @@ import messageBus, {
   MQTT__CLIENT_READY
 } from './messageBus'
 import './persistence'
-import initApi from './api-socket.io'
+import initApi from './api-server'
 import initScheduler from './presetScheduler'
 import initMqtt from './mqtt-client'
 
@@ -26,7 +26,7 @@ messageBus.once(PERSISTENCE__READY, () => {
     if (err) {
       throw err
     }
-    console.info(`==> api-socket.io is listening on [ *:${port} ]`)
+    console.info(`==> Socket.IO API is listening on [ *:${port} ]`)
   })
 
   console.info('||| planner-api init done')
