@@ -32,3 +32,5 @@ export const MQTT__LAMP_CMND__SET_STATE = Symbol('mqtt:setLampstate')
 export const MQTT__LAMP_PRESENT = Symbol('mqtt:lampPresent')
 
 export const MQTT__LAMP_LOST = Symbol('mqtt:lampLost')
+
+export const MQTT__CLIENT_LOST = Symbol('mqtt:clientLost')

@@ -6,6 +6,7 @@ import registerLampMqttBroadcast from './lampMqttBroadcast'
 import registerBlindEvents from './blindEvents'
 import registerPresetEvents from './presetEvents'
 import registerPresetBroadcast from './presetBroadcast'
+import registerCommonMqttBroadcasts from './commonMqttBroadcast'
 
 export default function initApi(httpServer) {
   // @ts-ignore
@@ -25,6 +26,7 @@ const socketIoConfig = {
 function register(io) {
   registerLampMqttBroadcast(io)
   registerPresetBroadcast(io)
+  registerCommonMqttBroadcasts(io)
   io.on(
     'connection',
     /** @param {SocketIO.Socket} socket current connections socket  */
