@@ -12,7 +12,13 @@ const clientStateStore = {
 
 Object.keys(clientStateStore).forEach(clientId => {
   const client = mqtt.connect('mqtt://broker.hivemq.com:1883', {
-    clientId
+    clientId,
+    will: {
+      topic: `saartk/device/${clientId}/lost`,
+      payload: null,
+      qos: 0,
+      retain: false
+    }
   })
   client.on('message', (topic, payload, packet) => {
     logOnMessage(clientId, payload, packet)

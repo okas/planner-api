@@ -7,11 +7,11 @@ import {
 } from './lampMqtt'
 
 const sentCommands = new Map()
-const broadcasts = {}
+const broadcasts = new Map()
 
 export default function registerBridge(client) {
   /* Add broadcasts here */
-  addApiBroadcasts(lampBroadcasts, lampType)
+  broadcasts.set(lampType, lampBroadcasts)
   /* Add publishers here */
   bridgePublishes(client, lampCommands)
   client.on('connect', connAck => {
@@ -19,12 +19,6 @@ export default function registerBridge(client) {
     bridgeSubscriptions(client, lampSubscriptions)
   })
   client.on('message', messageHandler)
-}
-
-function addApiBroadcasts(broadcastMap, name) {
-  broadcastMap.forEach((v, k) => {
-    broadcasts[name] = { [k]: v }
-  })
 }
 
 /**
@@ -83,6 +77,9 @@ function messageHandler(topic, payload) {
     case 'present':
       devicePresentMessageHandler(topicObj, payload)
       break
+    case 'lost':
+      deviceLostMessageHandler(topicObj)
+      break
     default:
       break
   }
@@ -124,9 +121,17 @@ function createCommandTopic({ type, subtype, id, command, senderInApi }) {
 }
 
 function devicePresentMessageHandler({ id, subtype, msgType }, payload) {
-  const broadcastEvent = broadcasts[subtype][msgType]
-  const eventPayload = { id, ...JSON.parse(payload.toString()) }
+  const broadcastEvent = broadcasts.get(subtype).get(msgType)
+  const eventPayload = {
+    id: JSON.parse(id),
+    ...JSON.parse(payload.toString())
+  }
   messageBus.emit(broadcastEvent, eventPayload)
+}
+
+function deviceLostMessageHandler({ id, subtype, msgType }) {
+  const broadcastEvent = broadcasts.get(subtype).get(msgType)
+  messageBus.emit(broadcastEvent, JSON.parse(id))
 }
 
 messageBus.on(MQTT__CLEAR_SENDER_COMMANDS, sender => {
