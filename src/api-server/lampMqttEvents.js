@@ -31,16 +31,18 @@ export default function registerLampMqttEvents(socket) {
   })
 
   socket.on('lamp__set_state', (changeData, fn) => {
+    const errors = validateState(changeData)
+    if (errors) {
+      fn(errors)
+      return
+    }
     messageBus.emit(MQTT__LAMP_CMND__SET_STATE, {
       data: changeData,
       sender: socket.id,
       done: payload => {
         // ToDo error handling, a/o validation?
         fn({ status: 'ok', response: payload })
-        socket.to(broadcastRoom).emit('lamp__api_set_state', {
-          id: changeData.id,
-          state: payload
-        })
+        broadcastLampSetState(changeData, payload)
         console.log(
           `${getLogPrefix(
             broadcastRoom
@@ -49,4 +51,19 @@ export default function registerLampMqttEvents(socket) {
       }
     })
   })
+
+  function broadcastLampSetState({ id }, state) {
+    socket.to(broadcastRoom).emit('lamp__api_set_state', { id, state })
+  }
+}
+
+function validateState(changeData) {
+  const errors = []
+  if (typeof changeData.state !== 'number') {
+    errors.push('state must be type of number')
+  }
+  if (changeData.state < 0 && changeData.state > 1) {
+    errors.push('state value must be in 0..1')
+  }
+  return errors.length ? { errors } : null
 }
