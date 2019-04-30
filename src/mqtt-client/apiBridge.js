@@ -31,7 +31,9 @@ export default function registerBridge(client) {
     }
   })
 
-  client.on('message', onMessage)
+  client.on('message', (topic, payload) =>
+    setImmediate(onMessage, topic, payload)
+  )
 
   /**
    * @param {Map<symbol,function>} commandsMap
@@ -147,7 +149,7 @@ function deviceLostMessageHandler({ id, subtype, msgType }) {
 }
 
 messageBus.on(MQTT__CLEAR_SENDER_COMMANDS, sender => {
-  setImmediate(() => clearSenderCommands(sender))
+  setImmediate(clearSenderCommands, sender)
 })
 
 function clearSenderCommands(sender) {
