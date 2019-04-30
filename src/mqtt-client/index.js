@@ -3,7 +3,20 @@ import messageBus, {
   MQTT__CLIENT_READY,
   MQTT__CLIENT_LOST
 } from '../messageBus'
-import registerBridge from './apiBridge'
+import registerBridgeContext from './apiBridgingContext'
+import lampStrategy from './lampMqttStrategy'
+import blindStrategy from './blindMqttStrategy'
+
+const strategiesMap = new Map()
+
+/* Add imported strategies to arguments */
+setupStrategyMaps([lampStrategy, blindStrategy])
+
+function setupStrategyMaps(strategies) {
+  strategies.forEach(s => {
+    strategiesMap.set(s.type, s)
+  })
+}
 
 export default function initMqtt() {
   const client = mqtt.connect('mqtt://broker.hivemq.com:1883', {
@@ -31,7 +44,7 @@ export default function initMqtt() {
     messageBus.emit(MQTT__CLIENT_READY)
   })
 
-  registerBridge(client)
+  registerBridgeContext(client, strategiesMap)
 }
 
 function logMessage(topic, payload, packet) {
