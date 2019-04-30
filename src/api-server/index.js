@@ -4,6 +4,8 @@ import registerLampModelEvents from './lampModelEvents'
 import registerLampMqttEvents from './lampMqttEvents'
 import registerLampMqttBroadcast from './lampMqttBroadcast'
 import registerBlindModelEvents from './blindModelEvents'
+import registerBlindMqttEvents from './blindMqttEvents'
+import registerBlindMqttBroadcast from './blindMqttBroadcast'
 import registerPresetEvents from './presetEvents'
 import registerPresetBroadcast from './presetBroadcast'
 import registerCommonMqttBroadcasts from './commonMqttBroadcast'
@@ -25,6 +27,7 @@ const socketIoConfig = {
  */
 function register(io) {
   registerLampMqttBroadcast(io)
+  registerBlindMqttBroadcast(io)
   registerPresetBroadcast(io)
   registerCommonMqttBroadcasts(io)
   io.on(
@@ -35,6 +38,7 @@ function register(io) {
       registerLampModelEvents(socket)
       registerLampMqttEvents(socket)
       registerBlindModelEvents(socket)
+      registerBlindMqttEvents(socket)
       registerPresetEvents(socket)
     }
   )

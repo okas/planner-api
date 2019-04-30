@@ -23,6 +23,8 @@ export const PRESET__UPDATED_DEVICE_DELETED = Symbol(
 
 export const MQTT__CLIENT_READY = Symbol('mqtt:ready')
 
+export const MQTT__CLIENT_LOST = Symbol('mqtt:clientLost')
+
 export const MQTT__CLEAR_SENDER_COMMANDS = Symbol('mqtt:clearSenderCommands')
 
 export const MQTT__LAMP_CMND__STATE = Symbol('mqtt:getLampState')
@@ -33,4 +35,10 @@ export const MQTT__LAMP_PRESENT = Symbol('mqtt:lampPresent')
 
 export const MQTT__LAMP_LOST = Symbol('mqtt:lampLost')
 
-export const MQTT__CLIENT_LOST = Symbol('mqtt:clientLost')
+export const MQTT__BLIND_CMND__STATE = Symbol('mqtt:getBlindState')
+
+export const MQTT__BLIND_CMND__SET_STATE = Symbol('mqtt:setBlindState')
+
+export const MQTT__BLIND_PRESENT = Symbol('mqtt:blindPresent')
+
+export const MQTT__BLIND_LOST = Symbol('mqtt:blindLost')

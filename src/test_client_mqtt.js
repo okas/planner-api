@@ -7,7 +7,12 @@ const clientStateStore = {
   'lamp/63': 0,
   'lamp/64': 1,
   'lamp/65': 0,
-  'lamp/66': 1
+  'lamp/66': 1,
+  'blind/10': 1,
+  'blind/11': 0,
+  'blind/12': 0.5,
+  'blind/13': 0.63,
+  'blind/14': 0.33
 }
 
 Object.keys(clientStateStore).forEach(clientId => {

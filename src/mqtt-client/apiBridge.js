@@ -5,6 +5,12 @@ import {
   type as lampType,
   lampBroadcasts
 } from './lampMqtt'
+import {
+  blindCommands,
+  blindSubscriptions,
+  type as blindType,
+  blindBroadcasts
+} from './blindMqtt'
 
 const sentCommands = new Map()
 const broadcasts = new Map()
@@ -12,13 +18,16 @@ const broadcasts = new Map()
 export default function registerBridge(client) {
   /* Add broadcasts here */
   broadcasts.set(lampType, lampBroadcasts)
+  broadcasts.set(blindType, blindBroadcasts)
   /* Add publishers here */
   bridgePublishes(lampCommands)
+  bridgePublishes(blindCommands)
 
   client.on('connect', connAck => {
     if (!connAck.sessionPresent) {
       /* Add subscriptions here */
       bridgeSubscriptions(lampSubscriptions)
+      bridgeSubscriptions(blindSubscriptions)
     }
   })
 
