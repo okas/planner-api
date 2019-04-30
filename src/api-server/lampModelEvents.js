@@ -15,7 +15,7 @@ export default function registerLampsEvents(socket) {
 
   socket.on('lamp__get_all', fn => {
     fn(model.getAll())
-    console.log(`${getLogPrefix()}Sent Lamps`)
+    console.log(`${getLogPrefix()}sent Lamps`)
   })
 
   socket.on('lamp__add', (lamp, fn) => {

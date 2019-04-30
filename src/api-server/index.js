@@ -1,9 +1,9 @@
 import IOServer from 'socket.io'
 import registerCommonEvents from './commonEvents'
-import registerLampEvents from './lampModelEvents'
+import registerLampModelEvents from './lampModelEvents'
 import registerLampMqttEvents from './lampMqttEvents'
 import registerLampMqttBroadcast from './lampMqttBroadcast'
-import registerBlindEvents from './blindEvents'
+import registerBlindModelEvents from './blindModelEvents'
 import registerPresetEvents from './presetEvents'
 import registerPresetBroadcast from './presetBroadcast'
 import registerCommonMqttBroadcasts from './commonMqttBroadcast'
@@ -32,9 +32,9 @@ function register(io) {
     /** @param {SocketIO.Socket} socket current connections socket  */
     socket => {
       registerCommonEvents(socket)
-      registerLampEvents(socket)
+      registerLampModelEvents(socket)
       registerLampMqttEvents(socket)
-      registerBlindEvents(socket)
+      registerBlindModelEvents(socket)
       registerPresetEvents(socket)
     }
   )

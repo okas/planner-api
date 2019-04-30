@@ -1,13 +1,16 @@
 import * as model from '../model/blindModel'
 
-const room = 'blind'
+const broadcastRoom = 'blind'
 
 /**
  * @param {SocketIO.Socket} socket
  */
 export default function registerWindowsBlindEvents(socket) {
-  function getLogPrefix(roomVal) {
-    return `[ ${socket.id} ]${roomVal ? `, room "${roomVal}"` : ''} : `
+  /**
+   * @param {String} [room]
+   */
+  function getLogPrefix(room) {
+    return `[ ${socket.id} ]${room ? `, room "${room}"` : ''} : `
   }
 
   socket.on('blind__get_all', fn => {
@@ -21,10 +24,10 @@ export default function registerWindowsBlindEvents(socket) {
       fn(result)
     } else {
       fn({ id: result.id })
-      socket.to(room).emit('blind__api_add', result)
+      socket.to(broadcastRoom).emit('blind__api_add', result)
     }
     console.log(
-      `${getLogPrefix(room)}${
+      `${getLogPrefix(broadcastRoom)}${
         result.errors
           ? `Sent errors on adding new Blind: [ ${JSON.stringify(result)} ]`
           : `Sent added Blind's id and broadcasted new document.`
@@ -38,10 +41,10 @@ export default function registerWindowsBlindEvents(socket) {
       fn(result)
     } else {
       fn({ status: 'ok' })
-      socket.to(room).emit('blind__api_update', result)
+      socket.to(broadcastRoom).emit('blind__api_update', result)
     }
     console.log(
-      `${getLogPrefix(room)}${
+      `${getLogPrefix(broadcastRoom)}${
         result.errors
           ? `Sent errors on updating Blind: [ ${JSON.stringify(result)} ]`
           : `Sent updated Blind's status and broadcasted document changes.`
@@ -55,10 +58,10 @@ export default function registerWindowsBlindEvents(socket) {
       fn(result)
     } else {
       fn({ status: 'ok' })
-      socket.to(room).emit('blind__api_remove', result)
+      socket.to(broadcastRoom).emit('blind__api_remove', result)
     }
     console.log(
-      `${getLogPrefix(room)}${
+      `${getLogPrefix(broadcastRoom)}${
         result.errors
           ? `Sent errors on removing Blind: [ ${JSON.stringify(result)} ]`
           : `Sent removed Blind's status, no errors.`
