@@ -17,7 +17,7 @@ export default function registerBlindMqttEvents(socket) {
   }
 
   socket.on('blind__get_state', (blindId, fn) => {
-    console.log(`${getLogPrefix()} get Blind state form MQTT`)
+    console.log(`${getLogPrefix()}get Blind state form MQTT`)
     messageBus.emit(MQTT__BLIND_CMND__STATE, {
       data: blindId,
       sender: socket.id,

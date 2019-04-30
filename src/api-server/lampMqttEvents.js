@@ -17,7 +17,7 @@ export default function registerLampMqttEvents(socket) {
   }
 
   socket.on('lamp__get_state', (lampId, fn) => {
-    console.log(`${getLogPrefix()} get Lamp state form MQTT`)
+    console.log(`${getLogPrefix()}get Lamp state form MQTT`)
     messageBus.emit(MQTT__LAMP_CMND__STATE, {
       data: lampId,
       sender: socket.id,
