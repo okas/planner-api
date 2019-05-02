@@ -9,6 +9,7 @@ const parpre = '[%lktxp]'
  */
 export default function setupPresetCollection(database) {
   const collection = getOrAddCollection(database, 'preset', {
+    unique: ['id'],
     disableMeta: true
   })
   return setupTransforms(collection, requiredTransforms)

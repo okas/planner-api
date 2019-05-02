@@ -7,6 +7,7 @@ import messageBus, {
 import setupLampCollection from './lampCollection'
 import setupBlindCollection from './blindCollection'
 import setupPresetCollection from './presetCollection'
+import attachIdGeneration from './idGeneration'
 
 // take from configuration or export constructor from this module
 const dbFile = './data/loki_db.json'
@@ -22,6 +23,7 @@ const database = new Loki(dbFile, {
 
 function initializeDatabase() {
   initCollections()
+  attachIdGeneration(database.collections)
   // Save configurations to db
   database.saveDatabase(err => {
     if (err) {

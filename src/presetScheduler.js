@@ -16,8 +16,8 @@ function runPresetJobs() {
   logJobCount()
 }
 
-function collDeletedHandler({ $loki }) {
-  const job = nodeShedule.scheduledJobs[$loki]
+function collDeletedHandler({ id }) {
+  const job = nodeShedule.scheduledJobs[id]
   if (job) {
     job.cancel()
     logJobCount()
@@ -36,17 +36,13 @@ function collUpdateHandler(docPreset) {
   collInsertHandler(docPreset)
 }
 
-function initiateJob(docPreset) {
-  nodeShedule.scheduleJob(
-    docPreset.$loki.toString(),
-    docPreset.schedule,
-    fireDate => {
-      presetTask(docPreset, fireDate)
-    }
-  )
+function initiateJob({ id, schedule, devices }) {
+  nodeShedule.scheduleJob(id.toString(), schedule, fireDate => {
+    presetTask(devices, fireDate)
+  })
 }
 
-function presetTask({ devices }, fireDate = new Date()) {
+function presetTask(devices, fireDate = new Date()) {
   // ToDo some async way?
   devices.forEach(d =>
     console.log(`at "${fireDate}"`, 'run preset device [hardware] of:', d)

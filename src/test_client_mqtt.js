@@ -4,15 +4,10 @@ import mqtt from 'mqtt'
  * Client registry and initial states.
  */
 const clientStateStore = {
-  'lamp/63': 0,
-  'lamp/64': 1,
-  'lamp/65': 0,
-  'lamp/66': 1,
-  'blind/10': 1,
-  'blind/11': 0,
-  'blind/12': 0.5,
-  'blind/13': 0.63,
-  'blind/14': 0.33
+  'lamp/6529777472840401000': 0,
+  'lamp/6529777590750675000': 1,
+  'blind/6529777716835647000': 1,
+  'blind/6529777749580579000': 0.33
 }
 
 Object.keys(clientStateStore).forEach(clientId => {

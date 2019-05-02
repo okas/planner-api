@@ -4,8 +4,10 @@ export function getDependendtPresets(id) {
   return presetCollection
     .chain('findPresetsByDevice', { id, type: 'blind' })
     .simplesort('name')
-    .data()
-    .map(({ $loki, name }) => ({ id: $loki, name }))
+    .data({
+      removeMeta: true
+    })
+    .map(({ id, name }) => ({ id, name }))
 }
 
 export function getAll() {
@@ -26,29 +28,31 @@ export function add(blind) {
   if (errors) {
     return errors
   }
-  const { $loki: id, ...docRest } = blindCollection.insertOne(doc)
+  const { $loki, ...docRest } = blindCollection.insertOne(doc)
   // ToDo handle db level errors and return them
-  return { id, ...docRest }
+  return docRest
 }
 
-export function update(blind) {
-  const doc = sanitize(blind)
+export function update({ id, ...blindRest }) {
+  const doc = sanitize(blindRest)
   const errors = validate(doc)
   if (errors) {
     return errors
   }
-  // ToDo add error handling (Loki, sync vs async update!)
-  const dbDoc = blindCollection.get(blind.id)
+  const dbDoc = getById(id)
   if (!dbDoc) {
     return {
-      errors: [
-        `didn't found a Blind document from database with {id}: "${blind.id}"`
-      ]
+      errors: [`didn't found a Blind document from database with {id}: "${id}"`]
     }
   }
+  // ToDo add error handling (Loki, sync vs async update!)
   Object.assign(dbDoc, doc)
-  const { $loki: id, ...docRest } = blindCollection.update(dbDoc)
-  return { id, ...docRest }
+  const { $loki, ...docRest } = blindCollection.update(dbDoc)
+  return docRest
+}
+
+function getById(id) {
+  return blindCollection.by('id', id)
 }
 
 /**
@@ -76,7 +80,8 @@ function validate({ name, room, valuestep }) {
 }
 
 export function remove(id) {
-  if (blindCollection.remove(id)) {
+  const dbDoc = getById(id)
+  if (blindCollection.remove(dbDoc)) {
     return { id }
   } else {
     return { errors: [{ no_exist: id }] }

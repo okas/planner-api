@@ -7,7 +7,6 @@ import {
   lampCollection,
   blindCollection
 } from '../persistence'
-import { transformItems } from './transforms'
 import cronParser from 'cron-parser'
 
 /**
@@ -22,29 +21,33 @@ export function add(preset) {
   if (errors) {
     return errors
   }
-  const { $loki: id, ...docRest } = presetCollection.insertOne(doc)
+  const { $loki, ...docRest } = presetCollection.insertOne(doc)
   // ToDo error check
-  return { id, ...docRest }
+  return docRest
 }
 
-export function update(preset) {
-  const doc = sanitize(preset)
+export function update({ id, ...presetRest }) {
+  const doc = sanitize(presetRest)
   const errors = validate(doc)
   if (errors) {
     return errors
   }
   // ToDo add error handling (Loki, sync vs async update!)
-  const dbDoc = presetCollection.get(preset.id)
+  const dbDoc = getById(id)
   if (!dbDoc) {
     return {
       errors: [
-        `didn't found a Preset document from database with {id}: "${preset.id}"`
+        `didn't found a Preset document from database with {id}: "${id}"`
       ]
     }
   }
   Object.assign(dbDoc, doc)
-  const { $loki: id, ...docRest } = presetCollection.update(dbDoc)
-  return { id, ...docRest }
+  const { $loki, ...docRest } = presetCollection.update(dbDoc)
+  return docRest
+}
+
+function getById(id) {
+  return presetCollection.by('id', id)
 }
 
 /**
@@ -131,7 +134,8 @@ function validateDevices(devices, errors) {
 }
 
 export function remove(id) {
-  if (presetCollection.remove(id)) {
+  const dbDoc = getById(id)
+  if (presetCollection.remove(dbDoc)) {
     return { id }
   } else {
     return { errors: [{ no_exist: id }] }
@@ -168,7 +172,7 @@ function validateActiveStateChange(doc, newState) {
 }
 
 export function getAll() {
-  return presetCollection.data.map(transformItems())
+  return presetCollection.chain().data({ removeMeta: true })
 }
 
 export function getDevicesSelection(lang) {
@@ -177,12 +181,12 @@ export function getDevicesSelection(lang) {
     {
       type: 'lamp',
       name: i18n.lampGroupId,
-      items: lampCollection.data.map(transformItems())
+      items: lampCollection.chain().data({ removeMeta: true })
     },
     {
       type: 'blind',
       name: i18n.blindsGroupId,
-      items: blindCollection.data.map(transformItems())
+      items: blindCollection.chain().data({ removeMeta: true })
     }
   ]
 }
@@ -209,21 +213,23 @@ messageBus.once(PERSISTENCE__COLLECTIONS_READY, () => {
 
 /**
  * @typedef ChangedDevice
- * @property {String} $loki of changed device.
+ * @property {Number} id of changed device.
  * @param {ChangedDevice} device changed device.
  * @param {String} type of changed device.
  * @returns {Array} changed Presets.
  */
-function removeDeviceFomAllPresets({ $loki }, type) {
+function removeDeviceFomAllPresets({ id }, type) {
   return presetCollection
-    .chain('findPresetsByDevice', { id: $loki, type })
+    .chain('findPresetsByDevice', { id, type })
     .update(p => {
-      p.devices.splice(p.devices.findIndex(d => d.id === $loki), 1)
+      p.devices.splice(p.devices.findIndex(d => d.id === id), 1)
       if (p.devices.length === 0) {
         p.active = false
       }
     })
-    .data()
+    .data({
+      removeMeta: true
+    })
 }
 
 /**
@@ -231,8 +237,8 @@ function removeDeviceFomAllPresets({ $loki }, type) {
  */
 function notifyChangedPresets(changedPresets) {
   setImmediate(() => {
-    changedPresets.forEach(({ $loki: id, ...docRest }) => {
-      messageBus.emit(PRESET__UPDATED_DEVICE_DELETED, { id, ...docRest })
+    changedPresets.forEach(doc => {
+      messageBus.emit(PRESET__UPDATED_DEVICE_DELETED, doc)
     })
   })
 }

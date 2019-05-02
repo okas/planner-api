@@ -4,12 +4,16 @@ export function getDependendtPresets(id) {
   return presetCollection
     .chain('findPresetsByDevice', { id, type: 'lamp' })
     .simplesort('name')
-    .data()
-    .map(({ $loki, name }) => ({ id: $loki, name }))
+    .data({
+      removeMeta: true
+    })
+    .map(({ id, name }) => ({ id, name }))
 }
 
 export function getAll() {
-  return lampCollection.data.map(({ $loki: id, ...rest }) => ({ id, ...rest }))
+  return lampCollection.chain().data({
+    removeMeta: true
+  })
 }
 
 /**
@@ -24,29 +28,31 @@ export function add(lamp) {
   if (errors) {
     return errors
   }
-  const { $loki: id, ...docRest } = lampCollection.insert(doc)
+  const { $loki, ...docRest } = lampCollection.insertOne(doc)
   // ToDo handle db level errors and return them
-  return { id, ...docRest }
+  return docRest
 }
 
-export function update(lamp) {
-  const doc = sanitize(lamp)
+export function update({ id, ...lampRest }) {
+  const doc = sanitize(lampRest)
   const errors = validate(doc)
   if (errors) {
     return errors
   }
-  // ToDo add error handling (Loki, sync vs async update!)
-  const dbDoc = lampCollection.get(lamp.id)
+  const dbDoc = getById(id)
   if (!dbDoc) {
     return {
-      errors: [
-        `didn't found a Lamp document from database with {id}: "${lamp.id}"`
-      ]
+      errors: [`didn't found a Lamp document from database with {id}: "${id}"`]
     }
   }
   Object.assign(dbDoc, doc)
-  const { $loki: id, ...docRest } = lampCollection.update(dbDoc)
-  return { id, ...docRest }
+  // ToDo add error handling (Loki, sync vs async update!)
+  const { $loki, ...docRest } = lampCollection.update(dbDoc)
+  return docRest
+}
+
+function getById(id) {
+  return lampCollection.by('id', id)
 }
 
 /**
@@ -74,7 +80,8 @@ function validate({ name, room, valuestep }) {
 }
 
 export function remove(id) {
-  if (lampCollection.remove(id)) {
+  const dbDoc = getById(id)
+  if (lampCollection.remove(dbDoc)) {
     return { id }
   } else {
     return { errors: [{ no_exist: id }] }
