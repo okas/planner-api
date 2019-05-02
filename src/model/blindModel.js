@@ -1,5 +1,4 @@
 import { blindCollection, presetCollection } from '../persistence'
-import { getRandomIntInclusive } from '../utilities'
 
 export function getDependendtPresets(id) {
   return presetCollection
@@ -10,22 +9,9 @@ export function getDependendtPresets(id) {
 }
 
 export function getAll() {
-  return blindCollection.data.map(({ $loki, ...rest }) => ({
-    id: $loki,
-    ...rest,
-    state: getState($loki)
-  }))
-}
-
-// Mockup function. This funtion will retreive physical state in future.
-function getState(blindId) {
-  // About 1/3 of calls will be 1, otherwize 0. This decides which blind gets value later.
-  const match = +(
-    getRandomIntInclusive(blindId, blindId + 2) % (blindId + 2) ===
-    0
-  )
-  // Find randomly value between 0..1.
-  return match === 1 ? getRandomIntInclusive(0, 100) / 100 : 0
+  return blindCollection.chain().data({
+    removeMeta: true
+  })
 }
 
 /**
