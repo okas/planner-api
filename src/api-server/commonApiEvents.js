@@ -3,7 +3,7 @@ import messageBus, { MQTT__CLEAR_SENDER_COMMANDS } from '../messageBus'
 /**
  * @param {SocketIO.Socket} socket conection from browser
  */
-export default function registerCommonEvents(socket) {
+export default function registerCommonApiEvents(socket) {
   console.log(`|-> [ ${socket.id} ] : a user connected`)
 
   socket.on('disconnecting', reason => {

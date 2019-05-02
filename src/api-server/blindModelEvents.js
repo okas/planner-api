@@ -5,7 +5,7 @@ const broadcastRoom = 'blind'
 /**
  * @param {SocketIO.Socket} socket
  */
-export default function registerWindowsBlindEvents(socket) {
+export default function registerBlindModelEvents(socket) {
   /**
    * @param {String} [room]
    */

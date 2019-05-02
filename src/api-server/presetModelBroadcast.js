@@ -6,7 +6,7 @@ const room = 'preset'
  *  SocketIO broadcaster. Uses `{messageBus}` module to listen events from app.
  *  @param {SocketIO.Server} io
  */
-export default function(io) {
+export default function registerPresetModelBroadcast(io) {
   function getLogPrefix() {
     return `[ API: presetEmitter ], room "${room}" : `
   }

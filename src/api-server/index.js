@@ -1,14 +1,14 @@
 import IOServer from 'socket.io'
-import registerCommonEvents from './commonEvents'
-import registerLampModelEvents from './lampModelEvents'
-import registerLampMqttEvents from './lampMqttEvents'
-import registerLampMqttBroadcast from './lampMqttBroadcast'
 import registerBlindModelEvents from './blindModelEvents'
-import registerBlindMqttEvents from './blindMqttEvents'
 import registerBlindMqttBroadcast from './blindMqttBroadcast'
-import registerPresetEvents from './presetEvents'
-import registerPresetBroadcast from './presetBroadcast'
+import registerBlindMqttEvents from './blindMqttEvents'
+import registerCommonApiEvents from './commonApiEvents'
 import registerCommonMqttBroadcasts from './commonMqttBroadcast'
+import registerLampModelEvents from './lampModelEvents'
+import registerLampMqttBroadcast from './lampMqttBroadcast'
+import registerLampMqttEvents from './lampMqttEvents'
+import registerPresetModelBroadcast from './presetModelBroadcast'
+import registerPresetModelEvents from './presetModelEvents'
 
 export default function initApi(httpServer) {
   // @ts-ignore
@@ -28,17 +28,18 @@ const socketIoConfig = {
 function register(io) {
   registerLampMqttBroadcast(io)
   registerBlindMqttBroadcast(io)
-  registerPresetBroadcast(io)
+  registerPresetModelBroadcast(io)
   registerCommonMqttBroadcasts(io)
   io.on(
     'connection',
     /** @param {SocketIO.Socket} socket current connections socket  */
     socket => {
-      registerCommonEvents(socket)
+      registerCommonApiEvents(socket)
       registerLampModelEvents(socket)
       registerLampMqttEvents(socket)
       registerBlindModelEvents(socket)
       registerBlindMqttEvents(socket)
+      registerPresetModelEvents(socket)
       registerPresetEvents(socket)
     }
   )

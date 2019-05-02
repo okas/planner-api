@@ -9,7 +9,7 @@ const room = 'blind-state'
  *  SocketIO broadcaster. Uses `{messageBus}` module to listen events from MQTT.
  *  @param {SocketIO.Server} io
  */
-export default function(io) {
+export default function registerBlindMqttBroadcast(io) {
   function getLogPrefix() {
     return `[ API: Blind MQTT Broadcaster ], room "${room}" : `
   }

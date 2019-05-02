@@ -5,7 +5,7 @@ const broadcastRoom = 'lamp'
 /**
  * @param {SocketIO.Socket} socket
  */
-export default function registerLampsEvents(socket) {
+export default function registerLampModelEvents(socket) {
   /**
    * @param {String} [room]
    */

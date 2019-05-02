@@ -9,7 +9,7 @@ const deviceStateRooms = ['lamp-state']
  *  SocketIO broadcaster. Uses `{messageBus}` module to listen events from MQTT.
  *  @param {SocketIO.Server} io
  */
-export default function(io) {
+export default function registerCommonMqttBroadcasts(io) {
   function getLogPrefix() {
     return `[ API: Common MQTT Broadcaster ], rooms "${deviceStateRooms}" : `
   }

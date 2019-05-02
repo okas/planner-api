@@ -5,7 +5,7 @@ const room = 'preset'
 /**
  * @param {SocketIO.Socket} socket
  */
-export default function registerPresetsEvents(socket) {
+export default function registerPresetModelEvents(socket) {
   function getLogPrefix(roomVal) {
     return `[ ${socket.id} ]${roomVal ? `, room "${roomVal}"` : ''} : `
   }
