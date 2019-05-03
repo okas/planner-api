@@ -143,7 +143,7 @@ export function remove(id) {
 }
 
 export function setActive({ id, active }) {
-  let doc = presetCollection.get(id)
+  let doc = getById(id)
   const errors = validateActiveStateChange(doc, active)
   if (errors) {
     return errors
