@@ -34,9 +34,12 @@ function collUpdateHandler(docPreset) {
   collInsertHandler(docPreset)
 }
 
-function createScheduledJob({ id, schedule, devices }) {
+function createScheduledJob({ id, name, schedule, devices }) {
   nodeShedule.scheduleJob(id.toString(), schedule, fireDate => {
     runPresetTask(devices, 'presetScheduler', fireDate)
+    console.log(
+      `presetsScheduler: running tasks for Preset "${name}", at "${fireDate}"`
+    )
   })
 }
 
