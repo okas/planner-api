@@ -3,7 +3,7 @@ import messageBus, {
   MQTT__CLIENT_READY
 } from '../messageBus'
 
-const deviceStateRooms = ['lamp-state']
+const deviceStateRooms = ['lamp-state', 'blind-state']
 
 /**
  *  SocketIO broadcaster. Uses `{messageBus}` module to listen events from MQTT.
