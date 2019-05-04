@@ -9,6 +9,7 @@ import registerLampMqttBroadcast from './lampMqttBroadcast'
 import registerLampMqttEvents from './lampMqttEvents'
 import registerPresetModelBroadcast from './presetModelBroadcast'
 import registerPresetModelEvents from './presetModelEvents'
+import registerPresetMqttEvents from './presetMqttEvents'
 
 export default function initApi(httpServer) {
   // @ts-ignore
@@ -40,7 +41,7 @@ function register(io) {
       registerBlindModelEvents(socket)
       registerBlindMqttEvents(socket)
       registerPresetModelEvents(socket)
-      registerPresetEvents(socket)
+      registerPresetMqttEvents(socket)
     }
   )
 }

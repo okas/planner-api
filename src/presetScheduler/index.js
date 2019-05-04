@@ -1,13 +1,17 @@
 import nodeShedule from 'node-schedule'
+import { presetCollection } from '../persistence'
+import { runPresetTask, queryAllRunnableTasks } from './sharedFunctions'
 
 export default function initScheduler() {
+  runAllPesetTasks()
   presetCollection.addListener('delete', collDeletedHandler)
   presetCollection.addListener('insert', collInsertHandler)
   presetCollection.addListener('update', collUpdateHandler)
 }
 
-  presetCollection
-    .chain('findRunnablePresets')
+function runAllPesetTasks() {
+  queryAllRunnableTasks().forEach(createScheduledJob)
+  logJobCount()
 }
 
 function collDeletedHandler({ id }) {
@@ -20,6 +24,7 @@ function collDeletedHandler({ id }) {
 
 function collInsertHandler(docPreset) {
   if (docPreset.active && docPreset.devices.length > 0) {
+    createScheduledJob(docPreset)
     logJobCount()
   }
 }
@@ -29,7 +34,9 @@ function collUpdateHandler(docPreset) {
   collInsertHandler(docPreset)
 }
 
+function createScheduledJob({ id, schedule, devices }) {
   nodeShedule.scheduleJob(id.toString(), schedule, fireDate => {
+    runPresetTask(devices, 'presetScheduler', fireDate)
   })
 }
 
