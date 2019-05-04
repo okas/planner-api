@@ -11,10 +11,6 @@ const room = 'blind-state'
  *  @param {SocketIO.Server} io
  */
 export default function registerBlindMqttBroadcast(io) {
-  function logMsg(msg) {
-    console.log(`[ API: Blind MQTT Broadcaster ], room "${room}" : ${msg}.`)
-  }
-
   messageBus.on(MQTT__BLIND_PRESENT, data => {
     io.to(room).emit('blind__api_present', data)
     logMsg(`blind "${data.id}" is present.`)
@@ -35,4 +31,8 @@ export default function registerBlindMqttBroadcast(io) {
       logMsg('forwarding set state of Blind, MQTT=>API=>browser')
     }
   )
+
+  function logMsg(msg) {
+    console.log(`[ API: Blind MQTT Broadcaster ], room "${room}" : ${msg}.`)
+  }
 }

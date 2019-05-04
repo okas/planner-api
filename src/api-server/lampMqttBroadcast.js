@@ -11,10 +11,6 @@ const room = 'lamp-state'
  *  @param {SocketIO.Server} io
  */
 export default function registerLampMqttBroadcast(io) {
-  function logMsg(msg) {
-    console.log(`[ API: Lamp MQTT Broadcaster ], room "${room}" : ${msg}.`)
-  }
-
   messageBus.on(MQTT__LAMP_PRESENT, data => {
     io.to(room).emit('lamp__api_present', data)
     logMsg(`lamp "${data.id}" is present.`)
@@ -35,4 +31,8 @@ export default function registerLampMqttBroadcast(io) {
       logMsg('forwarding set state of Lamp, MQTT=>API=>browser')
     }
   )
+
+  function logMsg(msg) {
+    console.log(`[ API: Lamp MQTT Broadcaster ], room "${room}" : ${msg}.`)
+  }
 }

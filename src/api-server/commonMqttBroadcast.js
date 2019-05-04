@@ -10,21 +10,23 @@ const deviceStateRooms = ['lamp-state', 'blind-state']
  *  @param {SocketIO.Server} io
  */
 export default function registerCommonMqttBroadcasts(io) {
-  function getLogPrefix() {
-    return `[ API: Common MQTT Broadcaster ], rooms "${deviceStateRooms}" : `
-  }
-
   messageBus.on(MQTT__CLIENT_LOST, () => {
     deviceStateRooms.forEach(r => {
       io.to(r).emit('devices__api_lost')
     })
-    console.log(`${getLogPrefix()}MQTT client lost.`)
+    logMsg('MQTT client lost')
   })
 
   messageBus.on(MQTT__CLIENT_READY, () => {
     deviceStateRooms.forEach(r => {
       io.to(r).emit('devices__api_ready')
     })
-    console.log(`${getLogPrefix()}MQTT client ready.`)
+    logMsg('MQTT client ready')
   })
+
+  function logMsg(msg) {
+    console.log(
+      `[ API: Common MQTT Broadcaster ], rooms "${deviceStateRooms}" : ${msg}.`
+    )
+  }
 }
