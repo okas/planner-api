@@ -12,7 +12,7 @@ const room = 'blind-state'
  */
 export default function registerBlindMqttBroadcast(io) {
   function logMsg(msg) {
-    console.log(`[ API: Lamp MQTT Broadcaster ], room "${room}" : ${msg}.`)
+    console.log(`[ API: Blind MQTT Broadcaster ], room "${room}" : ${msg}.`)
   }
 
   messageBus.on(MQTT__BLIND_PRESENT, data => {
