@@ -42,20 +42,17 @@ export default function registerBridge(client, strategiesMap) {
     })
   }
 
-  function apiEventHandler(getArgs, eventPayload) {
-    const publishArgs = getArgs(
-      eventPayload.data,
-      sanitizeSender(eventPayload.sender)
-    )
-    publishCommandFromApi(publishArgs, eventPayload)
+  function apiEventHandler(getArgs, { data, sender, done }) {
+    const publishArgs = getArgs(data, sanitizeSender(sender))
+    publishCommandFromApi(publishArgs, done)
   }
 
-  function publishCommandFromApi({ topic, payload }, eventPayload) {
+  function publishCommandFromApi({ topic, payload }, doneCallBack) {
     client.publish(topic, payload, err => {
       if (err) {
         throw err
       } else {
-        sentCommands.set(topic, eventPayload.done)
+        sentCommands.set(topic, doneCallBack)
       }
     })
   }
