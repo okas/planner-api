@@ -1,9 +1,8 @@
 import messageBus, {
   MQTT__LAMP_CMND__STATE,
-  MQTT__LAMP_CMND__SET_STATE
+  MQTT__LAMP_CMND__SET_STATE,
+  MQTT__RESP__LAMP__SET_STATE
 } from '../messageBus'
-
-const broadcastRoom = 'lamp-state'
 
 /**
  * @param {SocketIO.Socket} socket
@@ -40,21 +39,15 @@ export default function registerLampMqttEvents(socket) {
       data: changeData,
       sender: socket.id,
       done: payload => {
-        // ToDo error handling, a/o validation?
         fn({ status: 'ok', response: payload })
-        broadcastLampSetState(changeData, payload)
-        console.log(
-          `${getLogPrefix(
-            broadcastRoom
-          )}forwarding set state of Lamp, MQTT=>API=>browser.`
-        )
+        const eventPayload = {
+          id: changeData.id,
+          state: payload
+        }
+        messageBus.emit(MQTT__RESP__LAMP__SET_STATE, eventPayload, socket)
       }
     })
   })
-
-  function broadcastLampSetState({ id }, state) {
-    socket.to(broadcastRoom).emit('lamp__api_set_state', { id, state })
-  }
 }
 
 function validateState(changeData) {

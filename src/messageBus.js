@@ -31,6 +31,8 @@ export const MQTT__LAMP_CMND__STATE = Symbol('mqtt:getLampState')
 
 export const MQTT__LAMP_CMND__SET_STATE = Symbol('mqtt:setLampstate')
 
+export const MQTT__RESP__LAMP__SET_STATE = Symbol('mqtt:ResponseLampSetState')
+
 export const MQTT__LAMP_PRESENT = Symbol('mqtt:lampPresent')
 
 export const MQTT__LAMP_LOST = Symbol('mqtt:lampLost')
@@ -38,6 +40,8 @@ export const MQTT__LAMP_LOST = Symbol('mqtt:lampLost')
 export const MQTT__BLIND_CMND__STATE = Symbol('mqtt:getBlindState')
 
 export const MQTT__BLIND_CMND__SET_STATE = Symbol('mqtt:setBlindState')
+
+export const MQTT__RESP__BLIND__SET_STATE = Symbol('mqtt:ResponseBlindSetState')
 
 export const MQTT__BLIND_PRESENT = Symbol('mqtt:blindPresent')
 

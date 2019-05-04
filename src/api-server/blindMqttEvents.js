@@ -1,9 +1,8 @@
 import messageBus, {
   MQTT__BLIND_CMND__STATE,
-  MQTT__BLIND_CMND__SET_STATE
+  MQTT__BLIND_CMND__SET_STATE,
+  MQTT__RESP__BLIND__SET_STATE
 } from '../messageBus'
-
-const broadcastRoom = 'blind-state'
 
 /**
  * @param {SocketIO.Socket} socket
@@ -40,21 +39,15 @@ export default function registerBlindMqttEvents(socket) {
       data: changeData,
       sender: socket.id,
       done: payload => {
-        // ToDo error handling, a/o validation?
         fn({ status: 'ok', response: payload })
-        broadcastBlindSetState(changeData, payload)
-        console.log(
-          `${getLogPrefix(
-            broadcastRoom
-          )}forwarding set state of Blind, MQTT=>API=>browser.`
-        )
+        const eventPayload = {
+          id: changeData.id,
+          state: payload
+        }
+        messageBus.emit(MQTT__RESP__BLIND__SET_STATE, eventPayload, socket)
       }
     })
   })
-
-  function broadcastBlindSetState({ id }, state) {
-    socket.to(broadcastRoom).emit('blind__api_set_state', { id, state })
-  }
 }
 
 function validateState(changeData) {
