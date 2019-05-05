@@ -26,8 +26,10 @@ export function queryRunnableTaskById(id) {
 
 /**
  * @param {Array<any>} devices
+ * @param {any} sender
+ * @param {function} beforeDone
  */
-export function runPresetTask(devices, sender, fireDate = new Date()) {
+export function runPresetTask(devices, sender, beforeDone = null) {
   devices.forEach(({ id, type, value }) => {
     let mqttCommandEvent, mqttResponseEvent
     switch (type) {
@@ -43,13 +45,17 @@ export function runPresetTask(devices, sender, fireDate = new Date()) {
     messageBus.emit(mqttCommandEvent, {
       data: { id, state: value },
       sender,
-      done: payload => {
-        const eventPayload = {
-          id,
-          state: payload
-        }
-        messageBus.emit(mqttResponseEvent, eventPayload)
-      }
+      done
     })
+    function done(payload) {
+      const eventPayload = {
+        id,
+        state: payload
+      }
+      if (beforeDone) {
+        beforeDone({ type, ...eventPayload })
+      }
+      messageBus.emit(mqttResponseEvent, eventPayload)
+    }
   })
 }
