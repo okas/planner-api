@@ -34,20 +34,28 @@ export default function registerBridge(client, strategiesMap) {
 
   function bridgePublishes() {
     strategiesMap.forEach(({ publishCommands }) => {
-      publishCommands.forEach((getPublishArgs, eventSymbol) => {
+      publishCommands.forEach((getStrategyPublishData, eventSymbol) => {
         messageBus.on(eventSymbol, eventPayload =>
-          setImmediate(apiEventHandler, getPublishArgs, eventPayload)
+          setImmediate(apiEventHandler, getStrategyPublishData, eventPayload)
         )
       })
     })
   }
 
-  function apiEventHandler(getArgs, { data, sender, done }) {
-    const publishArgs = getArgs(data, sanitizeSender(sender))
-    publishCommandFromApi(publishArgs, done)
+  function apiEventHandler(getStrategyPublishData, { data, sender, done }) {
+    const { topic, payload: pubPLoad, responseParser } = getStrategyPublishData(
+      data,
+      sanitizeSender(sender)
+    )
+    publishCommandFromApi(topic, pubPLoad, parseAndDone)
+
+    function parseAndDone(respPLoad) {
+      const data = responseParser ? responseParser(respPLoad) : respPLoad
+      done(data)
+    }
   }
 
-  function publishCommandFromApi({ topic, payload }, doneCallBack) {
+  function publishCommandFromApi(topic, payload, doneCallBack) {
     client.publish(topic, payload, err => {
       if (err) {
         throw err
@@ -84,7 +92,7 @@ export default function registerBridge(client, strategiesMap) {
   function devicePresentMessageHandler({ id, subtype, msgType }, payload) {
     const broadcastEvent = strategiesMap.get(subtype).apiBroadcasts.get(msgType)
     const eventPayload = {
-      id: JSON.parse(id),
+      id: JSON.parse(id.toString()), // Todo crashes, when id is non-number.
       ...JSON.parse(payload.toString())
     }
     messageBus.emit(broadcastEvent, eventPayload)
@@ -117,7 +125,7 @@ function commandResponseHandler(topicObj, payload) {
   let doneCallBack = sentCommands.get(commandTopic)
   sentCommands.delete(commandTopic)
   if (doneCallBack) {
-    doneCallBack(JSON.parse(payload.toString()))
+    doneCallBack(payload)
   } else {
     console.log(
       `MQTT: cannot pass command response, did't found sent command: "${commandTopic}"`

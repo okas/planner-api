@@ -19,14 +19,16 @@ publishCommands.set(MQTT__BLIND_CMND__SET_STATE, setBlindState)
 function getBlindState(data, sender) {
   return {
     topic: `${topicBase}/${data}/cmnd/state/${sender}`,
-    payload: null
+    payload: null,
+    responseParser: payload => payload.readFloatLE(0)
   }
 }
 
 function setBlindState(data, sender) {
   return {
     topic: `${topicBase}/${data.id}/cmnd/set-state/${sender}`,
-    payload: data.state.toString()
+    payload: Buffer.from(Float32Array.from([data.state]).buffer),
+    responseParser: payload => payload.readFloatLE(0)
   }
 }
 
