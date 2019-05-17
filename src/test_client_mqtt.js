@@ -4,9 +4,9 @@ import mqtt from 'mqtt'
  * Client registry and initial states.
  */
 const clientStateStore = {
-  'lamp/6529777472840401000': 0,
-  'lamp/6529777590750675000': 1,
-  'blind/6529777716835647000': 1,
+  'lamp/6529777472840401000': 0.0,
+  'lamp/6529777590750675000': 1.0,
+  'blind/6529777716835647000': 1.0,
   'blind/6529777749580579000': 0.33
 }
 
@@ -55,31 +55,25 @@ function onConnect(client, clientId, ack) {
  * @param {Buffer} payload
  */
 function messageHandler(client, clientId, topic, payload) {
-  const [, , , , , command, sender] = topic.split('/')
-  const responseTopic = `saartk/device/${clientId}/resp/${command}/${sanitizeSender(
-    sender
-  )}`
+  const [, , , , , command] = topic.split('/')
+  const responseTopic = topic.replace('/cmnd/', '/resp/')
   console.log(`responseTopic:`, responseTopic)
   switch (command) {
     case 'set-state':
-      clientStateStore[clientId] = JSON.parse(payload.toString()) // "Do work" part
+      clientStateStore[clientId] = payload.readFloatLE(0) // "Do work" part
     // eslint-disable-next-line no-fallthrough
     case 'state':
-      respondState(client, responseTopic, clientId)
       break
     default:
-      break
+      return
   }
-}
-
-function sanitizeSender(sender) {
-  return sender || sender === false ? sender : ''
+  respondState(client, responseTopic, clientId)
 }
 
 function respondState(client, responseTopic, clientId) {
   client.publish(
     responseTopic,
-    clientStateStore[clientId].toString(),
+    Buffer.from(Float32Array.from([clientStateStore[clientId]]).buffer),
     console.log
   )
 }
