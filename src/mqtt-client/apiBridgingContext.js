@@ -92,7 +92,7 @@ export default function registerBridge(client, strategiesMap) {
   function devicePresentMessageHandler({ id, subtype, msgType }, payload) {
     const broadcastEvent = strategiesMap.get(subtype).apiBroadcasts.get(msgType)
     const eventPayload = {
-      id: JSON.parse(id.toString()), // Todo crashes, when id is non-number.
+      id,
       ...JSON.parse(payload.toString())
     }
     messageBus.emit(broadcastEvent, eventPayload)
