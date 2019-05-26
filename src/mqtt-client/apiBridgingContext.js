@@ -109,11 +109,21 @@ export default function registerBridge(client, strategiesMap) {
  * @returns {object}
  */
 function createTopicObject(topic) {
-  const [, type, subtype, id, msgType, command, senderInApi] = topic.split('/')
+  const [
+    ,
+    type,
+    subtype,
+    id,
+    output,
+    msgType,
+    command,
+    senderInApi
+  ] = topic.split('/')
   return {
     type,
     subtype,
     id,
+    output,
     msgType,
     command,
     senderInApi
@@ -133,8 +143,15 @@ function commandResponseHandler(topicObj, payload) {
   }
 }
 
-function createCommandTopic({ type, subtype, id, command, senderInApi }) {
-  return `saartk/${type}/${subtype}/${id}/cmnd/${command}/${sanitizeSender(
+function createCommandTopic({
+  type,
+  subtype,
+  id,
+  output,
+  command,
+  senderInApi
+}) {
+  return `saartk/${type}/${subtype}/${id}/${output}/cmnd/${command}/${sanitizeSender(
     senderInApi
   )}`
 }

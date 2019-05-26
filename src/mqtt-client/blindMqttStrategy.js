@@ -7,7 +7,12 @@ import {
 
 const type = 'blind'
 const topicBase = `saartk/device/${type}`
-const topicSubscriptionParts = ['/+/present', '/+/lost', '/+/resp/+/+']
+const topicSubscriptionParts = [
+  '/+/lost',
+  '/+/present',
+  '/+/+/resp/state/+',
+  '/+/+/resp/set-state/+'
+]
 
 /**
  * @type {Map<symbol,function>}
@@ -17,16 +22,18 @@ publishCommands.set(MQTT__BLIND_CMND__STATE, getBlindState)
 publishCommands.set(MQTT__BLIND_CMND__SET_STATE, setBlindState)
 
 function getBlindState(data, sender) {
+  data = { id: data, output: 0 }
   return {
-    topic: `${topicBase}/${data}/cmnd/state/${sender}`,
+    topic: `${topicBase}/${data.id}/${data.output}/cmnd/state/${sender}`,
     payload: null,
     responseParser: payload => payload.readFloatLE(0)
   }
 }
 
 function setBlindState(data, sender) {
+  data.output = 0
   return {
-    topic: `${topicBase}/${data.id}/cmnd/set-state/${sender}`,
+    topic: `${topicBase}/${data.id}/${data.output}/cmnd/set-state/${sender}`,
     payload: Buffer.from(Float32Array.from([data.state]).buffer),
     responseParser: payload => payload.readFloatLE(0)
   }
