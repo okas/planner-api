@@ -79,17 +79,17 @@ export default function registerBridge(client, strategiesMap) {
         commandResponseHandler(topicObj, payload)
         break
       case 'present':
-        devicePresentMessageHandler(topicObj, payload)
+        devicePresentHandler(topicObj, payload)
         break
       case 'lost':
-        deviceLostMessageHandler(topicObj)
+        deviceLostHandler(topicObj)
         break
       default:
         break
     }
   }
 
-  function devicePresentMessageHandler({ id, subtype, msgType }, payload) {
+  function devicePresentHandler({ id, subtype, msgType }, payload) {
     const broadcastEvent = strategiesMap.get(subtype).apiBroadcasts.get(msgType)
     const eventPayload = {
       id,
@@ -98,7 +98,7 @@ export default function registerBridge(client, strategiesMap) {
     messageBus.emit(broadcastEvent, eventPayload)
   }
 
-  function deviceLostMessageHandler({ id, subtype, msgType }) {
+  function deviceLostHandler({ id, subtype, msgType }) {
     const broadcastEvent = strategiesMap.get(subtype).apiBroadcasts.get(msgType)
     messageBus.emit(broadcastEvent, JSON.parse(id))
   }
