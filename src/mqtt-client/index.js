@@ -40,7 +40,6 @@ export default function initMqtt() {
       return
     }
     client.publish('saartk/api/present', `hello, at @${Date()}`, console.log)
-
     messageBus.emit(MQTT__CLIENT_READY)
   })
 
