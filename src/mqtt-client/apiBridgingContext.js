@@ -132,7 +132,7 @@ function createTopicObject(topic) {
 
 function commandResponseHandler(topicObj, payload) {
   const commandTopic = createCommandTopic(topicObj)
-  let doneCallBack = sentCommands.get(commandTopic)
+  const doneCallBack = sentCommands.get(commandTopic)
   sentCommands.delete(commandTopic)
   if (doneCallBack) {
     doneCallBack(payload)
