@@ -34,6 +34,7 @@ export function add(lamp) {
 }
 
 export function update({ id, ...lampRest }) {
+  // @ts-ignore
   const doc = sanitize(lampRest)
   const errors = validate(doc)
   if (errors) {
@@ -64,7 +65,7 @@ function sanitize({ name, room, valuestep }) {
 }
 
 function validate({ name, room, valuestep }) {
-  let errors = []
+  const errors = []
   if (!name) {
     errors.push(`attempted object didn't have valid {name} value: [${name}]`)
   }
