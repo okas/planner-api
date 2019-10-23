@@ -70,6 +70,9 @@ function sanitize({
   }
 }
 
+/**
+ * @param {{ name: string; schedule: string; active: boolean; devices:{id:number, type:string, value:number}[]; }} doc
+ */
 function validate(doc) {
   const errors = []
   validateName(doc.name, errors)
@@ -89,6 +92,10 @@ function validateName(name, errors) {
   }
 }
 
+/**
+ * @param {string} schedule
+ * @param {string[]} errors
+ */
 function validateSchedule(schedule, errors) {
   if (!schedule) {
     errors.push(getErrorMessage('schedule', schedule))
@@ -102,6 +109,10 @@ function validateSchedule(schedule, errors) {
   }
 }
 
+/**
+ * @param {string | boolean} active
+ * @param {string[]} errors
+ */
 function validateActive(active, errors) {
   if (
     !(
@@ -115,6 +126,10 @@ function validateActive(active, errors) {
   }
 }
 
+/**
+ * @param {{ id: number; type: string; value: number; }[]} devices
+ * @param {string[]} errors
+ */
 function validateDevices(devices, errors) {
   if (devices && devices.length > 0) {
     devices.forEach(({ id, type, value }) => {
@@ -133,6 +148,9 @@ function validateDevices(devices, errors) {
   }
 }
 
+/**
+ * @param {number} id
+ */
 export function remove(id) {
   const dbDoc = getById(id)
   if (presetCollection.remove(dbDoc)) {
@@ -143,7 +161,7 @@ export function remove(id) {
 }
 
 export function setActive({ id, active }) {
-  let doc = getById(id)
+  const doc = getById(id)
   const errors = validateActiveStateChange(doc, active)
   if (errors) {
     return errors
@@ -162,9 +180,7 @@ function validateActiveStateChange(doc, newState) {
   if (!doc.devices || doc.devices.length < 1) {
     return {
       errors: [
-        `cannot change {active} state, because Preset with {id:${
-          doc.id
-        }} has no devices`
+        `cannot change {active} state, because Preset with {id:${doc.id}} has no devices`
       ]
     }
   }
@@ -175,8 +191,11 @@ export function getAll() {
   return presetCollection.chain().data({ removeMeta: true })
 }
 
+/**
+ * @param {string} lang
+ */
 export function getDevicesSelection(lang) {
-  const i18n = translations[lang] || translations['en']
+  const i18n = translations[lang] || translations.en
   return [
     {
       type: 'lamp',
