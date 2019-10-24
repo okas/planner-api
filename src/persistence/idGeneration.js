@@ -1,17 +1,8 @@
 import FlakeId from 'flake-idgen'
 
-/**
- * @param {Collection<any>[]} collections
- */
-export default function attachIdGeneration(collections) {
-  collections.forEach(c => {
-    c.on('pre-insert', generateDocId)
-  })
-}
-
 const flakeIdGen = new FlakeId()
 
-function generateDocId(doc) {
+export default function generateDocId(doc) {
   /**
    * @type {Buffer}
    */

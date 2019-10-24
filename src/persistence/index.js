@@ -23,7 +23,6 @@ const database = new Loki(dbFile, {
 
 function initializeDatabase() {
   initCollections()
-  attachIdGeneration(database.collections)
   // Save configurations to db
   database.saveDatabase(err => {
     if (err) {
@@ -41,9 +40,6 @@ function initCollections() {
   presetCollection = setupPresetCollection(database)
 }
 
-/** @type {Collection} */
 export let lampCollection
-/** @type {Collection} */
 export let blindCollection
-/** @type {Collection} */
 export let presetCollection
