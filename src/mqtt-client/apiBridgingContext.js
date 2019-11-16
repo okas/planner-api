@@ -3,6 +3,7 @@ import messageBus, { MQTT__CLEAR_SENDER_COMMANDS } from '../messageBus'
 const sentCommands = new Map()
 
 /**
+ * @param {import('mqtt').MqttClient} client
  * @param {Map<string,object>} strategiesMap
  */
 export default function registerBridge(client, strategiesMap) {
