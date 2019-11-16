@@ -1,4 +1,5 @@
 import mqtt from 'mqtt'
+import { toBuffer } from './mqtt-client/utilities'
 
 /**
  * Client registry and initial states.
@@ -73,7 +74,7 @@ function messageHandler(client, clientId, topic, payload) {
 function respondState(client, responseTopic, clientId) {
   client.publish(
     responseTopic,
-    Buffer.from(Float32Array.from([clientStateStore[clientId]]).buffer),
+    toBuffer([clientStateStore[clientId]]),
     console.log
   )
 }

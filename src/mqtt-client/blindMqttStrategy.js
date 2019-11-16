@@ -4,6 +4,7 @@ import {
   MQTT__BLIND_PRESENT,
   MQTT__BLIND_LOST
 } from '../messageBus'
+import { toBuffer } from './utilities'
 
 const type = 'blind'
 const topicBase = `saartk/device/${type}`
@@ -27,7 +28,7 @@ function getBlindState(data, sender) {
 function setBlindState(data, sender) {
   return {
     topic: `${topicBase}/${data.id}/cmnd/set-state/${sender}`,
-    payload: Buffer.from(Float32Array.from([data.state]).buffer),
+    payload: toBuffer([data.state]),
     responseParser: payload => payload.readFloatLE(0)
   }
 }

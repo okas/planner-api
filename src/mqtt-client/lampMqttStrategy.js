@@ -4,6 +4,7 @@ import {
   MQTT__LAMP_PRESENT,
   MQTT__LAMP_LOST
 } from '../messageBus'
+import { toBuffer } from './utilities'
 
 const type = 'lamp'
 const topicBase = `saartk/device/${type}`
@@ -27,7 +28,7 @@ function getLampState(data, sender) {
 function setLampState(data, sender) {
   return {
     topic: `${topicBase}/${data.id}/cmnd/set-state/${sender}`,
-    payload: Buffer.from(Float32Array.from([data.state]).buffer),
+    payload: toBuffer(data.state),
     responseParser: payload => payload.readFloatLE(0)
   }
 }
