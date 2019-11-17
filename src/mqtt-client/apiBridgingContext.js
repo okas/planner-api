@@ -34,7 +34,13 @@ export default function registerBridge(client, strategiesMap) {
   }
 
   function bridgePublishes() {
-    strategiesMap.forEach(({ publishCommands }) => {
+    strategiesMap.forEach(({ type, publishCommands }) => {
+      if (!publishCommands) {
+        console.log(
+          ` MQTT API Bridge: missing 'publishCommands' for strategy: '${type}'`
+        )
+        return
+      }
       publishCommands.forEach((getStrategyPublishData, eventSymbol) => {
         messageBus.on(eventSymbol, eventPayload =>
           setImmediate(apiEventHandler, getStrategyPublishData, eventPayload)
@@ -91,7 +97,12 @@ export default function registerBridge(client, strategiesMap) {
   }
 
   function devicePresentHandler({ id, subtype, msgType }, payload) {
-    const broadcastEvent = strategiesMap.get(subtype).apiBroadcasts.get(msgType)
+    const broadcasts = strategiesMap.get(subtype).apiBroadcasts
+    if (!broadcasts) {
+      logMissingComponent('broadcast', subtype, msgType)
+      return
+    }
+    const broadcastEvent = broadcasts.get(msgType)
     const eventPayload = {
       id,
       ...JSON.parse(payload.toString())
@@ -100,7 +111,12 @@ export default function registerBridge(client, strategiesMap) {
   }
 
   function deviceLostHandler({ id, subtype, msgType }) {
-    const broadcastEvent = strategiesMap.get(subtype).apiBroadcasts.get(msgType)
+    const broadcasts = strategiesMap.get(subtype).apiBroadcasts
+    if (!broadcasts) {
+      logMissingComponent('broadcast', subtype, msgType)
+      return
+    }
+    const broadcastEvent = broadcasts.get(msgType)
     messageBus.emit(broadcastEvent, JSON.parse(id))
   }
 }
@@ -156,4 +172,10 @@ function clearSenderCommands(sender) {
 
 function sanitizeSender(sender) {
   return sender || sender === false ? sender : ''
+}
+
+function logMissingComponent(component, subtype, msgType) {
+  console.log(
+    ` MQTT API Bridge: didn't found ${component} for ${subtype}/+/${msgType}!`
+  )
 }
