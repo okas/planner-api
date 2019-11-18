@@ -7,7 +7,7 @@ import messageBus, {
 import setupLampCollection from './lampCollection'
 import setupBlindCollection from './blindCollection'
 import setupPresetCollection from './presetCollection'
-import attachIdGeneration from './idGeneration'
+import setupIoTNodeCollection from './iotnodeCollection'
 
 // take from configuration or export constructor from this module
 const dbFile = './data/loki_db.json'
@@ -38,8 +38,11 @@ function initCollections() {
   lampCollection = setupLampCollection(database)
   blindCollection = setupBlindCollection(database)
   presetCollection = setupPresetCollection(database)
+  iotnodeCollection = setupIoTNodeCollection(database)
 }
 
 export let lampCollection
 export let blindCollection
 export let presetCollection
+/** @type {Collection<import('./iotnodeCollection').IoTNodeDoc>} */
+export let iotnodeCollection

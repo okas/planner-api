@@ -91,7 +91,11 @@ export default function registerBridge(client, strategiesMap) {
       case 'lost':
         deviceLostHandler(topicObj)
         break
+      case 'init':
+        initHandler(topicObj, payload)
+        break
       default:
+        console.log('! received topic with unknown scheme: ', topic)
         break
     }
   }
@@ -118,6 +122,18 @@ export default function registerBridge(client, strategiesMap) {
     }
     const broadcastEvent = broadcasts.get(msgType)
     messageBus.emit(broadcastEvent, JSON.parse(id))
+  }
+
+  function initHandler({ id, subtype, msgType }, payload) {
+    const asyncFn = strategiesMap.get(subtype).mqttInitHandler
+    if (!asyncFn) {
+      logMissingComponent('mqttInitHandler', subtype, msgType)
+    }
+    asyncFn(id, payload)
+      .then(({ topic, payload: respPayload }) => {
+        client.publish(topic, respPayload)
+      })
+      .catch(console.log)
   }
 }
 

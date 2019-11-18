@@ -6,11 +6,12 @@ import messageBus, {
 import registerBridgeContext from './apiBridgingContext'
 import lampStrategy from './lampMqttStrategy'
 import blindStrategy from './blindMqttStrategy'
+import iotnodeMqttStrategy from './iotnodeMqttStrategy'
 
 const strategiesMap = new Map()
 
 /* Add imported strategies to arguments */
-setupStrategyMaps([lampStrategy, blindStrategy])
+setupStrategyMaps([lampStrategy, blindStrategy, iotnodeMqttStrategy])
 
 function setupStrategyMaps(strategies) {
   strategies.forEach(s => {
