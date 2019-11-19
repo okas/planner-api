@@ -19,7 +19,7 @@ export default function registerLampModelEvents(socket) {
   })
 
   socket.on('lamp__add', (lamp, fn) => {
-    let result = model.add(lamp)
+    const result = model.add(lamp)
     if (result.errors) {
       fn(result)
     } else {
