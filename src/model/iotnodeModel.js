@@ -19,6 +19,7 @@ export function addOrUpdate(iotnode) {
     Object.assign(dbDoc, doc)
     dbDoc = iotnodeCollection.update(dbDoc)
   } else {
+    // @ts-ignore
     dbDoc = iotnodeCollection.insertOne(doc)
   }
   const { $loki, ...docRest } = dbDoc
@@ -68,7 +69,8 @@ export function getById(id) {
 
 /**
  * Takes object from API request and sanitizes according to model.
- * @returns new object that only has properties defined by model.
+ * @param {Object} sourceDoc source document.
+ * @returns {import('../persistence/iotnodeCollection').IoTNodeDoc} new object that only has properties defined by model.
  */
 function sanitize({ id, iottype, outputs: rawOutputs }) {
   return {

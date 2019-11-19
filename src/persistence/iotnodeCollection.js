@@ -16,7 +16,14 @@ import generateDocId from './idGeneration'
  */
 
 /**
- * @type {Collection<IoTNodeDoc>}
+ * IoTNode database document
+ * @typedef {IoTNodeDoc & {
+ *  $loki: number;
+ * }} IoTNodeDBDoc
+ */
+
+/**
+ * @type {Collection<IoTNodeDBDoc>}
  */
 let collection
 const parpre = '[%lktxp]'
@@ -24,7 +31,7 @@ const parpre = '[%lktxp]'
 /**
  * Get or create configured Loki Collection for Preset documents.
  * @param {Loki} database Loki database instance.
- * @returns {Collection<IoTNodeDoc>} initialized collection
+ * @returns {Collection<IoTNodeDBDoc>} initialized collection
  */
 export default function setupIoTNodeCollection(database) {
   collection = getOrAddCollection(database, 'iotnode', {
@@ -36,7 +43,7 @@ export default function setupIoTNodeCollection(database) {
 }
 
 /**
- * @param {IoTNodeDoc} doc
+ * @param {IoTNodeDBDoc} doc
  */
 export function generateOutputIds(doc) {
   doc.outputs.forEach(generateDocId)

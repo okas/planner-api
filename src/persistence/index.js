@@ -44,5 +44,5 @@ function initCollections() {
 export let lampCollection
 export let blindCollection
 export let presetCollection
-/** @type {Collection<import('./iotnodeCollection').IoTNodeDoc>} */
+/** @type {Collection<import('./iotnodeCollection').IoTNodeDBDoc>} */
 export let iotnodeCollection
