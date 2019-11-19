@@ -7,10 +7,18 @@ const topicSubscriptionParts = ['init']
 /* Use model directly in this strategy */
 
 /**
+ * @type {Map<String,Promise>} maps broadcast type to Symbol event for EventEmitter usage.
+ */
+const asyncActions = new Map()
+// @ts-ignore
+asyncActions.set('init', mqttInitHandler)
+
+/**
  * @param {Number|string} id
  * @param {string|Buffer} mqttPayload
  */
 async function mqttInitHandler(id, mqttPayload) {
+  // @ts-ignore
   const { outputs, errors } = model.addOrUpdate({
     id,
     ...JSON.parse(mqttPayload.toString())
@@ -22,7 +30,7 @@ async function mqttInitHandler(id, mqttPayload) {
     rawPayload = { outputs: outputs.map(({ id }) => ({ id })) }
   }
   return {
-    topic: `${topicBase}/${id}/${topicSubscriptionParts[0]}-r`,
+    topic: `${topicBase}/${id}/init-r`,
     payload: JSON.stringify(rawPayload)
   }
 }
@@ -30,7 +38,5 @@ async function mqttInitHandler(id, mqttPayload) {
 export default {
   type,
   subscriptions: topicSubscriptionParts.map(p => `${topicBase}/+/${p}`),
-  publishCommands: null,
-  apiBroadcasts: null,
-  mqttInitHandler
+  asyncActions
 }

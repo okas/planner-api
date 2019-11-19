@@ -125,11 +125,13 @@ export default function registerBridge(client, strategiesMap) {
   }
 
   function initHandler({ id, subtype, msgType }, payload) {
-    const asyncFn = strategiesMap.get(subtype).mqttInitHandler
-    if (!asyncFn) {
-      logMissingComponent('mqttInitHandler', subtype, msgType)
+    const { asyncActions } = strategiesMap.get(subtype)
+    if (!asyncActions) {
+      logMissingComponent('asyncActions', subtype, msgType)
+      return
     }
-    asyncFn(id, payload)
+    const asyncAction = asyncActions.get(msgType)
+    asyncAction(id, payload)
       .then(({ topic, payload: respPayload }) => {
         client.publish(topic, respPayload)
       })
