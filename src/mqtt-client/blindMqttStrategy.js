@@ -4,11 +4,10 @@ import {
   MQTT__BLIND_PRESENT,
   MQTT__BLIND_LOST
 } from '../messageBus'
-import { toBuffer } from './utilities'
+import { toBuffer, getTopicBaseDevice, getDeviceCommoTopics } from './utilities'
 
 const type = 'blind'
-const topicBase = `saartk/device/${type}`
-const topicSubscriptionParts = ['/+/present', '/+/lost', '/+/resp/+/+']
+const topicBase = getTopicBaseDevice(type)
 
 /**
  * @type {Map<symbol,function>}
@@ -42,7 +41,7 @@ apiBroadcasts.set('lost', MQTT__BLIND_LOST)
 
 export default {
   type,
-  subscriptions: topicSubscriptionParts.map(p => topicBase + p),
+  subscriptions: getDeviceCommoTopics(type),
   publishCommands,
   apiBroadcasts
 }

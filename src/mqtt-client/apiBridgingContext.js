@@ -1,4 +1,5 @@
 import messageBus, { MQTT__CLEAR_SENDER_COMMANDS } from '../messageBus'
+import { getBaseTopic, createTopicObject } from './utilities'
 
 const sentCommands = new Map()
 
@@ -139,22 +140,6 @@ export default function registerBridge(client, strategiesMap) {
   }
 }
 
-/**
- * @param {string} topic of MQTT packet
- * @returns {object}
- */
-function createTopicObject(topic) {
-  const [, type, subtype, id, msgType, command, senderInApi] = topic.split('/')
-  return {
-    type,
-    subtype,
-    id,
-    msgType,
-    command,
-    senderInApi
-  }
-}
-
 function commandResponseHandler(topicObj, payload) {
   const commandTopic = createCommandTopic(topicObj)
   const doneCallBack = sentCommands.get(commandTopic)
@@ -169,7 +154,7 @@ function commandResponseHandler(topicObj, payload) {
 }
 
 function createCommandTopic({ type, subtype, id, command, senderInApi }) {
-  return `saartk/${type}/${subtype}/${id}/cmnd/${command}/${sanitizeSender(
+  return `${getBaseTopic(type, subtype)}/${id}/cmnd/${command}/${sanitizeSender(
     senderInApi
   )}`
 }

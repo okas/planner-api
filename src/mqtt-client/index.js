@@ -7,6 +7,7 @@ import registerBridgeContext from './apiBridgingContext'
 import lampStrategy from './lampMqttStrategy'
 import blindStrategy from './blindMqttStrategy'
 import iotnodeMqttStrategy from './iotnodeMqttStrategy'
+import { serverTypeBase } from './utilities'
 
 const strategiesMap = new Map()
 
@@ -40,7 +41,11 @@ export default function initMqtt() {
       setTimeout(() => client.reconnect(), 2000)
       return
     }
-    client.publish('saartk/api/present', `hello, at @${Date()}`, console.log)
+    client.publish(
+      `${serverTypeBase}/present`,
+      `hello, at @${Date()}`,
+      console.log
+    )
     messageBus.emit(MQTT__CLIENT_READY)
   })
 

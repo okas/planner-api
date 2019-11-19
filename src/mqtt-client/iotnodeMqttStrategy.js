@@ -1,8 +1,7 @@
 import * as model from '../model/iotnodeModel'
+import { getTopicBaseDevice, getDeviceCommoTopicsWithOthers } from './utilities'
 
 const type = 'iotnode'
-const topicBase = `saartk/device/${type}`
-const topicSubscriptionParts = ['init']
 
 /* Use model directly in this strategy */
 
@@ -30,13 +29,13 @@ async function mqttInitHandler(id, mqttPayload) {
     rawPayload = { outputs: outputs.map(({ id }) => ({ id })) }
   }
   return {
-    topic: `${topicBase}/${id}/init-r`,
+    topic: `${getTopicBaseDevice(type)}/${id}/init-r`,
     payload: JSON.stringify(rawPayload)
   }
 }
 
 export default {
   type,
-  subscriptions: topicSubscriptionParts.map(p => `${topicBase}/+/${p}`),
+  subscriptions: getDeviceCommoTopicsWithOthers(type, ['init']),
   asyncActions
 }

@@ -4,11 +4,10 @@ import {
   MQTT__LAMP_PRESENT,
   MQTT__LAMP_LOST
 } from '../messageBus'
-import { toBuffer } from './utilities'
+import { toBuffer, getTopicBaseDevice, getDeviceCommoTopics } from './utilities'
 
 const type = 'lamp'
-const topicBase = `saartk/device/${type}`
-const topicSubscriptionParts = ['/+/present', '/+/lost', '/+/resp/+/+']
+const topicBase = getTopicBaseDevice(type)
 
 /**
  * @type {Map<symbol,function>}
@@ -42,7 +41,7 @@ apiBroadcasts.set('lost', MQTT__LAMP_LOST)
 
 export default {
   type,
-  subscriptions: topicSubscriptionParts.map(p => topicBase + p),
+  subscriptions: getDeviceCommoTopics(type),
   publishCommands,
   apiBroadcasts
 }

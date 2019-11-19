@@ -1,5 +1,9 @@
 import mqtt from 'mqtt'
-import { toBuffer } from './mqtt-client/utilities'
+import {
+  toBuffer,
+  getTopicBaseDevice,
+  serverTypeBase
+} from './mqtt-client/utilities'
 
 /**
  * Client registry and initial states.
@@ -15,7 +19,7 @@ Object.keys(clientStateStore).forEach(clientId => {
   const client = mqtt.connect('mqtt://broker.hivemq.com:1883', {
     clientId,
     will: {
-      topic: `saartk/device/${clientId}/lost`,
+      topic: `${getTopicBaseDevice(clientId)}/lost`,
       payload: null,
       qos: 0,
       retain: false
@@ -42,12 +46,12 @@ function onConnect(client, clientId, ack) {
     timestamp: Date.now()
   }
   client.publish(
-    `saartk/device/${clientId}/present`,
+    `${getTopicBaseDevice(clientId)}/present`,
     JSON.stringify(payload),
     console.log
   )
-  client.subscribe(`saartk/api/present`, console.log)
-  client.subscribe(`saartk/device/${clientId}/cmnd/+/+`, console.log)
+  client.subscribe(`${serverTypeBase}/present`, console.log)
+  client.subscribe(`${getTopicBaseDevice(clientId)}/cmnd/+/+`, console.log)
 }
 
 /**
