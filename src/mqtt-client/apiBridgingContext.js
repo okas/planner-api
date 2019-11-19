@@ -101,12 +101,12 @@ export default function registerBridge(client, strategiesMap) {
   }
 
   function devicePresentHandler({ id, subtype, msgType }, payload) {
-    const broadcasts = strategiesMap.get(subtype).apiBroadcasts
-    if (!broadcasts) {
-      logMissingComponent('broadcast', subtype, msgType)
+    const { apiBroadcasts } = strategiesMap.get(subtype)
+    if (!apiBroadcasts) {
+      logMissingComponent('apiBroadcasts', subtype, msgType)
       return
     }
-    const broadcastEvent = broadcasts.get(msgType)
+    const broadcastEvent = apiBroadcasts.get(msgType)
     const eventPayload = {
       id,
       ...JSON.parse(payload.toString())
@@ -115,12 +115,12 @@ export default function registerBridge(client, strategiesMap) {
   }
 
   function deviceLostHandler({ id, subtype, msgType }) {
-    const broadcasts = strategiesMap.get(subtype).apiBroadcasts
-    if (!broadcasts) {
-      logMissingComponent('broadcast', subtype, msgType)
+    const { apiBroadcasts } = strategiesMap.get(subtype)
+    if (!apiBroadcasts) {
+      logMissingComponent('apiBroadcasts', subtype, msgType)
       return
     }
-    const broadcastEvent = broadcasts.get(msgType)
+    const broadcastEvent = apiBroadcasts.get(msgType)
     messageBus.emit(broadcastEvent, JSON.parse(id))
   }
 
