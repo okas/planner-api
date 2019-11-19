@@ -30,8 +30,8 @@
     "prettier": "^1.19.1"
   },
   "scripts": {
-    "debug:watch": "onchange -v -i -k \"src/**/*.(mjs|js)\" -e \"src/test_client_mqtt.js|**/node_modules/**\" -- npm run debug",
-    "debug:watch:test_client_mqtt": "onchange -v -i -k \"src/test_client_mqtt.js|src/mqtt-client/utilities.js\" -- npm run debug:test_client_mqtt",
+    "debug:watch": "onchange -v -i -k \"src/**/*.(mjs|js)\" -e \"src/test_client_mqtt.js\" -e \"**/node_modules/**\" -- npm run debug",
+    "debug:watch:test_client_mqtt": "onchange -v -i -k \"src/test_client_mqtt.js\" \"src/mqtt-client/utilities.js\" -- npm run debug:test_client_mqtt",
     "debug": "run-s build start",
     "debug:test_client_mqtt": "run-s build:test_client_mqtt start:test_client_mqtt",
     "build": "babel --delete-dir-on-start src --ignore src/test_client_mqtt.js --out-dir dist --source-maps",
