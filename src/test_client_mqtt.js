@@ -29,12 +29,21 @@ Object.keys(clientStateStore).forEach(clientId => {
 })
 
 function logOnMessage(clientId, payload, packet) {
+  console.log(`~ ~ ~ ~ ~ ~ ~ ~`)
+
+  console.log(`Date time: `, Date())
   console.log('>>>>>')
   console.log(`payload: "${payload}"`)
   console.log(` => for ${clientId} : `, packet)
   console.log('<<<<<')
 }
 
+/**
+ *
+ * @param {mqtt.MqttClient} client
+ * @param {string} clientId
+ * @param {any} ack
+ */
 function onConnect(client, clientId, ack) {
   console.log(`connect connaACK:`, ack)
   const payload = {
@@ -52,6 +61,7 @@ function onConnect(client, clientId, ack) {
 
 /**
  * @param {mqtt.MqttClient} client
+ * @param {string | number} clientId
  * @param {string} topic
  * @param {Buffer} payload
  */
@@ -71,7 +81,17 @@ function messageHandler(client, clientId, topic, payload) {
   respondState(client, responseTopic, clientId)
 }
 
+/**
+ * @param {mqtt.MqttClient} client
+ * @param {string} responseTopic
+ * @param {string | number} clientId
+ */
 function respondState(client, responseTopic, clientId) {
+  console.log(
+    `~ ~ ~ responseState(): JSON.stringify(clientStateStore[${clientId}]): ${JSON.stringify(
+      clientStateStore[clientId]
+    )}`
+  )
   client.publish(
     responseTopic,
     JSON.stringify(clientStateStore[clientId]),
