@@ -6,7 +6,7 @@
   "dependencies": {
     "cron-parser": "^2.13.0",
     "flake-idgen": "^1.1.2",
-    "lokijs": "^1.5.7",
+    "lokijs": "^1.5.8",
     "mqtt": "^3.0.0",
     "node-schedule": "^1.3.2",
     "socket.io": "^2.3.0"
