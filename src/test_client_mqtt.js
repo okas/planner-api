@@ -1,9 +1,5 @@
 import mqtt from 'mqtt'
-import {
-  toBuffer,
-  getTopicBaseDevice,
-  serverTypeBase
-} from './mqtt-client/utilities'
+import { getTopicBaseDevice, serverTypeBase } from './mqtt-client/utilities'
 
 /**
  * Client registry and initial states.
@@ -65,7 +61,7 @@ function messageHandler(client, clientId, topic, payload) {
   console.log(`responseTopic:`, responseTopic)
   switch (command) {
     case 'set-state':
-      clientStateStore[clientId] = payload.readFloatLE(0) // "Do work" part
+      clientStateStore[clientId] = JSON.parse(payload.toString()) // "Do work" part
     // eslint-disable-next-line no-fallthrough
     case 'state':
       break
@@ -78,7 +74,7 @@ function messageHandler(client, clientId, topic, payload) {
 function respondState(client, responseTopic, clientId) {
   client.publish(
     responseTopic,
-    toBuffer([clientStateStore[clientId]]),
+    JSON.stringify(clientStateStore[clientId]),
     console.log
   )
 }

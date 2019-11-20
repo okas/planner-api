@@ -4,7 +4,7 @@ import {
   MQTT__LAMP_PRESENT,
   MQTT__LAMP_LOST
 } from '../messageBus'
-import { toBuffer, getTopicBaseDevice, getDeviceCommoTopics } from './utilities'
+import { getTopicBaseDevice, getDeviceCommoTopics } from './utilities'
 
 const type = 'lamp'
 const topicBase = getTopicBaseDevice(type)
@@ -20,15 +20,15 @@ function getLampState(data, sender) {
   return {
     topic: `${topicBase}/${data}/cmnd/state/${sender}`,
     payload: null,
-    responseParser: payload => payload.readFloatLE(0)
+    responseParser: JSON.parse
   }
 }
 
 function setLampState(data, sender) {
   return {
     topic: `${topicBase}/${data.id}/cmnd/set-state/${sender}`,
-    payload: toBuffer(data.state),
-    responseParser: payload => payload.readFloatLE(0)
+    payload: JSON.stringify(data.state),
+    responseParser: JSON.parse
   }
 }
 
