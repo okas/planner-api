@@ -1,5 +1,3 @@
-/** @module mqtt-client */
-
 /**
  * Topic and payload for ready for MQTT publish.
 @typedef {
@@ -24,4 +22,4 @@
 } TopicObject
   */
 
-exports.unused = {}
+export const unused = {}
