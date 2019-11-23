@@ -79,7 +79,7 @@ function genericCreatorWithIdLevel(type, subType, topicParts) {
 
 /**
  * @param {string} topic of MQTT packet
- * @returns {object}
+ * @returns {import('./typedefCommons').TopicObject} Topic string splitted to ovject properties.
  */
 export function createTopicObject(topic) {
   const [, type, subtype, id, msgType, command, senderInApi] = topic.split('/')

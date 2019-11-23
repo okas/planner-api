@@ -177,6 +177,11 @@ function sanitizeSender(sender) {
   return sender || sender === false ? sender : ''
 }
 
+/**
+ * @param {string} component
+ * @param {string} subtype
+ * @param {string} msgType
+ */
 function logMissingComponent(component, subtype, msgType) {
   console.log(
     ` MQTT API Bridge: didn't found ${component} for ${subtype}/+/${msgType}!`
