@@ -8,18 +8,18 @@ import generateDocId from './idGeneration'
 
 /**
  * IoTNode document
- * @typedef {{
- *  id: number;
- *  iottype: string;
- *  outputs: Output[];
- *  }} IoTNodeDoc
+@typedef {
+  {
+    id: number;
+    iottype: string;
+    outputs: Output[];
+  }
+} IoTNodeDoc
  */
 
 /**
  * IoTNode database document
- * @typedef {IoTNodeDoc & {
- *  $loki: number;
- * }} IoTNodeDBDoc
+ * @typedef {IoTNodeDoc & { $loki: number;}} IoTNodeDBDoc
  */
 
 /**
