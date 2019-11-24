@@ -159,7 +159,7 @@ export default function registerBridge(client, strategiesMap) {
 
   /**
    * Get item from StrategyMap, log errors if encountered.
-   * @param {('apiBroadcasts' | 'asyncActions')} strategyComponent Type of item to retreive // TODO JSDoc enum
+   * @param {('apiBroadcasts' | 'asyncActions')} strategyComponent Type of item to retreive
    * @param {string} subtype Strategy type or name of Model Entity (device).
    * @param {string} msgType Item name in Strategy.
    */
