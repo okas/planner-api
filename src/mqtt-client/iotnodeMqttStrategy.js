@@ -6,21 +6,8 @@ const type = 'iotnode'
 const baseTopic = getTopicBaseDevice(type)
 const cmndInit = 'init'
 const cmndInitUpdate = 'init-update'
-const subscriptions = getDeviceCommoTopicsWithOthers(type, [
-  cmndInit,
-  cmndInitUpdate
-])
 
 /* Use model directly in this strategy */
-
-/**
- * @type {Map<string,Promise<import('./typedefCommons').MQTTActionResult>>}
- */
-const asyncActions = new Map()
-// @ts-ignore
-asyncActions.set(cmndInit, mqttInitHandler)
-// @ts-ignore
-asyncActions.set(cmndInitUpdate, mqttInitUpdateHandler)
 
 /**
  * @async
@@ -109,10 +96,19 @@ function getActionResult(id, command, rawPayload) {
   }
 }
 
+/**
+ * Public API.
+ */
 export default {
   type,
-  subscriptions,
-  asyncActions
+  subscriptions: getDeviceCommoTopicsWithOthers(type, [
+    cmndInit,
+    cmndInitUpdate
+  ]),
+  asyncActions: new Map([
+    [cmndInit, mqttInitHandler],
+    [cmndInitUpdate, mqttInitUpdateHandler]
+  ])
 }
 
 /**
