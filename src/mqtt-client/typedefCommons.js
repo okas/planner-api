@@ -22,4 +22,9 @@
 } TopicObject
   */
 
+/**
+ * Common errors result.
+ * @typedef {{errors: string[]; }} ErrorResult
+ */
+
 export const unused = {}

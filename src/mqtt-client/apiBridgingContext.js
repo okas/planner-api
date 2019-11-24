@@ -111,6 +111,7 @@ export default function registerBridge(client, strategiesMap) {
         deviceLostHandler(topicObj)
         break
       case 'init':
+      case 'init-update':
         genericAsyncActionHandler(topicObj, payload)
         break
       default:
