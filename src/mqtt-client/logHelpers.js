@@ -10,7 +10,7 @@ export function logMqttGeneric(message) {
  * @param {string} forPart
  */
 export function logMissingGeneric(componentPart, forPart) {
-  logMqttGeneric(`missing '${componentPart}' in ${forPart}`)
+  logMqttGeneric(`missing ${componentPart} for ${forPart}`)
 }
 
 /**
@@ -20,18 +20,21 @@ export function logMissingGeneric(componentPart, forPart) {
  * @param {string} msgType
  */
 export function logMissingComponent(depth, componentName, subtype, msgType) {
-  let componentPart = `didn't found`
+  let componentPart = ''
   switch (depth) {
     case 'item':
-      componentPart = `.${subtype}` + componentPart
+      componentPart = `.${msgType}`
     // eslint-disable no-fallthrough
     case 'component':
       componentPart = `.${componentName}` + componentPart
-    // eslint-disable-next-line no-fallthrough
+    // eslint-disable no-fallthrough
     case 'strategy':
-      componentPart = `'strategy[${msgType}]'` + componentPart
+      componentPart = `strategy[${subtype}]` + componentPart
   }
-  logMissingGeneric(`'${componentPart}'`, `'${subtype}/+/${msgType}'`)
+  logMissingGeneric(
+    `${depth} in '${componentPart}'`,
+    `'${subtype}/+/${msgType}'`
+  )
 }
 
 /**
