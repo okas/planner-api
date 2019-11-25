@@ -1,12 +1,4 @@
-export class MyBaseError extends Error {
-  /**
-   * @param {string} message
-   */
-  constructor(message) {
-    super(message)
-    this.name = this.constructor.name
-  }
-}
+import { MyBaseError } from '../common/errors'
 
 export class ValidationErrors extends MyBaseError {
   /**
