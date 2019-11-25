@@ -19,10 +19,10 @@ async function mqttInitHandler(id, mqttPayload) {
   const parsedSourceDoc = createModelDoc(id, mqttPayload)
   let rawPayload
   try {
-    const result = model.addOrUpdate(parsedSourceDoc)
-    rawPayload = trimOutputs(result)
+    const { outputs: resultOutputs } = model.addOrUpdate(parsedSourceDoc)
+    rawPayload = { outputs: resultOutputs.map(({ id }) => ({ id })) }
   } catch (err) {
-    rawPayload = errorHandler(err)
+    rawPayload = generateErrorResult(err)
   }
   // TODO Limit errors to 10! IoTNode might not handle more!
   // TODO IoTNode max packet size is 1KB
@@ -39,10 +39,10 @@ async function mqttInitUpdateHandler(id, mqttPayload) {
   const parsedSourceDoc = createModelDoc(id, mqttPayload)
   let rawPayload
   try {
-    const result = model.updateForced(parsedSourceDoc)
-    rawPayload = trimOutputs(result)
+    model.updateForced(parsedSourceDoc)
+    rawPayload = { state: 'ok' }
   } catch (err) {
-    rawPayload = errorHandler(err)
+    rawPayload = generateErrorResult(err)
   }
   // TODO Limit errors to 10! IoTNode might not handle more!
   // TODO IoTNode max packet size is 1KB
@@ -61,17 +61,10 @@ function createModelDoc(id, mqttPayload) {
 }
 
 /**
- * @param {import('../persistence/iotnodeCollection').IoTNodeDoc} outputs
- */
-function trimOutputs({ outputs }) {
-  return { outputs: outputs.map(({ id }) => ({ id })) }
-}
-
-/**
  * @param {ValidationErrors | ExistingDocumentError<import('../persistence/iotnodeCollection').IoTNodeDoc>} err
- * @returns {import('./typedefCommons').ErrorResult | ErrorExistingResult<import('../persistence/iotnodeCollection').IoTNodeDoc>}
+ * @returns {import('./typedefCommons').ErrorResult | ErrorExistingResult<ExistingDocumentError,import('../persistence/iotnodeCollection').IoTNodeDoc>}
  */
-function errorHandler(err) {
+function generateErrorResult(err) {
   let rawPayload
   if (err instanceof ExistingDocumentError) {
     rawPayload = { errors: err.errors, existing: err.existing }
@@ -86,10 +79,11 @@ function errorHandler(err) {
 /**
  * @param {string | number} id
  * @param {string} command
- * @param {OKResult | ErrorExistingResult<import('../persistence/iotnodeCollection').IoTNodeDoc>} rawPayload
+ * @param {any} rawPayload
  * @returns {import('./typedefCommons').MQTTActionResult}
  */
 function getActionResult(id, command, rawPayload) {
+  /* Do not use pretty JSON, as IoTNode has veri limited resources to handle data!!! */
   return {
     topic: `${baseTopic}/${id}/${command}-r`,
     payload: JSON.stringify(rawPayload)
@@ -112,9 +106,12 @@ export default {
 }
 
 /**
- * @typedef {{outputs: { id: number; }[];}} OKResult
+ * @typedef {{state: string}} StateResult
  */
 /**
- * @template T
- * @typedef {T | import('./typedefCommons').ErrorResult & {existing?: T}} ErrorExistingResult<T>
+ * @typedef {{outputs: { id: number; }[];}} OutputsInitializedResult
+ */
+/**
+ * @template  TError, T
+ * @typedef {import('./typedefCommons').ErrorResult & {existing: T}} ErrorExistingResult<TError<T>>
  */
