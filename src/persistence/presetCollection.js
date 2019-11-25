@@ -7,14 +7,7 @@ const parpre = '[%lktxp]'
 /**
  * Get or create configured Loki Collection for Preset documents.
  * @param {Loki} database Loki database instance.
- * @returns {Collection<{
- *  id:number;
- *  $loki: number;
- *  name: string;
- *  schedule: string;
- *  active:boolean;
- *  devices:{id:number,type: string; value: number}[];
- * }>}  Collection for Preset documents
+ * @returns {Collection<import('./typedefs').PresetDBDoc>}  Collection for Preset documents
  */
 export default function setupPresetCollection(database) {
   collection = getOrAddCollection(database, 'preset', {

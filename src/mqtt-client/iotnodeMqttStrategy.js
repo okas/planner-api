@@ -13,7 +13,7 @@ const cmndInitUpdate = 'init-update'
  * @async
  * @param {number | string} id
  * @param {string | Buffer} mqttPayload
- * @returns {Promise<import('./typedefCommons').MQTTActionResult>}
+ * @returns {Promise<import('./typedefs').MQTTActionResult>}
  */
 async function mqttInitHandler(id, mqttPayload) {
   const parsedSourceDoc = createModelDoc(id, mqttPayload)
@@ -33,7 +33,7 @@ async function mqttInitHandler(id, mqttPayload) {
  * @async
  * @param {number | string} id
  * @param {string | Buffer} mqttPayload
- * @returns {Promise<import('./typedefCommons').MQTTActionResult>}
+ * @returns {Promise<import('./typedefs').MQTTActionResult>}
  */
 async function mqttInitUpdateHandler(id, mqttPayload) {
   const parsedSourceDoc = createModelDoc(id, mqttPayload)
@@ -61,8 +61,8 @@ function createModelDoc(id, mqttPayload) {
 }
 
 /**
- * @param {ValidationErrors | ExistingDocumentError<import('../persistence/iotnodeCollection').IoTNodeDoc>} err
- * @returns {import('./typedefCommons').ErrorResult | ErrorExistingResult<ExistingDocumentError,import('../persistence/iotnodeCollection').IoTNodeDoc>}
+ * @param {ValidationErrors | ExistingDocumentError<import('../model/typedefs').IoTNodeDoc>} err
+ * @returns {import('./typedefs').ErrorResult | import('./typedefs').ErrorExistingResult<ExistingDocumentError,import('../model/typedefs').IoTNodeDoc>}
  */
 function generateErrorResult(err) {
   let rawPayload
@@ -80,7 +80,7 @@ function generateErrorResult(err) {
  * @param {string | number} id
  * @param {string} command
  * @param {any} rawPayload
- * @returns {import('./typedefCommons').MQTTActionResult}
+ * @returns {import('./typedefs').MQTTActionResult}
  */
 function getActionResult(id, command, rawPayload) {
   /* Do not use pretty JSON, as IoTNode has veri limited resources to handle data!!! */
@@ -104,14 +104,3 @@ export default {
     [cmndInitUpdate, mqttInitUpdateHandler]
   ])
 }
-
-/**
- * @typedef {{state: string}} StateResult
- */
-/**
- * @typedef {{outputs: { id: number; }[];}} OutputsInitializedResult
- */
-/**
- * @template  TError, T
- * @typedef {import('./typedefCommons').ErrorResult & {existing: T}} ErrorExistingResult<TError<T>>
- */

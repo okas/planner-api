@@ -3,8 +3,8 @@ import { ValidationErrors, ExistingDocumentError } from './errors'
 
 /**
  * Upsert object to database; or return `{errors:[]}`, if validation fails.
- * @param {import('../persistence/iotnodeCollection').IoTNodeDoc} iotnode entity data to upinsert to database, provided `{id}` wil be used and it must be unique!
- * @returns {import('../persistence/iotnodeCollection').IoTNodeDoc}
+ * @param {import('./typedefs').IoTNodeDoc} iotnode entity data to upinsert to database, provided `{id}` wil be used and it must be unique!
+ * @returns {import('./typedefs').IoTNodeDoc}
  */
 export function addOrUpdate(iotnode) {
   const doc = sanitize(iotnode)
@@ -29,8 +29,8 @@ export function addOrUpdate(iotnode) {
 }
 
 /**
- * @param {import('../persistence/iotnodeCollection').IoTNodeDoc} iotnode entity data to upinsert to database, provided `{id}` wil be used and it must be unique!
- * @returns {import('../persistence/iotnodeCollection').IoTNodeDoc}
+ * @param {import('./typedefs').IoTNodeDoc} iotnode entity data to upinsert to database, provided `{id}` wil be used and it must be unique!
+ * @returns {import('./typedefs').IoTNodeDoc}
  */
 export function updateForced(iotnode) {
   const doc = sanitize(iotnode)
@@ -72,7 +72,7 @@ export function remove(id) {
 /**
  * Takes object from API request and sanitizes according to model.
  * @param {Object} sourceDoc source document.
- * @returns {import('../persistence/iotnodeCollection').IoTNodeDoc} new object that only has properties defined by model.
+ * @returns {import('./typedefs').IoTNodeDoc} new object that only has properties defined by model.
  */
 function sanitize({ id, iottype, outputs: rawOutputs }) {
   return {
@@ -83,7 +83,7 @@ function sanitize({ id, iottype, outputs: rawOutputs }) {
 }
 
 /**
- * @param {import('../persistence/iotnodeCollection').IoTNodeDoc} sourceDoc Incoming data to update database.
+ * @param {import('./typedefs').IoTNodeDoc} sourceDoc Incoming data to update database.
  */
 function validateInitial({ id, iottype }) {
   const errors = []
@@ -99,7 +99,7 @@ function validateInitial({ id, iottype }) {
 
 /**
  * @param {string[]} errors
- * @param {import('../persistence/iotnodeCollection').Output[]} outputs
+ * @param {import('./typedefs').Output[]} outputs
  */
 function validateOutputsRequireId(errors, outputs) {
   if (outputs && outputs.length > 0) {
@@ -115,8 +115,8 @@ function validateOutputsRequireId(errors, outputs) {
 
 /**
  * @param {string[]} errors
- * @param {import('../persistence/iotnodeCollection').IoTNodeDoc} sourceDoc Incoming data to update database.
- * @param {import('../persistence/iotnodeCollection').IoTNodeDoc} dbDoc Current database document.
+ * @param {import('./typedefs').IoTNodeDoc} sourceDoc Incoming data to update database.
+ * @param {import('./typedefs').IoTNodeDoc} dbDoc Current database document.
  */
 function validateOnlyOutputsUsageCanDiffer(
   errors,
@@ -168,8 +168,8 @@ function stringIsEmptyOrWhiteSpace(string) {
 
 /**
  * Trim the `$loki` property, result is other type.
- * @param {import('../persistence/iotnodeCollection').IoTNodeDBDoc} dbDoc Database form of document.
- * @returns {import('../persistence/iotnodeCollection').IoTNodeDoc} Model form of document.
+ * @param {import('../persistence/typedefs').IoTNodeDBDoc} dbDoc Database form of document.
+ * @returns {import('./typedefs').IoTNodeDoc} Model form of document.
  */
 function trim$loki(dbDoc) {
   const { $loki, ...docRest } = dbDoc

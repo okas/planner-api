@@ -41,8 +41,11 @@ function initCollections() {
   iotnodeCollection = setupIoTNodeCollection(database)
 }
 
+/** @type {Collection<import('./typedefs').LampDBDoc>} */
 export let lampCollection
+/** @type {Collection<import('./typedefs').BlindDBDoc>} */
 export let blindCollection
+/** @type {Collection<import('./typedefs').PresetDBDoc>} */
 export let presetCollection
-/** @type {Collection<import('./iotnodeCollection').IoTNodeDBDoc>} */
+/** @type {Collection<import('./typedefs').IoTNodeDBDoc>} */
 export let iotnodeCollection

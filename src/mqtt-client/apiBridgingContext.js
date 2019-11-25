@@ -121,7 +121,7 @@ export default function registerBridge(client, strategiesMap) {
   }
 
   /**
-   * @param {import('./typedefCommons').TopicObject} topic
+   * @param {import('./typedefs').TopicObject} topic
    * @param {Buffer} payload
    */
   function devicePresentHandler({ id, subtype, msgType }, payload) {
@@ -145,7 +145,7 @@ export default function registerBridge(client, strategiesMap) {
   }
 
   /**
-   * @param {import('./typedefCommons').TopicObject} topic
+   * @param {import('./typedefs').TopicObject} topic
    * @param {Buffer} payload
    */
   function genericAsyncActionHandler({ id, subtype, msgType }, payload) {
@@ -184,7 +184,7 @@ export default function registerBridge(client, strategiesMap) {
 }
 
 /**
- * @param {import('./typedefCommons').TopicObject} topicObj
+ * @param {import('./typedefs').TopicObject} topicObj
  * @param {Buffer} payload
  */
 function commandResponseHandler(topicObj, payload) {

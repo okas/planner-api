@@ -2,28 +2,7 @@ import { getOrAddCollection, setupTransforms } from './utilities'
 import generateDocId from './idGeneration'
 
 /**
- * Output of IoTNode
- * @typedef {{ id: number; usage: string}} Output
- */
-
-/**
- * IoTNode document
-@typedef {
-  {
-    id: number;
-    iottype: string;
-    outputs: Output[];
-  }
-} IoTNodeDoc
- */
-
-/**
- * IoTNode database document
- * @typedef {IoTNodeDoc & { $loki: number;}} IoTNodeDBDoc
- */
-
-/**
- * @type {Collection<IoTNodeDBDoc>}
+ * @type {Collection<import('./typedefs').IoTNodeDBDoc>}
  */
 let collection
 const parpre = '[%lktxp]'
@@ -31,7 +10,7 @@ const parpre = '[%lktxp]'
 /**
  * Get or create configured Loki Collection for Preset documents.
  * @param {Loki} database Loki database instance.
- * @returns {Collection<IoTNodeDBDoc>} initialized collection
+ * @returns {Collection<import('./typedefs').IoTNodeDBDoc>} initialized collection
  */
 export default function setupIoTNodeCollection(database) {
   collection = getOrAddCollection(database, 'iotnode', {
@@ -43,7 +22,7 @@ export default function setupIoTNodeCollection(database) {
 }
 
 /**
- * @param {IoTNodeDBDoc} doc
+ * @param {import('./typedefs').IoTNodeDBDoc} doc
  */
 export function generateOutputIds(doc) {
   doc.outputs.forEach(generateDocId)

@@ -231,8 +231,6 @@ messageBus.once(PERSISTENCE__COLLECTIONS_READY, () => {
 })
 
 /**
- * @typedef ChangedDevice
- * @property {Number} id of changed device.
  * @param {ChangedDevice} device changed device.
  * @param {String} type of changed device.
  * @returns {Array} changed Presets.
@@ -241,7 +239,10 @@ function removeDeviceFomAllPresets({ id }, type) {
   return presetCollection
     .chain('findPresetsByDevice', { id, type })
     .update(p => {
-      p.devices.splice(p.devices.findIndex(d => d.id === id), 1)
+      p.devices.splice(
+        p.devices.findIndex(d => d.id === id),
+        1
+      )
       if (p.devices.length === 0) {
         p.active = false
       }
@@ -261,3 +262,7 @@ function notifyChangedPresets(changedPresets) {
     })
   })
 }
+
+/**
+ * @typedef {{id: number;}} ChangedDevice
+ */

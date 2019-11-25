@@ -1,3 +1,5 @@
+export const unused = {}
+
 /**
  * Topic and payload for ready for MQTT publish.
 @typedef {
@@ -27,4 +29,15 @@
  * @typedef {{errors: string[]; }} ErrorResult
  */
 
-export const unused = {}
+/**
+ * @typedef {{state: string}} StateResult
+ */
+
+/**
+ * @typedef {{outputs: { id: number; }[];}} OutputsInitializedResult
+ */
+
+/**
+ * @template  TError, T
+ * @typedef {import('./typedefs').ErrorResult & {existing: T}} ErrorExistingResult<TError<T>>
+ */
