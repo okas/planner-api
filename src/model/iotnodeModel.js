@@ -36,7 +36,7 @@ export function updateForced(iotnode) {
   const doc = sanitize(iotnode)
   const errors = validateInitial(doc)
   validateOutputsRequireId(errors, doc.outputs)
-  if (errors) {
+  if (errors.length) {
     throw new ValidationErrors('', errors)
   }
   let dbDoc = getById(doc.id)
