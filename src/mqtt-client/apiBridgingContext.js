@@ -149,7 +149,7 @@ export default function registerBridge(client, strategiesMap) {
    * @param {Buffer} payload
    */
   function genericAsyncActionHandler({ id, subtype, msgType }, payload) {
-    const asyncAction = getFromStrategies('asyncActions', subtype, msgType)
+    const asyncAction = getFromStrategies('asyncTasks', subtype, msgType)
     if (!asyncAction) {
       return
     }
@@ -160,7 +160,7 @@ export default function registerBridge(client, strategiesMap) {
 
   /**
    * Get item from StrategyMap, log errors if encountered.
-   * @param {('apiBroadcasts' | 'asyncActions')} strategyComponent Type of item to retreive
+   * @param {('apiBroadcasts' | 'asyncTasks')} strategyComponent Type of item to retreive
    * @param {string} subtype Strategy type or name of Model Entity (device).
    * @param {string} msgType Item name in Strategy.
    */

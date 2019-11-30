@@ -102,7 +102,7 @@ export default {
     cmndInit,
     cmndInitUpdate
   ]),
-  asyncActions: new Map([
+  asyncTasks: new Map([
     [cmndInit, mqttInitHandler],
     [cmndInitUpdate, mqttInitUpdateHandler]
   ])
