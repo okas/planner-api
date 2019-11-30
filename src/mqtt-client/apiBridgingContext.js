@@ -10,7 +10,7 @@ const sentCommands = new Map()
 
 /**
  * @param {import('mqtt').MqttClient} client
- * @param {Map<string,object>} strategiesMap
+ * @param {Map<string,import('./typedefs').MQTTStrategy>} strategiesMap
  */
 export default function registerBridge(client, strategiesMap) {
   bridgePublishes()
@@ -27,12 +27,10 @@ export default function registerBridge(client, strategiesMap) {
 
   function bridgeSubscriptions() {
     strategiesMap.forEach(({ subscriptions }) => {
-      if (!Array.isArray(subscriptions) && typeof subscriptions !== 'string') {
-        client.subscribe(
-          subscriptions.topics,
-          subscriptions.options,
-          console.log
-        )
+      if (Array.isArray(subscriptions)) {
+        subscriptions.forEach(sub => {
+          client.subscribe(sub, console.log)
+        })
       } else {
         client.subscribe(subscriptions, console.log)
       }
