@@ -39,6 +39,10 @@ const apiBroadcasts = new Map()
 apiBroadcasts.set('present', MQTT__BLIND_PRESENT)
 apiBroadcasts.set('lost', MQTT__BLIND_LOST)
 
+/**
+ * Public API
+ * @type {import('../typedefs').MQTTStrategy}
+ */
 export default {
   type,
   subscriptions: getDeviceCommonTopics(type),

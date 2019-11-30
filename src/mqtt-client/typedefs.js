@@ -11,6 +11,15 @@ export const unused = {}
  */
 
 /**
+ * @typedef {object} MQTTStrategy
+ * @property {string} type
+ * @property {string[]} subscriptions
+ * @property {Map.<string, (id: string | number, mqttPayload: string | Buffer) => Promise<MQTTActionResult>>} [asyncTasks]
+ * @property {Map<symbol, Function>} [publishCommands]
+ * @property {Map<string, symbol>} [apiBroadcasts]
+ */
+
+/**
   * Topic string splitted to object properties.
 @typedef {
   {

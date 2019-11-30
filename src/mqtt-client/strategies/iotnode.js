@@ -94,7 +94,8 @@ function getActionResult(id, command, rawPayload) {
 }
 
 /**
- * Public API.
+ * Public API
+ * @type {import('../typedefs').MQTTStrategy}
  */
 export default {
   type,
