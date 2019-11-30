@@ -44,7 +44,7 @@ export function getBaseTopic(type, subType) {
  * @returns `[saartk/device/{subType}/{common}]`
  * @example return ['saartk/device/lamp/+/resp/+/+']
  */
-export function getDeviceCommoTopics(subType) {
+export function getDeviceCommonTopics(subType) {
   return genericCreatorWithIdLevel(typeDevice, subType, deviceCommonParts)
 }
 
@@ -57,8 +57,8 @@ export function getDeviceCommoTopics(subType) {
  * return ['saartk/device/lamp/+/resp/+/+',
  *         'saartk/device/lamp/+/init']
  */
-export function getDeviceCommoTopicsWithOthers(subType, topicEnds) {
-  const result = getDeviceCommoTopics(subType)
+export function getDeviceCommonTopicsWithOthers(subType, topicEnds) {
+  const result = getDeviceCommonTopics(subType)
   result.push(...genericCreatorWithIdLevel(typeDevice, subType, topicEnds))
   return result
 }

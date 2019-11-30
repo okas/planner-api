@@ -4,7 +4,7 @@ import {
   MQTT__LAMP_PRESENT,
   MQTT__LAMP_LOST
 } from '../../messageBus'
-import { getTopicBaseDevice, getDeviceCommoTopics } from '../utilities'
+import { getTopicBaseDevice, getDeviceCommonTopics } from '../utilities'
 
 const type = 'lamp'
 const topicBase = getTopicBaseDevice(type)
@@ -41,7 +41,7 @@ apiBroadcasts.set('lost', MQTT__LAMP_LOST)
 
 export default {
   type,
-  subscriptions: getDeviceCommoTopics(type),
+  subscriptions: getDeviceCommonTopics(type),
   publishCommands,
   apiBroadcasts
 }

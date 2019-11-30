@@ -1,7 +1,7 @@
 import * as model from '../../model/iotnodeModel'
 import {
   getTopicBaseDevice,
-  getDeviceCommoTopicsWithOthers
+  getDeviceCommonTopicsWithOthers
 } from '../utilities'
 import { ExistingDocumentError, ValidationErrors } from '../../model/errors'
 
@@ -98,7 +98,7 @@ function getActionResult(id, command, rawPayload) {
  */
 export default {
   type,
-  subscriptions: getDeviceCommoTopicsWithOthers(type, [
+  subscriptions: getDeviceCommonTopicsWithOthers(type, [
     cmndInit,
     cmndInitUpdate
   ]),
