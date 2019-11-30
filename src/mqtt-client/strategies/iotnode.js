@@ -1,6 +1,9 @@
-import * as model from '../model/iotnodeModel'
-import { getTopicBaseDevice, getDeviceCommoTopicsWithOthers } from './utilities'
-import { ExistingDocumentError, ValidationErrors } from '../model/errors'
+import * as model from '../../model/iotnodeModel'
+import {
+  getTopicBaseDevice,
+  getDeviceCommoTopicsWithOthers
+} from '../utilities'
+import { ExistingDocumentError, ValidationErrors } from '../../model/errors'
 
 const type = 'iotnode'
 const baseTopic = getTopicBaseDevice(type)
@@ -13,7 +16,7 @@ const cmndInitUpdate = 'init-update'
  * @async
  * @param {number | string} id
  * @param {string | Buffer} mqttPayload
- * @returns {Promise<import('./typedefs').MQTTActionResult>}
+ * @returns {Promise<import('../typedefs').MQTTActionResult>}
  */
 async function mqttInitHandler(id, mqttPayload) {
   const parsedSourceDoc = createModelDoc(id, mqttPayload)
@@ -33,7 +36,7 @@ async function mqttInitHandler(id, mqttPayload) {
  * @async
  * @param {number | string} id
  * @param {string | Buffer} mqttPayload
- * @returns {Promise<import('./typedefs').MQTTActionResult>}
+ * @returns {Promise<import('../typedefs').MQTTActionResult>}
  */
 async function mqttInitUpdateHandler(id, mqttPayload) {
   const parsedSourceDoc = createModelDoc(id, mqttPayload)
@@ -61,8 +64,8 @@ function createModelDoc(id, mqttPayload) {
 }
 
 /**
- * @param {ValidationErrors | ExistingDocumentError<import('../model/typedefs').IoTNodeDoc>} err
- * @returns {import('./typedefs').ErrorResult | import('./typedefs').ErrorExistingResult<ExistingDocumentError,import('../model/typedefs').IoTNodeDoc>}
+ * @param {ValidationErrors | ExistingDocumentError<import('../../model/typedefs').IoTNodeDoc>} err
+ * @returns {import('../typedefs').ErrorResult | import('../typedefs').ErrorExistingResult<ExistingDocumentError,import('../../model/typedefs').IoTNodeDoc>}
  */
 function generateErrorResult(err) {
   let rawPayload
@@ -80,7 +83,7 @@ function generateErrorResult(err) {
  * @param {string | number} id
  * @param {string} command
  * @param {any} rawPayload
- * @returns {import('./typedefs').MQTTActionResult}
+ * @returns {import('../typedefs').MQTTActionResult}
  */
 function getActionResult(id, command, rawPayload) {
   /* Do not use pretty JSON, as IoTNode has veri limited resources to handle data!!! */

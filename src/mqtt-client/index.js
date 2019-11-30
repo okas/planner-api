@@ -4,9 +4,9 @@ import messageBus, {
   MQTT__CLIENT_LOST
 } from '../messageBus'
 import registerBridgeContext from './apiBridgingContext'
-import lampStrategy from './lampMqttStrategy'
-import blindStrategy from './blindMqttStrategy'
-import iotnodeMqttStrategy from './iotnodeMqttStrategy'
+import lampStrategy from './strategies/lamp'
+import blindStrategy from './strategies/blind'
+import iotnodeMqttStrategy from './strategies/iotnode'
 import { serverTypeBase } from './utilities'
 
 const strategiesMap = new Map()
