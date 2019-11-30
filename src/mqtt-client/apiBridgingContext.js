@@ -123,7 +123,7 @@ export default function registerBridge(client, strategiesMap) {
    * @param {Buffer} payload
    */
   function devicePresentHandler({ id, subtype, msgType }, payload) {
-    const broadcastEvent = getFromStrategies('apiBroadcasts', subtype, msgType)
+    const broadcastEvent = getStrategyApiBroadcast(subtype, msgType)
     if (!broadcastEvent) {
       return
     }
@@ -135,7 +135,7 @@ export default function registerBridge(client, strategiesMap) {
   }
 
   function deviceLostHandler({ id, subtype, msgType }) {
-    const broadcastEvent = getFromStrategies('apiBroadcasts', subtype, msgType)
+    const broadcastEvent = getStrategyApiBroadcast(subtype, msgType)
     if (!broadcastEvent) {
       return
     }
@@ -147,7 +147,7 @@ export default function registerBridge(client, strategiesMap) {
    * @param {Buffer} payload
    */
   function genericAsyncActionHandler({ id, subtype, msgType }, payload) {
-    const asyncAction = getFromStrategies('asyncTasks', subtype, msgType)
+    const asyncAction = getStrategyAsyncTask(subtype, msgType)
     if (!asyncAction) {
       return
     }
@@ -157,25 +157,45 @@ export default function registerBridge(client, strategiesMap) {
   }
 
   /**
+   * @param {string} subtype Device type
+   * @param {string} msgType Activity type
+   * @returns {import('./typedefs').MQTTAsyncTask}
+   */
+  function getStrategyAsyncTask(subtype, msgType) {
+    // @ts-ignore
+    return getFromStrategies('asyncTasks', subtype, msgType)
+  }
+
+  /**
+   * @param {string} subtype Device type
+   * @param {string} msgType Activity type
+   * @returns {symbol}
+   */
+  function getStrategyApiBroadcast(subtype, msgType) {
+    // @ts-ignore
+    return getFromStrategies('apiBroadcasts', subtype, msgType)
+  }
+
+  /**
    * Get item from StrategyMap, log errors if encountered.
-   * @param {('apiBroadcasts' | 'asyncTasks')} strategyComponent Type of item to retreive
+   * @param {import('./typedefs').StrategyComponentName} componentName Type of item to retreive
    * @param {string} subtype Strategy type or name of Model Entity (device).
    * @param {string} msgType Item name in Strategy.
    */
-  function getFromStrategies(strategyComponent, subtype, msgType) {
+  function getFromStrategies(componentName, subtype, msgType) {
     const strategy = strategiesMap.get(subtype)
     if (!strategy) {
-      logMissingComponent('strategy', strategyComponent, subtype, msgType)
+      logMissingComponent('strategy', componentName, subtype, msgType)
       return
     }
-    const component = strategy[strategyComponent]
+    const component = strategy[componentName]
     if (!component) {
-      logMissingComponent('component', strategyComponent, subtype, msgType)
+      logMissingComponent('component', componentName, subtype, msgType)
       return
     }
     const item = component.get(msgType)
     if (!item) {
-      logMissingComponent('item', strategyComponent, subtype, msgType)
+      logMissingComponent('item', componentName, subtype, msgType)
     }
     return item
   }
