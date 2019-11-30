@@ -1,6 +1,6 @@
 import messageBus, {
-  MQTT__CLIENT_LOST,
-  MQTT__CLIENT_READY
+  MQTT__API_CLIENT_LOST,
+  MQTT__API_CLIENT_READY
 } from '../../messageBus'
 
 const deviceStateRooms = ['lamp-state', 'blind-state']
@@ -10,18 +10,18 @@ const deviceStateRooms = ['lamp-state', 'blind-state']
  *  @param {SocketIO.Server} io
  */
 export default function registerMqttBroadcastsCommon(io) {
-  messageBus.on(MQTT__CLIENT_LOST, () => {
+  messageBus.on(MQTT__API_CLIENT_LOST, () => {
     deviceStateRooms.forEach(r => {
       io.to(r).emit('devices__api_lost')
     })
-    logMsg('MQTT client lost')
+    logMsg('MQTT API client lost')
   })
 
-  messageBus.on(MQTT__CLIENT_READY, () => {
+  messageBus.on(MQTT__API_CLIENT_READY, () => {
     deviceStateRooms.forEach(r => {
       io.to(r).emit('devices__api_ready')
     })
-    logMsg('MQTT client ready')
+    logMsg('MQTT API client ready')
   })
 
   function logMsg(msg) {

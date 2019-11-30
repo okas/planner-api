@@ -21,9 +21,9 @@ export const PRESET__UPDATED_DEVICE_DELETED = Symbol(
   'presetModel:updatedDevicesDeleted'
 )
 
-export const MQTT__CLIENT_READY = Symbol('mqtt:ready')
+export const MQTT__API_CLIENT_READY = Symbol('mqtt:apiClientReady')
 
-export const MQTT__CLIENT_LOST = Symbol('mqtt:clientLost')
+export const MQTT__API_CLIENT_LOST = Symbol('mqtt:apiClientLost')
 
 export const MQTT__CLEAR_SENDER_COMMANDS = Symbol('mqtt:clearSenderCommands')
 

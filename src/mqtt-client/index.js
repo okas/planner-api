@@ -1,12 +1,12 @@
 import mqtt from 'mqtt'
 import messageBus, {
-  MQTT__CLIENT_READY,
-  MQTT__CLIENT_LOST
+  MQTT__API_CLIENT_LOST,
+  MQTT__API_CLIENT_READY
 } from '../messageBus'
 import registerBridgeContext from './apiBridgingContext'
-import lampStrategy from './strategies/lamp'
 import blindStrategy from './strategies/blind'
 import iotnodeMqttStrategy from './strategies/iotnode'
+import lampStrategy from './strategies/lamp'
 import { serverTypeBase } from './utilities'
 
 const strategiesMap = new Map()
@@ -26,9 +26,9 @@ export default function initMqtt() {
     clientId: 'api'
   })
 
-  client.on('end', () => messageBus.emit(MQTT__CLIENT_LOST))
+  client.on('end', () => messageBus.emit(MQTT__API_CLIENT_LOST))
 
-  client.on('offline', () => messageBus.emit(MQTT__CLIENT_LOST))
+  client.on('offline', () => messageBus.emit(MQTT__API_CLIENT_LOST))
 
   client.on('message', logMessage)
 
@@ -46,7 +46,7 @@ export default function initMqtt() {
       `hello, at @${Date()}`,
       console.log
     )
-    messageBus.emit(MQTT__CLIENT_READY)
+    messageBus.emit(MQTT__API_CLIENT_READY)
   })
 
   registerBridgeContext(client, strategiesMap)

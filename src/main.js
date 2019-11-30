@@ -1,11 +1,11 @@
 import http from 'http'
 import messageBus, {
-  PERSISTENCE__READY,
-  MQTT__CLIENT_READY
+  MQTT__API_CLIENT_READY,
+  PERSISTENCE__READY
 } from './messageBus'
+import initMqtt from './mqtt-client'
 import './persistence'
 import initScheduler from './presetScheduler'
-import initMqtt from './mqtt-client'
 import initWsServer from './ws-server'
 
 console.info('>>> planner-api init start')
@@ -17,7 +17,7 @@ messageBus.once(PERSISTENCE__READY, () => {
 
   const httpServer = http.createServer()
   initWsServer(httpServer)
-  messageBus.once(MQTT__CLIENT_READY, initScheduler)
+  messageBus.once(MQTT__API_CLIENT_READY, initScheduler)
   initMqtt()
 
   /* Run API server */
