@@ -6,6 +6,9 @@ import {
 } from './logHelpers'
 import { createTopicObject, getBaseTopic } from './utilities'
 
+/**
+ * @type {Map.<string, (responsePayload: Buffer) => void>}
+ */
 const sentCommands = new Map()
 
 /**
