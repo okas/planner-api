@@ -2,12 +2,12 @@ import messageBus, {
   MQTT__BLIND_CMND__STATE,
   MQTT__BLIND_CMND__SET_STATE,
   MQTT__RESP__BLIND__SET_STATE
-} from '../messageBus'
+} from '../../messageBus'
 
 /**
  * @param {SocketIO.Socket} socket
  */
-export default function registerBlindMqttEvents(socket) {
+export default function registerMqttEventsBlind(socket) {
   /**
    * @param {String} [room]
    */

@@ -1,11 +1,11 @@
-import * as model from '../model/blindModel'
+import * as model from '../../model/blindModel'
 
 const broadcastRoom = 'blind'
 
 /**
  * @param {SocketIO.Socket} socket
  */
-export default function registerBlindModelEvents(socket) {
+export default function registerModelEventsBlind(socket) {
   /**
    * @param {String} [room]
    */
@@ -19,7 +19,7 @@ export default function registerBlindModelEvents(socket) {
   })
 
   socket.on('blind__add', (blind, fn) => {
-    let result = model.add(blind)
+    const result = model.add(blind)
     if (result.errors) {
       fn(result)
     } else {

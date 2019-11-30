@@ -1,11 +1,11 @@
-import * as model from '../model/presetModel'
+import * as model from '../../model/presetModel'
 
 const room = 'preset'
 
 /**
  * @param {SocketIO.Socket} socket
  */
-export default function registerPresetModelEvents(socket) {
+export default function registerModelEventPreset(socket) {
   function getLogPrefix(roomVal) {
     return `[ ${socket.id} ]${roomVal ? `, room "${roomVal}"` : ''} : `
   }

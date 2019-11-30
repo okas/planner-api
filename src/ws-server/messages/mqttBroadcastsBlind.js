@@ -2,7 +2,7 @@ import messageBus, {
   MQTT__BLIND_PRESENT,
   MQTT__BLIND_LOST,
   MQTT__RESP__BLIND__SET_STATE
-} from '../messageBus'
+} from '../../messageBus'
 
 const room = 'blind-state'
 
@@ -10,7 +10,7 @@ const room = 'blind-state'
  *  SocketIO broadcaster. Uses `{messageBus}` module to listen events from MQTT.
  *  @param {SocketIO.Server} io
  */
-export default function registerBlindMqttBroadcast(io) {
+export default function registerMqttBroadcastsBlind(io) {
   messageBus.on(MQTT__BLIND_PRESENT, data => {
     io.to(room).emit('blind__api_present', data)
     logMsg(`blind "${data.id}" is present.`)

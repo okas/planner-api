@@ -4,9 +4,9 @@ import messageBus, {
   MQTT__CLIENT_READY
 } from './messageBus'
 import './persistence'
-import initApi from './api-server'
 import initScheduler from './presetScheduler'
 import initMqtt from './mqtt-client'
+import initWsServer from './ws-server'
 
 console.info('>>> planner-api init start')
 // Todo: retreive configurtion here
@@ -16,7 +16,7 @@ messageBus.once(PERSISTENCE__READY, () => {
   /* Init internals  */
 
   const httpServer = http.createServer()
-  initApi(httpServer)
+  initWsServer(httpServer)
   messageBus.once(MQTT__CLIENT_READY, initScheduler)
   initMqtt()
 

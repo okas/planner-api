@@ -2,12 +2,12 @@ import messageBus, {
   MQTT__LAMP_CMND__STATE,
   MQTT__LAMP_CMND__SET_STATE,
   MQTT__RESP__LAMP__SET_STATE
-} from '../messageBus'
+} from '../../messageBus'
 
 /**
  * @param {SocketIO.Socket} socket
  */
-export default function registerLampMqttEvents(socket) {
+export default function registerMqttEventsLamp(socket) {
   /**
    * @param {String} [room]
    */

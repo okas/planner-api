@@ -1,7 +1,7 @@
 import messageBus, {
   MQTT__CLIENT_LOST,
   MQTT__CLIENT_READY
-} from '../messageBus'
+} from '../../messageBus'
 
 const deviceStateRooms = ['lamp-state', 'blind-state']
 
@@ -9,7 +9,7 @@ const deviceStateRooms = ['lamp-state', 'blind-state']
  *  SocketIO broadcaster. Uses `{messageBus}` module to listen events from MQTT.
  *  @param {SocketIO.Server} io
  */
-export default function registerCommonMqttBroadcasts(io) {
+export default function registerMqttBroadcastsCommon(io) {
   messageBus.on(MQTT__CLIENT_LOST, () => {
     deviceStateRooms.forEach(r => {
       io.to(r).emit('devices__api_lost')

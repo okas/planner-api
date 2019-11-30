@@ -1,4 +1,4 @@
-import messageBus, { PRESET__UPDATED_DEVICE_DELETED } from '../messageBus'
+import messageBus, { PRESET__UPDATED_DEVICE_DELETED } from '../../messageBus'
 
 const room = 'preset'
 
@@ -6,7 +6,7 @@ const room = 'preset'
  *  SocketIO broadcaster. Uses `{messageBus}` module to listen events from app.
  *  @param {SocketIO.Server} io
  */
-export default function registerPresetModelBroadcast(io) {
+export default function registerModelBroadcastsPreset(io) {
   function getLogPrefix() {
     return `[ API: presetEmitter ], room "${room}" : `
   }

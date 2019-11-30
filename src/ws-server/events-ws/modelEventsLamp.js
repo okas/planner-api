@@ -1,11 +1,11 @@
-import * as model from '../model/lampModel'
+import * as model from '../../model/lampModel'
 
 const broadcastRoom = 'lamp'
 
 /**
  * @param {SocketIO.Socket} socket
  */
-export default function registerLampModelEvents(socket) {
+export default function registerModelEventsLamp(socket) {
   /**
    * @param {String} [room]
    */

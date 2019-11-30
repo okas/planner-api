@@ -1,14 +1,14 @@
 import {
   queryRunnableTaskById,
   runPresetTask
-} from '../presetScheduler/sharedFunctions'
+} from '../../presetScheduler/sharedFunctions'
 
 /**
  * @param {SocketIO.Socket} socket
  */
-export default function registerPresetMqttEvents(socket) {
+export default function registerMqttEventsPreset(socket) {
   socket.on('preset__run_taks_manually', (presetId, fn) => {
-    let waitForTimeout = 5000
+    const waitForTimeout = 5000
     const startedDevices = []
     const { devices } = queryRunnableTaskById(presetId)
 

@@ -2,7 +2,7 @@ import messageBus, {
   MQTT__LAMP_LOST,
   MQTT__LAMP_PRESENT,
   MQTT__RESP__LAMP__SET_STATE
-} from '../messageBus'
+} from '../../messageBus'
 
 const room = 'lamp-state'
 
@@ -10,7 +10,7 @@ const room = 'lamp-state'
  *  SocketIO broadcaster. Uses `{messageBus}` module to listen events from MQTT.
  *  @param {SocketIO.Server} io
  */
-export default function registerLampMqttBroadcast(io) {
+export default function registerMqttBroadcastsLamp(io) {
   messageBus.on(MQTT__LAMP_PRESENT, data => {
     io.to(room).emit('lamp__api_present', data)
     logMsg(`lamp "${data.id}" is present.`)

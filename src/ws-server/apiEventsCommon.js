@@ -3,7 +3,7 @@ import messageBus, { MQTT__CLEAR_SENDER_COMMANDS } from '../messageBus'
 /**
  * @param {SocketIO.Socket} socket conection from browser
  */
-export default function registerCommonApiEvents(socket) {
+export default function registerApiEventsCommon(socket) {
   console.log(`|-> [ ${socket.id} ] : a user connected`)
 
   socket.on('disconnecting', reason => {
@@ -42,7 +42,7 @@ export default function registerCommonApiEvents(socket) {
 }
 
 function createResponse(err) {
-  let response = { status: '' }
+  const response = { status: '' }
   if (err) {
     response.status = 'failed'
     response.erros = [err]
