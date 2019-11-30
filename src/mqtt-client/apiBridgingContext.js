@@ -1,10 +1,10 @@
 import messageBus, { MQTT__CLEAR_SENDER_COMMANDS } from '../messageBus'
-import { getBaseTopic, createTopicObject } from './utilities'
 import {
-  logMissingGeneric,
+  logMissingCommandResponse,
   logMissingComponent,
-  logMissingCommandResponse
+  logMissingGeneric
 } from './logHelpers'
+import { createTopicObject, getBaseTopic } from './utilities'
 
 const sentCommands = new Map()
 

@@ -1,9 +1,9 @@
+import { ExistingDocumentError, ValidationErrors } from '../../model/errors'
 import * as model from '../../model/iotnodeModel'
 import {
-  getTopicBaseDevice,
-  getDeviceCommonTopicsWithOthers
+  getDeviceCommonTopicsWithOthers,
+  getTopicBaseDevice
 } from '../utilities'
-import { ExistingDocumentError, ValidationErrors } from '../../model/errors'
 
 const type = 'iotnode'
 const baseTopic = getTopicBaseDevice(type)

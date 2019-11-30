@@ -1,10 +1,10 @@
 import {
-  MQTT__LAMP_CMND__STATE,
   MQTT__LAMP_CMND__SET_STATE,
-  MQTT__LAMP_PRESENT,
-  MQTT__LAMP_LOST
+  MQTT__LAMP_CMND__STATE,
+  MQTT__LAMP_LOST,
+  MQTT__LAMP_PRESENT
 } from '../../messageBus'
-import { getTopicBaseDevice, getDeviceCommonTopics } from '../utilities'
+import { getDeviceCommonTopics, getTopicBaseDevice } from '../utilities'
 
 const type = 'lamp'
 const topicBase = getTopicBaseDevice(type)

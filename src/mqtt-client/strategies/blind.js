@@ -1,10 +1,10 @@
 import {
-  MQTT__BLIND_CMND__STATE,
   MQTT__BLIND_CMND__SET_STATE,
-  MQTT__BLIND_PRESENT,
-  MQTT__BLIND_LOST
+  MQTT__BLIND_CMND__STATE,
+  MQTT__BLIND_LOST,
+  MQTT__BLIND_PRESENT
 } from '../../messageBus'
-import { getTopicBaseDevice, getDeviceCommonTopics } from '../utilities'
+import { getDeviceCommonTopics, getTopicBaseDevice } from '../utilities'
 
 const type = 'blind'
 const topicBase = getTopicBaseDevice(type)
