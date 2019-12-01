@@ -15,6 +15,13 @@ export const unused = {}
  */
 
 /**
+ * @callback MQTTAction
+ * @param {number | string} id
+ * @param {Buffer | string} [mqttPayload]
+ * @returns {void}
+ */
+
+/**
  * Topic and payload for ready for MQTT publish.
  * @typedef {MQTTTaskResult & {responseParser?: Function}} MQTTPublishCommandResult
  */
@@ -32,11 +39,11 @@ export const unused = {}
  * @property {string | string[] | import('mqtt').ISubscriptionMap[]} subscriptions
  * @property {Map.<string, MQTTAsyncTask>} [asyncTasks]
  * @property {Map.<symbol, Function>} [publishCommands]
- * @property {Map.<string, symbol>} [apiBroadcasts]
+ * @property {Map.<string, MQTTAction>} [actions]
  */
 
 /**
- * @typedef {('apiBroadcasts' | 'asyncTasks')} StrategyComponentName
+ * @typedef {('asyncTasks' | 'actions')} StrategyComponentName
  */
 
 /**

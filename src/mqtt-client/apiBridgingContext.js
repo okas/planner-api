@@ -107,10 +107,8 @@ export default function registerBridge(client, strategiesMap) {
         commandResponseHandler(topicObj, payload)
         break
       case 'present':
-        devicePresentHandler(topicObj, payload)
-        break
       case 'lost':
-        deviceLostHandler(topicObj)
+        genericActionHandler(topicObj, payload)
         break
       case 'init':
       case 'init-update':
@@ -126,26 +124,13 @@ export default function registerBridge(client, strategiesMap) {
    * @param {import('./typedefs').TopicObject} topic
    * @param {Buffer} payload
    */
-  function devicePresentHandler({ id, subtype, msgType }, payload) {
-    const broadcastEvent = getStrategyApiBroadcast(subtype, msgType)
-    if (!broadcastEvent) {
+  function genericActionHandler({ id, subtype, msgType }, payload) {
+    const action = getStrategyAction(subtype, msgType)
+    if (!action) {
       return
     }
-    const eventPayload = {
-      id,
-      ...JSON.parse(payload.toString())
-    }
-    messageBus.emit(broadcastEvent, eventPayload)
+    action(id, payload)
   }
-
-  function deviceLostHandler({ id, subtype, msgType }) {
-    const broadcastEvent = getStrategyApiBroadcast(subtype, msgType)
-    if (!broadcastEvent) {
-      return
-    }
-    messageBus.emit(broadcastEvent, JSON.parse(id))
-  }
-
   /**
    * @param {import('./typedefs').TopicObject} topic
    * @param {Buffer} payload
@@ -173,11 +158,10 @@ export default function registerBridge(client, strategiesMap) {
   /**
    * @param {string} subtype Device type
    * @param {string} msgType Activity type
-   * @returns {symbol}
+   * @returns {import('./typedefs').MQTTAction}
    */
-  function getStrategyApiBroadcast(subtype, msgType) {
-    // @ts-ignore
-    return getFromStrategies('apiBroadcasts', subtype, msgType)
+  function getStrategyAction(subtype, msgType) {
+    return getFromStrategies('actions', subtype, msgType)
   }
 
   /**
@@ -185,6 +169,7 @@ export default function registerBridge(client, strategiesMap) {
    * @param {import('./typedefs').StrategyComponentName} componentName Type of item to retreive
    * @param {string} subtype Strategy type or name of Model Entity (device).
    * @param {string} msgType Item name in Strategy.
+   * @returns {import('./typedefs').MQTTAsyncTask | import('./typedefs').MQTTAction}
    */
   function getFromStrategies(componentName, subtype, msgType) {
     const strategy = strategiesMap.get(subtype)

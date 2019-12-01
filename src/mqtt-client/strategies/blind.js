@@ -6,6 +6,7 @@ import {
 } from '../../messageBus'
 import { getDeviceCommonTopics, getTopicBaseDevice } from '../utilities'
 import { geState, setState } from './commonPublishCommands'
+import { getActionDevicePresentLost } from './commonSyncActions'
 
 const type = 'blind'
 const topicBase = getTopicBaseDevice(type)
@@ -23,8 +24,8 @@ export default {
     [MQTT__BLIND_CMND__STATE, geState(topicBase)],
     [MQTT__BLIND_CMND__SET_STATE, setState(topicBase)]
   ]),
-  apiBroadcasts: new Map([
-    ['present', MQTT__BLIND_PRESENT],
-    ['lost', MQTT__BLIND_LOST]
+  actions: new Map([
+    ['present', getActionDevicePresentLost(MQTT__BLIND_PRESENT)],
+    ['lost', getActionDevicePresentLost(MQTT__BLIND_LOST)]
   ])
 }
