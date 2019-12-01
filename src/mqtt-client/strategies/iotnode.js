@@ -16,7 +16,7 @@ const cmndInitUpdate = 'init-update'
  * @async
  * @param {number | string} id
  * @param {string | Buffer} mqttPayload
- * @returns {Promise<import('../typedefs').MQTTActionResult>}
+ * @returns {Promise<import('../typedefs').MQTTTaskResult>}
  */
 async function mqttInitHandler(id, mqttPayload) {
   const parsedSourceDoc = createModelDoc(id, mqttPayload)
@@ -29,14 +29,14 @@ async function mqttInitHandler(id, mqttPayload) {
   }
   // TODO Limit errors to 10! IoTNode might not handle more!
   // TODO IoTNode max packet size is 1KB
-  return getActionResult(id, cmndInit, rawPayload)
+  return getTaskResult(id, cmndInit, rawPayload)
 }
 
 /**
  * @async
  * @param {number | string} id
  * @param {string | Buffer} mqttPayload
- * @returns {Promise<import('../typedefs').MQTTActionResult>}
+ * @returns {Promise<import('../typedefs').MQTTTaskResult>}
  */
 async function mqttInitUpdateHandler(id, mqttPayload) {
   const parsedSourceDoc = createModelDoc(id, mqttPayload)
@@ -49,7 +49,7 @@ async function mqttInitUpdateHandler(id, mqttPayload) {
   }
   // TODO Limit errors to 10! IoTNode might not handle more!
   // TODO IoTNode max packet size is 1KB
-  return getActionResult(id, cmndInitUpdate, rawPayload)
+  return getTaskResult(id, cmndInitUpdate, rawPayload)
 }
 
 /**
@@ -83,9 +83,9 @@ function generateErrorResult(err) {
  * @param {string | number} id
  * @param {string} command
  * @param {any} rawPayload
- * @returns {import('../typedefs').MQTTActionResult}
+ * @returns {import('../typedefs').MQTTTaskResult}
  */
-function getActionResult(id, command, rawPayload) {
+function getTaskResult(id, command, rawPayload) {
   /* Do not use pretty JSON, as IoTNode has veri limited resources to handle data!!! */
   return {
     topic: `${baseTopic}/${id}/${command}-r`,
