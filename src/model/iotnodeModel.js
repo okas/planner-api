@@ -78,7 +78,10 @@ function sanitize({ id, iottype, outputs: rawOutputs }) {
   return {
     id,
     iottype,
-    outputs: rawOutputs.map(({ id, usage }) => ({ id, usage }))
+    outputs: rawOutputs.map(({ id, usage }) => ({
+      id: Number.parseInt(id, 10),
+      usage
+    }))
   }
 }
 
@@ -87,7 +90,7 @@ function sanitize({ id, iottype, outputs: rawOutputs }) {
  */
 function validateInitial({ id, iottype }) {
   const errors = []
-  if (id === undefined || Number(id) < 1) {
+  if (stringIsEmptyOrWhiteSpace(id)) {
     errors.push(getErrorMessagePropValue('id', id))
   }
   if (stringIsEmptyOrWhiteSpace(iottype)) {
@@ -104,7 +107,7 @@ function validateInitial({ id, iottype }) {
 function validateOutputsRequireId(errors, outputs) {
   if (outputs && outputs.length > 0) {
     outputs.forEach(({ id }) => {
-      if (id === undefined || Number(id) < 1) {
+      if (id === undefined || id < 1) {
         errors.push(getErrorMessagePropValue('outputs.id', id))
       }
     })
