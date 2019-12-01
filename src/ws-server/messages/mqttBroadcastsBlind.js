@@ -18,14 +18,13 @@ export default function registerMqttBroadcastsBlind(io) {
 
   messageBus.on(MQTT__BLIND_LOST, data => {
     io.to(room).emit('blind__api_lost', data)
-    logMsg(`blind "${data}" is lost`)
+    logMsg(`blind "${data.id}" is lost`)
   })
 
   messageBus.on(
     MQTT__RESP__BLIND__SET_STATE,
-    /**
-     * @param {SocketIO.Socket} broadcastContext if null, then broadcast context is {SocketIO.Server}
-     */ (data, broadcastContext = null) => {
+    /** @param {SocketIO.Socket} broadcastContext if null, then broadcast context is {SocketIO.Server} */
+    (data, broadcastContext = null) => {
       const context = broadcastContext || io
       context.to(room).emit('blind__api_set_state', data)
       logMsg('forwarding set state of Blind, MQTT=>API=>browser')

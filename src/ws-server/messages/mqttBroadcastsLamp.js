@@ -18,14 +18,13 @@ export default function registerMqttBroadcastsLamp(io) {
 
   messageBus.on(MQTT__LAMP_LOST, data => {
     io.to(room).emit('lamp__api_lost', data)
-    logMsg(`lamp "${data}" is lost`)
+    logMsg(`lamp "${data.id}" is lost`)
   })
 
   messageBus.on(
     MQTT__RESP__LAMP__SET_STATE,
-    /**
-     * @param {SocketIO.Socket} broadcastContext if null, then broadcast context is {SocketIO.Server}
-     */ (data, broadcastContext = null) => {
+    /** @param {SocketIO.Socket} broadcastContext if null, then broadcast context is {SocketIO.Server} */
+    (data, broadcastContext = null) => {
       const context = broadcastContext || io
       context.to(room).emit('lamp__api_set_state', data)
       logMsg('forwarding set state of Lamp, MQTT=>API=>browser')
