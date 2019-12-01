@@ -9,7 +9,7 @@ export const unused = {}
  * IoTNode document
 @typedef {
   {
-    id: number;
+    id: string;
     iottype: string;
     outputs: Output[];
   }

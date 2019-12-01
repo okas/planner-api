@@ -50,7 +50,7 @@ export function updateForced(iotnode) {
 }
 
 /**
- * @param {Number} id
+ * @param {string} id
  */
 export function getById(id) {
   return iotnodeCollection.by('id', id)
@@ -61,7 +61,7 @@ export function getById(id) {
  * @returns {{id:number;}|{errors:[{ no_exist:number}]}} where `no_exist` equals to `id` attempted to remove.
  */
 export function remove(id) {
-  const dbDoc = getById(id)
+  const dbDoc = getById(id.toString())
   if (iotnodeCollection.remove(dbDoc)) {
     return { id }
   } else {
