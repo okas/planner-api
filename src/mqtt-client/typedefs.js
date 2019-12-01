@@ -2,12 +2,9 @@ export const unused = {}
 
 /**
  * Topic and payload for ready for MQTT publish.
-@typedef {
-  {
-    topic: string;
-    payload: string;
-  }
-} MQTTActionResult
+ * @typedef {object} MQTTActionResult
+ * @property {string} topic
+ * @property {string} [payload]
  */
 
 /**
@@ -15,6 +12,18 @@ export const unused = {}
  * @param {number | string} id
  * @param {Buffer | string} mqttPayload
  * @returns {Promise.<MQTTActionResult>}
+ */
+
+/**
+ * Topic and payload for ready for MQTT publish.
+ * @typedef {MQTTActionResult & {responseParser?: Function}} MQTTPublishCommandResult
+ */
+
+/**
+ * @callback MQTTPublishCommand
+ * @param {object} data
+ * @param {string} [sender]
+ * @returns {MQTTPublishCommandResult}
  */
 
 /**

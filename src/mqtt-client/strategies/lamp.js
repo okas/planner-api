@@ -5,39 +5,12 @@ import {
   MQTT__LAMP_PRESENT
 } from '../../messageBus'
 import { getDeviceCommonTopics, getTopicBaseDevice } from '../utilities'
+import { geState, setState } from './commonPublishCommands'
 
 const type = 'lamp'
 const topicBase = getTopicBaseDevice(type)
 
-/**
- * @type {Map<symbol,function>}
- */
-const publishCommands = new Map()
-publishCommands.set(MQTT__LAMP_CMND__STATE, getLampState)
-publishCommands.set(MQTT__LAMP_CMND__SET_STATE, setLampState)
-
-function getLampState(data, sender) {
-  return {
-    topic: `${topicBase}/${data}/cmnd/state/${sender}`,
-    payload: null,
-    responseParser: JSON.parse
-  }
-}
-
-function setLampState(data, sender) {
-  return {
-    topic: `${topicBase}/${data.id}/cmnd/set-state/${sender}`,
-    payload: JSON.stringify(data.state),
-    responseParser: JSON.parse
-  }
-}
-
-/**
- * @type {Map<string,symbol>} maps broadcast type to Symbol event for EventEmitter usage.
- */
-const apiBroadcasts = new Map()
-apiBroadcasts.set('present', MQTT__LAMP_PRESENT)
-apiBroadcasts.set('lost', MQTT__LAMP_LOST)
+/* Currently using only Common Publish Commands, but they can be replaced and new ones added. */
 
 /**
  * Public API
@@ -46,6 +19,12 @@ apiBroadcasts.set('lost', MQTT__LAMP_LOST)
 export default {
   type,
   subscriptions: getDeviceCommonTopics(type),
-  publishCommands,
-  apiBroadcasts
+  publishCommands: new Map([
+    [MQTT__LAMP_CMND__STATE, geState(topicBase)],
+    [MQTT__LAMP_CMND__SET_STATE, setState(topicBase)]
+  ]),
+  apiBroadcasts: new Map([
+    ['present', MQTT__LAMP_PRESENT],
+    ['lost', MQTT__LAMP_LOST]
+  ])
 }
