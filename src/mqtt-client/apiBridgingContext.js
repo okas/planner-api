@@ -31,9 +31,10 @@ export default function registerBridge(client, strategiesMap) {
   function bridgeSubscriptions() {
     strategiesMap.forEach(({ subscriptions }) => {
       if (Array.isArray(subscriptions)) {
-        subscriptions.forEach(sub => {
-          client.subscribe(sub, console.log)
-        })
+        subscriptions.forEach(
+          /** @param {string | import('mqtt').ISubscriptionMap} sub */
+          sub => client.subscribe(sub, console.log)
+        )
       } else {
         client.subscribe(subscriptions, console.log)
       }
