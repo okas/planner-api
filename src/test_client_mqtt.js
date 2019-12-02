@@ -71,7 +71,8 @@ function messageHandler(client, clientId, topic, payload) {
   console.log(`responseTopic:`, responseTopic)
   switch (command) {
     case 'set-state':
-      clientStateStore[clientId] = JSON.parse(payload.toString()) // "Do work" part
+      clientStateStore[clientId] =
+        payload && JSON.parse(payload.toString() || null) // "Do work" part
     // eslint-disable-next-line no-fallthrough
     case 'state':
       break
