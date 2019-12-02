@@ -1,3 +1,5 @@
+import { responseParser } from '../responseParser'
+
 /**
  * @param {string} topicBase
  */
@@ -8,7 +10,7 @@ export function geState(topicBase) {
   const func = (data, sender) => ({
     topic: `${topicBase}/${data}/cmnd/state/${sender}`,
     payload: null,
-    responseParser: parser
+    responseParser: responseParser
   })
   return func
 }
@@ -23,14 +25,7 @@ export function setState(topicBase) {
   const func = (data, sender) => ({
     topic: `${topicBase}/${data.id}/cmnd/set-state/${sender}`,
     payload: JSON.stringify(data.state),
-    responseParser: parser
+    responseParser: responseParser
   })
   return func
-}
-
-/**
- * @param {{ toString: () => string; }} responsePayload
- */
-function parser(responsePayload) {
-  return JSON.parse(responsePayload.toString() || null)
 }

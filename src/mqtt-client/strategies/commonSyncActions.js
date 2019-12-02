@@ -1,4 +1,5 @@
 import messageBus from '../../messageBus'
+import { responseParser } from '../responseParser'
 
 /**
  * @param {string | symbol} mbEvent
@@ -9,7 +10,7 @@ export function getActionDevicePresentLost(mbEvent) {
   const func = (id, mqttPayload) => {
     messageBus.emit(mbEvent, {
       id,
-      ...(mqttPayload && JSON.parse(mqttPayload.toString() || null))
+      ...responseParser(mqttPayload)
     })
   }
   return func

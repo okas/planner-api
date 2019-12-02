@@ -11,6 +11,7 @@ import {
   getTopicBaseDevice
 } from '../utilities'
 import { getActionDevicePresentLost } from './commonSyncActions'
+import { responseParser } from '../responseParser'
 
 const type = 'iotnode'
 const baseTopic = getTopicBaseDevice(type)
@@ -66,7 +67,7 @@ async function mqttInitUpdateHandler(id, mqttPayload) {
 function createModelDoc(id, mqttPayload) {
   return {
     id,
-    ...JSON.parse(mqttPayload.toString())
+    ...responseParser(mqttPayload)
   }
 }
 
@@ -111,8 +112,7 @@ const mbEventsOutput = new Map([
  * @type {import('../typedefs').MQTTAction}
  */
 function devicePresentHandler(iotId, mqttPayload) {
-  const { outputs: plOuts } =
-    mqttPayload && JSON.parse(mqttPayload.toString() || null)
+  const { outputs: plOuts } = responseParser(mqttPayload)
   const { outputs: dbOuts } = model.getById(iotId.toString())
   dbOuts
     .filter(o => o.usage)
