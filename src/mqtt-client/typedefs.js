@@ -22,8 +22,14 @@ export const unused = {}
  */
 
 /**
+ * @callback MQTTResponseParser
+ * @param {Buffer | string} responsePayload
+ * @returns {object}
+ */
+
+/**
  * Topic and payload for ready for MQTT publish.
- * @typedef {MQTTTaskResult & {responseParser?: Function}} MQTTPublishCommandResult
+ * @typedef {MQTTTaskResult & {responseParser?: MQTTResponseParser}} MQTTPublishCommandResult
  */
 
 /**

@@ -57,7 +57,7 @@ export default function registerBridge(client, strategiesMap) {
 
   /**
    * Set up Publish Commands in a way that that `mqtt-client` will react on certain `api-server` Events.
-   * @param {{(data: string, sender: string): { topic: string, payload: string | Buffer, responseParser:(responsePayload: Buffer)=>string}}} getStrategyPublishData generates data to pulish with MQTT.
+   * @param {import('./typedefs').MQTTPublishCommand} getStrategyPublishData
    * @param {symbol} eventSymbol Event in that `messageBus`.
    */
   function preparePublishCommands(getStrategyPublishData, eventSymbol) {
@@ -67,9 +67,9 @@ export default function registerBridge(client, strategiesMap) {
   }
 
   /**
-   * @param {(data: string, sender: string) => { topic: string, payload: string | Buffer, responseParser:function}} getStrategyPublishData
-   * @param {{data: string; sender: string | boolean; done: (payload: Buffer | *) => void}} apiEventPayload
-   *  This enables asyn two-way communication between `aspi-server` and `mqtt-client`.
+   * This enables asyn two-way communication between `aspi-server` and `mqtt-client`.
+   * @param {import('./typedefs').MQTTPublishCommand} getStrategyPublishData
+   * @param {{data: string; sender: string | boolean; done: (payload: Buffer | string) => void}} apiEventPayload
    */
   function apiEventHandler(getStrategyPublishData, { data, sender, done }) {
     const { topic, payload, responseParser } = getStrategyPublishData(
