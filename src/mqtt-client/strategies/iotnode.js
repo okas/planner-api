@@ -118,7 +118,7 @@ function devicePresentHandler(iotId, mqttPayload) {
     .filter(o => o.usage)
     .forEach(({ id: dbOId, usage }) => {
       const mbEvent = mbEventsOutput.get(`${usage}_present`)
-      if (mbEvent) {
+      if (!mbEvent) {
         return
       }
       const { id: _id, usage: _usage, ...rest } = plOuts.find(
