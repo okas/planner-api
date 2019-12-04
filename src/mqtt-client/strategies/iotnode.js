@@ -23,7 +23,7 @@ const cmndInitUpdate = 'init-update'
 /**
  * @async
  * @param {number | string} id
- * @param {string | Buffer} mqttPayload
+ * @param {Buffer} mqttPayload
  * @returns {Promise<import('../typedefs').MQTTTaskResult>}
  */
 async function mqttInitHandler(id, mqttPayload) {
@@ -43,7 +43,7 @@ async function mqttInitHandler(id, mqttPayload) {
 /**
  * @async
  * @param {number | string} id
- * @param {string | Buffer} mqttPayload
+ * @param {Buffer} mqttPayload
  * @returns {Promise<import('../typedefs').MQTTTaskResult>}
  */
 async function mqttInitUpdateHandler(id, mqttPayload) {
@@ -62,7 +62,7 @@ async function mqttInitUpdateHandler(id, mqttPayload) {
 
 /**
  * @param {string | number} id
- * @param {string | Buffer} mqttPayload
+ * @param {Buffer} mqttPayload
  */
 function createModelDoc(id, mqttPayload) {
   return {

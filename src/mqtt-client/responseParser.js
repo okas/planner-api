@@ -1,6 +1,6 @@
 /**
- * @param {Buffer|string} responsePayload
+ * @param {Buffer} responsePayload
  */
 export function responseParser(responsePayload) {
-  return responsePayload && JSON.parse(responsePayload.toString() || null)
+  return JSON.parse(responsePayload.toString() || null)
 }
