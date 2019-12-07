@@ -1,4 +1,5 @@
 import messageBus, { MQTT__CLEAR_SENDER_COMMANDS } from '../messageBus'
+import { stringIsEmptyOrWhiteSpace } from '../utilities'
 
 /**
  * @param {SocketIO.Socket} socket conection from browser
@@ -28,17 +29,48 @@ export default function registerApiEventsCommon(socket) {
   })
 
   socket.on('api__leave_rooms', (rooms, fn) => {
-    socket.leave(rooms, err => {
+    let workerPromise
+    if (Array.isArray(rooms)) {
+      workerPromise = Promise.allSettled(rooms.map(leaveRoom))
+    } else if (!stringIsEmptyOrWhiteSpace(rooms)) {
+      workerPromise = Promise.allSettled(leaveRoom(rooms))
+    } else {
       if (fn) {
-        fn(createResponse(err))
+        fn(createResponse('no rooms given to leave'))
       }
-      console.log(
-        err
-          ? `--< [ ${socket.id} ] : failed to leave from rooms "${rooms}"`
-          : `<-< [ ${socket.id} ] : leaved from rooms "${rooms}"`
-      )
-    })
+      console.log(`--< [ ${socket.id} ] : no rooms given to leave`)
+    }
+    workerPromise.then(getLeaveRoomResultHandler(socket.id, rooms, fn))
   })
+
+  /**
+   * @param {string} room
+   */
+  function leaveRoom(room) {
+    return new Promise(resolve => {
+      socket.leave(room, err => resolve({ room, err }))
+    })
+  }
+}
+
+/**
+ * @param {string } socketId
+ * @param {string | string[]} rooms
+ * @param {(arg0: object) => void} fn
+ */
+function getLeaveRoomResultHandler(socketId, rooms, fn) {
+  return workResults => {
+    const results = workResults.map(({ value }) => value)
+    const hasErrors = results.some(({ err }) => !!err)
+    if (fn) {
+      fn(createResponse(hasErrors ? results : null))
+    }
+    console.log(
+      hasErrors
+        ? `--< [ ${socketId} ] : failed to leave from rooms "${rooms}", because of errors: ${results}`
+        : `<-< [ ${socketId} ] : leaved from rooms "${rooms}"`
+    )
+  }
 }
 
 function createResponse(err) {
