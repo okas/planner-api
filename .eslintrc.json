@@ -2,12 +2,12 @@
   "extends": ["standard", "prettier", "prettier/standard"],
   "plugins": ["import", "prettier", "standard"],
   "parserOptions": {
-    "ecmaVersion": 2018,
+    "ecmaVersion": 2020,
     "sourceType": "module"
   },
   "env": {
     "node": true,
-    "es6": true
+    "es2020": true
   },
   "rules": {
     "space-before-function-paren": 0,
