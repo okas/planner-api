@@ -1,5 +1,6 @@
 import { iotnodeCollection } from '../persistence'
-import { ValidationErrors, ExistingDocumentError } from './errors'
+import { stringIsEmptyOrWhiteSpace } from '../utilities'
+import { ExistingDocumentError, ValidationErrors } from './errors'
 
 /**
  * Upsert object to database; or return `{errors:[]}`, if validation fails.
@@ -160,13 +161,6 @@ const getErrorMessagePropValue = (propName, propValue) => {
 
 const getErrorMessageDataMissmatch = (propName, srcPropVale, dbPropVale) => {
   return `data mismatch, {${propName}}: incoming has "${srcPropVale}"; database has "${dbPropVale}"`
-}
-
-/**
- * @param {string} string
- */
-function stringIsEmptyOrWhiteSpace(string) {
-  return string === undefined || string === null || !string.trim().length
 }
 
 /**
