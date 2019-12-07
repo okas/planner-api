@@ -21,7 +21,7 @@ export default function registerApiEventsCommon(socket) {
       }
       console.log(
         err
-          ? `>-- [ ${socket.id} ] : failed to joined to rooms "${rooms}"`
+          ? `>-- [ ${socket.id} ] : failed to joined to rooms "${rooms}", because of errors: ${err}`
           : `>-> [ ${socket.id} ] : joined to rooms "${rooms}"`
       )
     })
